@@ -26,13 +26,18 @@ public class Main extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		
     	login log = new login();
+    	
+  
+    	
     	try {
 			log.start(primaryStage);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+    	
+
+    	
 	}
 	
 
@@ -40,5 +45,10 @@ public class Main extends Application {
     	
 
         launch(args);
+        
+      	mainGUI mGUI = new mainGUI();
+        
+        mGUI.run();
+        
     }
 }

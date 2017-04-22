@@ -96,6 +96,8 @@ public class login {
 	                    message.setText("Your password has been confirmed");
 	                    message.setTextFill(Color.rgb(21, 117, 84));
 	                    
+	                    Controller.name = usernameTextField.getText();
+	                    
 	                    hide(primaryStage);
 	                    
 	                } else {
