@@ -9,14 +9,11 @@ import java.net.URL;
 import java.net.URLConnection;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
-import org.
+
 
 public class RestController {
-
-
-	JsonObject
-    
-    private String dataTransfer(JSONObject json, String url_address) {
+	
+	private String dataTransfer(JSONObject json, String url_address) {
         String print_returned = "";
 
         try {
@@ -83,7 +80,7 @@ public class RestController {
         return dataTransfer(json, url);
     }
 
-    public static void main(String[] args) {
+  /*  public static void main(String[] args) {
         ClientTest test = new ClientTest();
         String help = "";
 
@@ -91,6 +88,6 @@ public class RestController {
         help = test.login("kluski", "1234");
 
         System.out.println(help);
-    }
+   }*/ 
     
 }
