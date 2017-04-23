@@ -17,38 +17,29 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-
-
-
-
 public class Main extends Application {
 
 	public void start(Stage primaryStage) throws Exception {
-		
-    	login log = new login();
-    	
-  
-    	
-    	try {
+
+		login log = new login();
+
+		try {
 			log.start(primaryStage);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	
 
-    	
 	}
-	
 
-    public static void main(String[] args) {
-    	
+	public static void main(String[] args) {
 
-        launch(args);
-        
-      	mainGUI mGUI = new mainGUI();
-        
-        mGUI.run();
-        
-    }
+		launch(args);
+
+		if (Controller.name != "") {
+			mainGUI mGUI = new mainGUI();
+
+			mGUI.run();
+		}
+	}
 }
