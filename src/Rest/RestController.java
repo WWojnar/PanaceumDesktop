@@ -49,7 +49,7 @@ public class RestController {
         return print_returned;
     }
 
-    private String register(String login, String passwd) {
+    public String register(String login, String passwd) {
         JSONObject json = null;
         try {
             json = new JSONObject()
@@ -65,7 +65,7 @@ public class RestController {
         return dataTransfer(json, url);
     }
     
-    private String login(String login, String passwd) {
+    public String login(String login, String passwd) {
         JSONObject json = null;
         try {
             json = new JSONObject()

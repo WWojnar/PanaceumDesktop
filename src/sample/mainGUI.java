@@ -63,7 +63,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		this.setTitle("Panaceum");
 		contentPane.setLayout(null);
 
-		JLabel lblWelcome = new JLabel("Hello " + Controller.name);
+		JLabel lblWelcome = new JLabel("Welcome " + Controller.name);
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcome.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblWelcome.setBounds(288, 0, 1076, 47);
@@ -174,6 +174,10 @@ public class mainGUI extends JFrame implements ActionListener {
 					((JPanel) c).setVisible(false);
 				}
 			}
+			
+			// Json object = restpatients();
+			
+			
 			pnlPatients.setVisible(true);
 		}
 			else if (e.getSource() == btnPrescriptions) {
