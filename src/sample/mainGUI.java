@@ -23,9 +23,12 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JTextField textField;
 	private JButton btnMedicines;
-	private JButton btnSchedule;
+	private JButton btnPatients;
 	private JPanel pnlMedicine;
 	private JPanel pnlPatients;
+	private JButton btnPrescriptions;
+	private JPanel pnlPrescriptions;
+	
 
 	/**
 	 * Launch the application.
@@ -57,6 +60,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
+		this.setTitle("Panaceum");
 		contentPane.setLayout(null);
 
 		JLabel lblWelcome = new JLabel("Hello " + Controller.name);
@@ -77,15 +81,9 @@ public class mainGUI extends JFrame implements ActionListener {
 		//
 		//
 		// BUTTON PART
-		btnMedicines = new JButton("Medicine database");
-		btnMedicines.setBounds(10, 87, 283, 23);
-		contentPane.add(btnMedicines);
-		btnMedicines.addActionListener(this);
 
-		btnSchedule = new JButton("Schedules");
-		btnSchedule.setBounds(10, 120, 283, 23);
-		contentPane.add(btnSchedule);
-		btnSchedule.addActionListener(this);
+
+
 		//
 		//
 		//
@@ -101,7 +99,14 @@ public class mainGUI extends JFrame implements ActionListener {
 		contentPane.add(separator);
 
 		// *********************************************
-		// PANEL PRZYKLADOWY
+		// PANEL MEDICINES
+		
+		btnMedicines = new JButton("Medicine database");
+		btnMedicines.setBounds(10, 87, 283, 23);
+		contentPane.add(btnMedicines);
+		btnMedicines.addActionListener(this);
+		
+		
 		pnlMedicine = new JPanel();
 		pnlMedicine.setBounds(303, 54, 1071, 817);
 		contentPane.add(pnlMedicine);
@@ -112,15 +117,45 @@ public class mainGUI extends JFrame implements ActionListener {
 		// *********************************************
 
 		// *********************************************
-		// PANEL PRZYKLADOWY2
+		// PANEL PATIENTS
+		
+		btnPatients = new JButton("Patients");
+		btnPatients.setBounds(10, 120, 283, 23);
+		contentPane.add(btnPatients);
+		btnPatients.addActionListener(this);
+		
 		pnlPatients = new JPanel();
 		pnlPatients.setBounds(303, 54, 1071, 817);
 		contentPane.add(pnlPatients);
 
 		JLabel lblLabelTwo = new JLabel("label two");
 		pnlPatients.add(lblLabelTwo);
+		
+
 		// koniec przykladu
 		// *********************************************
+		
+		
+		// *********************************************
+		// PANEL PRESCRIPTIONS
+		
+		btnPrescriptions = new JButton("Prescriptions");
+		btnPrescriptions.setBounds(10, 154, 283, 23);
+		contentPane.add(btnPrescriptions);
+		btnPrescriptions.addActionListener(this);
+		
+		pnlPrescriptions = new JPanel();
+		pnlPrescriptions.setBounds(303, 54, 1071, 817);
+		contentPane.add(pnlPrescriptions);
+
+		JLabel lblLabelThree = new JLabel("label three");
+		pnlPrescriptions.add(lblLabelThree);
+		
+
+		// koniec przykladu
+		// *********************************************
+		
+		
 
 	}
 
@@ -133,7 +168,7 @@ public class mainGUI extends JFrame implements ActionListener {
 				}
 			}
 			pnlMedicine.setVisible(true);
-		} else if (e.getSource() == btnSchedule) {
+		} else if (e.getSource() == btnPatients) {
 			for (Component c : contentPane.getComponents()) {
 				if (c instanceof JPanel) {
 					((JPanel) c).setVisible(false);
@@ -141,6 +176,14 @@ public class mainGUI extends JFrame implements ActionListener {
 			}
 			pnlPatients.setVisible(true);
 		}
+			else if (e.getSource() == btnPrescriptions) {
+				for (Component c : contentPane.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				pnlPrescriptions.setVisible(true);
+			}
+		
 	}
-
 }
