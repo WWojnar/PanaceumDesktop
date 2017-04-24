@@ -81,7 +81,7 @@ public class login {
 		// ----------------- ACTIONS ---------------------------------------
 
 		// Action for password Field
-
+		btnLogin.setDefaultButton(true);
 		btnLogin.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
@@ -131,6 +131,7 @@ public class login {
 		primaryStage.setScene(scene);
 		// Show view
 		primaryStage.show();
+		
 
 	}
 

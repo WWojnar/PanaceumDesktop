@@ -11,7 +11,12 @@ import javax.swing.JPanel;
  * @author unknown
  */
 public class general extends JPanel {
-    public general() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 2369834668461380209L;
+
+	public general() {
         initComponents();
     }
 

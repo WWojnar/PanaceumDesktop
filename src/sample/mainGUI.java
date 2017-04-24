@@ -1,5 +1,6 @@
 package sample;
 
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +16,10 @@ import javax.swing.border.EmptyBorder;
 
 public class mainGUI extends JFrame implements ActionListener {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JButton btnMedicines;
@@ -95,7 +100,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		separator.setBounds(298, 0, 2, 871);
 		contentPane.add(separator);
 
-		
 		// *********************************************
 		// PANEL PRZYKLADOWY
 		pnlMedicine = new JPanel();
@@ -106,9 +110,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		pnlMedicine.add(lblLabelOne);
 		// koniec przykladu
 		// *********************************************
-		
-		
-		
+
 		// *********************************************
 		// PANEL PRZYKLADOWY2
 		pnlPatients = new JPanel();
@@ -119,19 +121,26 @@ public class mainGUI extends JFrame implements ActionListener {
 		pnlPatients.add(lblLabelTwo);
 		// koniec przykladu
 		// *********************************************
-		
 
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == btnMedicines) {
-			pnlPatients.hide();
-			pnlMedicine.show();
-			
 
+		if (e.getSource() == btnMedicines) {
+			for (Component c : contentPane.getComponents()) {
+				if (c instanceof JPanel) {
+					((JPanel) c).setVisible(false);
+				}
+			}
+			pnlMedicine.setVisible(true);
 		} else if (e.getSource() == btnSchedule) {
-			pnlMedicine.hide();
-			pnlPatients.show();
+			for (Component c : contentPane.getComponents()) {
+				if (c instanceof JPanel) {
+					((JPanel) c).setVisible(false);
+				}
+			}
+			pnlPatients.setVisible(true);
 		}
 	}
+
 }
