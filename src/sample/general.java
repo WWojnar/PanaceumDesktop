@@ -4,8 +4,8 @@
 
 package sample;
 
-import javax.swing.*;
 import javax.swing.GroupLayout;
+import javax.swing.JPanel;
 
 /**
  * @author unknown
