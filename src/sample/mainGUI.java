@@ -17,6 +17,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -34,6 +35,25 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JPanel pnlMedicine;
 	private JButton btnPrescriptions;
 	private JPanel pnlPrescriptions;
+	
+	//Medicine fields
+	
+	private JTextField txtSearchMedicine;
+	private JTable medicineTable;
+	private JButton btnSearchMedicine;
+	
+	// AddMedicine
+	private JPanel pnlAddMedicine;
+	private JTextPane txtpnAddMedicineName;
+	private JLabel lblActiveSubstances;
+	private JTextPane txtpnAddMedicineActive;
+	private JLabel lblRelations;
+	private JTextPane txtpnAddRelationsWith;
+	private JButton btnSubmitNewMedicine;
+	private JButton btnCancelAddMedicine;
+	private JLabel lblToAddNew;
+	private JLabel lblName_1;
+	
 
 	// patient fields
 	private JPanel pnlPatient;
@@ -173,12 +193,149 @@ public class mainGUI extends JFrame implements ActionListener {
 		pnlMedicine.setBounds(303, 54, 1071, 817);
 		contentPane.add(pnlMedicine);
 
-		JLabel lblLabelOne = new JLabel("label one");
-		pnlMedicine.add(lblLabelOne);
+String[] medicineColumnNames = {"Id:", "Name:"};
+		
+	
+		
+		//tutaj bedzie rest do leków
+		Object[][] medicineData = {
+			    {"001", "Apap"},
+			    {"002", "Ibuprom"}
+			};
+		
+		// JSON do tablicy 
+		/*
+		JSONArray jsonMedicineList = new JSONArray(Daj_mnie_Resta);
+		medicineData = new Object[jsonMedicineList.length()][2];
+		
+		for(int i = 0; i < jsonMedicineList.length(); i++){
+			JSONObject t;
+			try {
+				 t = (JSONObject) jsonMedicineList.get(i);
+				 	medicineData[i][0] = t.getString("id");
+				 	medicineData[i][1] = t.getString("name");
+			 } catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					 e1.printStackTrace();
+				}
+		}
+		*/
+				
+				
+				JButton btnAddNewMedicine = new JButton("Add new");
+				btnAddNewMedicine.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						for (Component c : contentPane.getComponents()) {
+							if (c instanceof JPanel) {
+								((JPanel) c).setVisible(false);
+							}
+						}
+						pnlAddMedicine.setVisible(true);
+						
+					}
+				});
+				pnlMedicine.setLayout(null);
+				btnAddNewMedicine.setBounds(933, 8, 128, 23);
+				pnlMedicine.add(btnAddNewMedicine);
+				
+				// Pole tekstowe do wyszukiwania
+				txtSearchMedicine = new JTextField();
+				txtSearchMedicine.setText("Search..");
+				txtSearchMedicine.setBounds(10, 9, 86, 20);
+				pnlMedicine.add(txtSearchMedicine);
+				txtSearchMedicine.setColumns(10);
+				
+				// przycisk do wyszukiwania
+				btnSearchMedicine = new JButton("Search");
+				btnSearchMedicine.setBounds(120, 8, 107, 23);
+				pnlMedicine.add(btnSearchMedicine);
+				
+				JScrollPane scrollPane_1 = new JScrollPane();
+				scrollPane_1.setBounds(10, 42, 1051, 764);
+				pnlMedicine.add(scrollPane_1);
+				
+				medicineTable = new JTable(medicineData, medicineColumnNames);
+				medicineTable.enable(false);
+				medicineTable.getColumn(medicineColumnNames[0]).setWidth(10);
+				scrollPane_1.setViewportView(medicineTable);
 		
 		// koniec MEDICINES
 		// *********************************************
 
+				// *********************************************
+				// PANEL ADD MEDICINES
+				
+				pnlAddMedicine = new JPanel();
+				pnlAddMedicine.setBounds(303, 54, 1071, 817);
+				contentPane.add(pnlAddMedicine);
+				pnlAddMedicine.setLayout(null);
+				
+				lblToAddNew = new JLabel("To add new medicine, fill all the fields and press \"Add\" button.");
+				lblToAddNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				lblToAddNew.setBounds(10, 11, 603, 37);
+				pnlAddMedicine.add(lblToAddNew);
+				
+				lblName_1 = new JLabel("Name: ");
+				lblName_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				lblName_1.setBounds(10, 73, 55, 37);
+				pnlAddMedicine.add(lblName_1);
+				
+				txtpnAddMedicineName = new JTextPane();
+				txtpnAddMedicineName.setText("Type medicine name...");
+				txtpnAddMedicineName.setBounds(10, 113, 354, 37);
+				pnlAddMedicine.add(txtpnAddMedicineName);
+				
+				lblActiveSubstances = new JLabel("Active Substances:");
+				lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				lblActiveSubstances.setBounds(10, 179, 130, 37);
+				pnlAddMedicine.add(lblActiveSubstances);
+				
+				txtpnAddMedicineActive = new JTextPane();
+				txtpnAddMedicineActive.setText("Type medicine active substances...");
+				txtpnAddMedicineActive.setBounds(10, 232, 354, 460);
+				pnlAddMedicine.add(txtpnAddMedicineActive);
+				
+				lblRelations = new JLabel("Relations");
+				lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				lblRelations.setBounds(572, 73, 157, 37);
+				pnlAddMedicine.add(lblRelations);
+				
+				txtpnAddRelationsWith = new JTextPane();
+				txtpnAddRelationsWith.setText("Type relations with other medicines...");
+				txtpnAddRelationsWith.setBounds(572, 113, 430, 579);
+				pnlAddMedicine.add(txtpnAddRelationsWith);
+				
+				// Adding new medicine 
+				btnSubmitNewMedicine = new JButton("Add");
+				btnSubmitNewMedicine.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						// Add function here...(txtpnAddMedicineName.getText(), txtpnAddMedicineActive.getText());
+					}
+				});
+				btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
+				pnlAddMedicine.add(btnSubmitNewMedicine);
+				
+				btnCancelAddMedicine = new JButton("Cancel");
+				btnCancelAddMedicine.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						for (Component c : contentPane.getComponents()) {
+							if (c instanceof JPanel) {
+								((JPanel) c).setVisible(false);
+							}
+						}
+						pnlMedicine.setVisible(true);
+					}
+				});
+				btnCancelAddMedicine.setBounds(10, 743, 141, 44);
+				pnlAddMedicine.add(btnCancelAddMedicine);
+		
+		
+		
+				// koniec przykladu
+				// *********************************************
+		
+				
 
 		// *********************************************
 		// PANEL USER (DODAWANIE PACJENTA I WSZYSTKIE AKCJE, KTORE NIE PASUJA DO
