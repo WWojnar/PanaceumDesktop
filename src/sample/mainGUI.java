@@ -1,5 +1,6 @@
 package sample;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Point;
@@ -20,6 +21,8 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+import javax.swing.table.DefaultTableModel;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
@@ -29,14 +32,13 @@ import Rest.RestController;
 
 public class mainGUI extends JFrame implements ActionListener {
 
+	RestController restController;
 	private JSONObject PatientJSON = new JSONObject();
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JButton btnMedicines;
 	private JPanel pnlMedicine;
-	private JButton btnPrescriptions;
-	private JPanel pnlPrescriptions;
 
 	// Medicine fields
 
@@ -137,6 +139,15 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JLabel lblHistory;
 	private JPanel pnlSingleHistory;
 
+	// Prescription panel
+	private JButton btnPrescriptions;
+	private JPanel pnlPrescriptions;
+	private JTable tblPrescription;
+	private JTextField searchPrescriptionField;
+	private JScrollPane scrollPane;
+	private DefaultTableModel dmPrescription;
+	private JSONArray prescriptionJson = new JSONArray();
+
 	/**
 	 * Launch the application.
 	 */
@@ -151,11 +162,12 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	/**
 	 * Create the frame.
-	 * @throws JSONException 
+	 * 
+	 * @throws JSONException
 	 */
 	public mainGUI() throws JSONException {
 
-		RestController restController = new RestController();
+		restController = new RestController();
 
 		// lista pacjentow musi zostac utworzona tutaj, bo ich pesele moga
 		// zostac wyszukane z kazdego miejsca
@@ -528,15 +540,14 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblDoctorPhone.setBounds(193, 369, 205, 32);
 		pnlUser.add(lblDoctorPhone);
 
-		//JSON doctors list
+		// JSON doctors list
 		try {
-			jsonDoctors = new JSONArray(
-					restController.doctorsList(Controller.name, Controller.token));
+			jsonDoctors = new JSONArray(restController.doctorsList(Controller.name, Controller.token));
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			System.out.println("failxd");
 		}
-		
+
 		doctors = new int[jsonDoctors.length()];
 
 		for (int j = 0; j < jsonDoctors.length(); j++) {
@@ -549,12 +560,13 @@ public class mainGUI extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
-		
-		for (int i=0;i<jsonDoctors.length();i++)
-			
-			if(doctors[i] == Controller.id){
+
+		for (int i = 0; i < jsonDoctors.length(); i++)
+
+			if (doctors[i] == Controller.id) {
 				ifdoctor = doctors[i];
-				//TU WYRZUCA BLAD _ WYDAJE MI SIE, ZE BLAD JEST PO STRONIE RESTA
+				// TU WYRZUCA BLAD _ WYDAJE MI SIE, ZE BLAD JEST PO STRONIE
+				// RESTA
 				try {
 					doctor = new JSONObject(restController.doctor(i, Controller.name, Controller.token));
 				} catch (JSONException e1) {
@@ -562,15 +574,14 @@ public class mainGUI extends JFrame implements ActionListener {
 					e1.printStackTrace();
 				}
 			}
-		if(ifdoctor!=-1){
-		lblDoctorName.setText(doctor.getString("firstName"));
-		lblDoctorLastName.setText(doctor.getString("lastName"));
-		lblSpeciality.setText(doctor.getString("speciality"));
-		lblLicence.setText(doctor.getString("licenceNumber"));
-		lblDoctorEmail.setText(doctor.getString("email"));
-		lblDoctorPhone.setText(doctor.getString("phone"));
-		}
-		else{
+		if (ifdoctor != -1) {
+			lblDoctorName.setText(doctor.getString("firstName"));
+			lblDoctorLastName.setText(doctor.getString("lastName"));
+			lblSpeciality.setText(doctor.getString("speciality"));
+			lblLicence.setText(doctor.getString("licenceNumber"));
+			lblDoctorEmail.setText(doctor.getString("email"));
+			lblDoctorPhone.setText(doctor.getString("phone"));
+		} else {
 			lblDoctorName.setText("You are not");
 			lblDoctorLastName.setText("a doctor.");
 			lblSpeciality.setText("");
@@ -578,7 +589,7 @@ public class mainGUI extends JFrame implements ActionListener {
 			lblDoctorEmail.setText("");
 			lblDoctorPhone.setText("");
 		}
-		
+
 		// koniec USER
 		// *********************************************
 
@@ -818,9 +829,9 @@ public class mainGUI extends JFrame implements ActionListener {
 										}
 									}
 									pnlSingleHistory.setVisible(true);
-									
-									 lblHistory.setText((String) data[row][0]);
-									
+
+									lblHistory.setText((String) data[row][0]);
+
 								}
 							}
 						});
@@ -831,15 +842,12 @@ public class mainGUI extends JFrame implements ActionListener {
 				if (!searchConfirmed)
 					JOptionPane.showMessageDialog(null, "Given PESEL is incorrect");
 
-
-
 			}// klikniecie buttnou search
 		});
 
 		// koniec PATIENTS
 		// *********************************************
 
-		
 		// *********************************************
 		// PANEL SINGLE HISTORY
 
@@ -856,7 +864,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblHistory.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblHistory.setBounds(10, 11, 962, 37);
 		pnlSingleHistory.add(lblHistory);
-
 
 		// Go back to history view
 
@@ -894,21 +901,13 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		// koniec SINGLE HISTORY
 		// *********************************************
-		
+
 		// *********************************************
 		// PANEL PRESCRIPTIONS
 
-		btnPrescriptions = new JButton("Prescriptions");
-		btnPrescriptions.setBounds(10, 154, 283, 23);
-		contentPane.add(btnPrescriptions);
-		btnPrescriptions.addActionListener(this);
-
-		pnlPrescriptions = new JPanel();
-		pnlPrescriptions.setBounds(303, 54, 1071, 817);
-		contentPane.add(pnlPrescriptions);
-
-		JLabel lblLabelThree = new JLabel("label three");
-		pnlPrescriptions.add(lblLabelThree);
+		fillPrescriptionJPanel();
+		createPrescriptionColumns();
+		//populatePrescriptionTable();
 
 		// koniec PRESCRIPTIONS
 		// *********************************************
@@ -921,6 +920,79 @@ public class mainGUI extends JFrame implements ActionListener {
 		}
 
 		pnlUser.setVisible(true);
+
+	}
+
+	private void fillPrescriptionJPanel() {
+
+		btnPrescriptions = new JButton("Prescriptions");
+		btnPrescriptions.setBounds(10, 154, 283, 23);
+		contentPane.add(btnPrescriptions);
+		btnPrescriptions.addActionListener(this);
+
+		pnlPrescriptions = new JPanel();
+		pnlPrescriptions.setBounds(303, 54, 1071, 817);
+		contentPane.add(pnlPrescriptions);
+		pnlPrescriptions.setLayout(null);
+
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 42, 1051, 764);
+		pnlPrescriptions.add(scrollPane);
+
+		tblPrescription = new JTable();
+		scrollPane.setViewportView(tblPrescription);
+		tblPrescription.setFillsViewportHeight(true);
+		tblPrescription.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
+
+		JButton btnModify = new JButton("Modify");
+		btnModify.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnModify.setBounds(316, 8, 128, 23);
+		pnlPrescriptions.add(btnModify);
+
+		JButton btnDetails = new JButton("Details");
+		btnDetails.setBounds(155, 8, 128, 23);
+		pnlPrescriptions.add(btnDetails);
+
+		JButton btnAdd = new JButton("Add");
+		btnAdd.setBounds(933, 8, 128, 23);
+		pnlPrescriptions.add(btnAdd);
+
+		searchPrescriptionField = new JTextField();
+		searchPrescriptionField.setBounds(10, 8, 122, 23);
+		pnlPrescriptions.add(searchPrescriptionField);
+		searchPrescriptionField.setColumns(3);
+
+	}
+
+	private void createPrescriptionColumns() {
+		dmPrescription = (DefaultTableModel) tblPrescription.getModel();
+		dmPrescription.addColumn("Id");
+		dmPrescription.addColumn("Surname");
+		dmPrescription.addColumn("Name");
+		dmPrescription.addColumn("Date");
+
+	}
+
+	private void populatePrescriptionTable(int id, String login, String token) throws JSONException {
+
+		/*
+		 * [{"id":1,"dosage":"3 na h","prescriptionDate":"2017-04-26",
+		 * "expiryDate":"2017-05-26","medicineId":1,"medicineName":"Medicine1",
+		 * "activeSubstance":"ActiveSubstance1","therapyPlanId":1,"excerptId":4,
+		 * "doctorid":2,"patientId":1,"patientPesel":"55555555555",
+		 * "patientFirstName":"Pacjent","patientLastName":"NumerJeden"}]
+		 */
+
+		prescriptionJson = new JSONArray(restController.getPrescription(ifdoctor, Controller.name, Controller.token));
+		for (int i = 0; i < prescriptionJson.length(); i++) {
+			dmPrescription.addRow(new Object[] { prescriptionJson.getJSONObject(i).getInt("id"),
+					prescriptionJson.getJSONObject(i).getString("patientFirstName"),
+					prescriptionJson.getJSONObject(i).getString("patientLastName"),
+					prescriptionJson.getJSONObject(i).getString("prescriptionDate") });
+		}
 
 	}
 
@@ -946,8 +1018,6 @@ public class mainGUI extends JFrame implements ActionListener {
 			// tu bedzie weryfikacja, czy zalogowany jest doktor
 			// rest do doctora
 			// Get information about specific doctor using id
-
-
 
 		} else if (e.getSource() == btnPrescriptions) {
 			for (Component c : contentPane.getComponents()) {

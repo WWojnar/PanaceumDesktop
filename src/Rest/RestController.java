@@ -114,6 +114,23 @@ public class RestController {
         return dataTransfer(json, url);
     }
     
+    public String getPrescription(int id, String login, String token) {
+    	
+    	String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getPrescriptions/"+id+"/"+login+"/"+token;
+    	
+    	return dataReceive(url);
+    }
+    
+ public String getHospital(int id) {
+    	
+    	String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/hospital/getById/1"+id;
+    	
+    	return dataReceive(url);
+    }
+    
+    
+    
+    
     public String patientsList(String login, String token) {
 
         String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/patient/getAll/"+login+"/"+token;
