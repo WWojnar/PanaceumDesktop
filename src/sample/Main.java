@@ -1,5 +1,7 @@
 package sample;
 
+import org.codehaus.jettison.json.JSONException;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -23,9 +25,18 @@ public class Main extends Application {
 		launch(args);
 
 		if (Controller.name != "") {
-			mainGUI mGUI = new mainGUI();
+			mainGUI mGUI;
+			try {
+				mGUI = new mainGUI();
+				
+				mGUI.run();
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
-			mGUI.run();
+		
 		}
 	}
 }

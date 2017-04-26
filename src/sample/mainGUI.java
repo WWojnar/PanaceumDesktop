@@ -128,6 +128,10 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JLabel lblDoctorEmail;
 	private JLabel lblDoctorPhoneStr;
 	private JLabel lblDoctorPhone;
+	private int[] doctors = null; // do tabeli historii pacjenta
+	private JSONArray jsonDoctors = new JSONArray();
+	private int ifdoctor = -1;
+	private JSONObject doctor = new JSONObject();
 
 	// single history
 	private JLabel lblHistory;
@@ -147,8 +151,9 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	/**
 	 * Create the frame.
+	 * @throws JSONException 
 	 */
-	public mainGUI() {
+	public mainGUI() throws JSONException {
 
 		RestController restController = new RestController();
 
@@ -523,6 +528,59 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblDoctorPhone.setBounds(193, 369, 205, 32);
 		pnlUser.add(lblDoctorPhone);
 
+		//JSON doctors list
+		try {
+			jsonDoctors = new JSONArray(
+					restController.doctorsList(Controller.name, Controller.token));
+
+			System.out.println(jsonDoctors);
+
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			System.out.println("failxd");
+		}
+		
+		doctors = new int[jsonDoctors.length()];
+
+		for (int j = 0; j < jsonDoctors.length(); j++) {
+			JSONObject t;
+			try {
+				t = (JSONObject) jsonDoctors.get(j);
+				doctors[j] = t.getInt("userId");
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
+		for (int i=0;i<jsonDoctors.length();i++)
+			
+			if(doctors[i] == Controller.id){
+				ifdoctor = doctors[i];
+				try {
+					doctor = new JSONObject(restController.doctor(i, Controller.name, Controller.token));
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		if(ifdoctor!=-1){
+		lblDoctorName.setText(doctor.getString("firstName"));
+		lblDoctorLastName.setText(doctor.getString("lastName"));
+		lblSpeciality.setText(doctor.getString("speciality"));
+		lblLicence.setText(doctor.getString("licenceNumber"));
+		lblDoctorEmail.setText(doctor.getString("email"));
+		lblDoctorPhone.setText(doctor.getString("phone"));
+		}
+		else{
+			lblDoctorName.setText("You are not");
+			lblDoctorLastName.setText("a doctor.");
+			lblSpeciality.setText("");
+			lblLicence.setText(doctor.getString("licenceNumber"));
+			lblDoctorEmail.setText(doctor.getString("email"));
+			lblDoctorPhone.setText(doctor.getString("phone"));
+		}
+		
 		// koniec USER
 		// *********************************************
 
@@ -891,12 +949,7 @@ public class mainGUI extends JFrame implements ActionListener {
 			// rest do doctora
 			// Get information about specific doctor using id
 
-			String DoctorName = "xxxxxxxxxx";
-			String DoctorLastName = "xxxxxxxxx";
-			String Speciality = "xxxxxxxxxx";
-			String Licence = "xxxxxxxxxx";
-			String DoctorEmail = "xxxxxxxxxx";
-			String DoctorPhone = "xxxxxxxxxx";
+
 
 		} else if (e.getSource() == btnPrescriptions) {
 			for (Component c : contentPane.getComponents()) {

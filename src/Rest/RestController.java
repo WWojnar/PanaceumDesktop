@@ -134,6 +134,22 @@ public class RestController {
         
         return dataReceive(url);
     }
+    
+    
+    public String doctorsList(String login, String token) {
+
+        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getAll/"+login+"/"+token;
+        
+        return dataReceive(url);
+    }
+    
+    public String doctor(int id, String login, String token) {
+
+        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getById/"+id+"/"+login+"/"+token;
+        
+        return dataReceive(url);
+    }
+
 
   /*  public static void main(String[] args) {
         ClientTest test = new ClientTest();

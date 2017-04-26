@@ -14,6 +14,9 @@ public class loginVerification {
         
         RestController restController = new RestController();
         String result = restController.login(login, password);
+        
+        System.out.println(result);
+        
         if (!result.contains("token")) {
             return false;
         }
@@ -21,6 +24,7 @@ public class loginVerification {
         try {
             JSONObject json = new JSONObject(result);
             token = json.getString("token");
+            Controller.id = json.getInt("id");
         } catch (JSONException ex) {
             Logger.getLogger(loginVerification.class.getName()).log(Level.SEVERE, null, ex);
         }
