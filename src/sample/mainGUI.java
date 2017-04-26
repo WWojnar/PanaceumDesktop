@@ -52,6 +52,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	private int medId = 0;
 	private String medName = new String();
 	private String medActiveSubstance = new String();
+	int idMedicine = 1;
 
 	private JLabel lblMedicineDetails;
 	private JLabel lblName_2;
@@ -235,19 +236,33 @@ public class mainGUI extends JFrame implements ActionListener {
 		String[] medicineColumnNames = { "Id:", "Name:" };
 
 		// tutaj bedzie rest do leków
-		Object[][] medicineData = { { "001", "Apap" }, { "002", "Ibuprom" } };
-
+		// Object[][] medicineData = { { "001", "Apap" }, { "002", "Ibuprom" }
+		// };
+		Object[][] medicineData;
+		JSONArray jsonMedicineList = null;
 		// JSON do tablicy
-		/*
-		 * JSONArray jsonMedicineList = new JSONArray(Daj_mnie_Resta);
-		 * medicineData = new Object[jsonMedicineList.length()][2];
-		 * 
-		 * for(int i = 0; i < jsonMedicineList.length(); i++){ JSONObject t; try
-		 * { t = (JSONObject) jsonMedicineList.get(i); medicineData[i][0] =
-		 * t.getString("id"); medicineData[i][1] = t.getString("name"); } catch
-		 * (JSONException e1) { // TODO Auto-generated catch block
-		 * e1.printStackTrace(); } }
-		 */
+
+		try {
+			jsonMedicineList = new JSONArray(restController.getMedicineList(Controller.name, Controller.token));
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			System.out.println("Fail Json Medicine list");
+		}
+		medicineData = new Object[jsonMedicineList.length()][2];
+
+		for (int i = 0; i < jsonMedicineList.length(); i++) {
+			JSONObject t;
+			try {
+				t = (JSONObject) jsonMedicineList.get(i);
+				medicineData[i][0] = t.getString("id");
+				medicineData[i][1] = t.getString("name");
+
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				System.out.println("Fail Json Medicine list");
+				e1.printStackTrace();
+			}
+		}
 
 		JButton btnAddNewMedicine = new JButton("Add new");
 		btnAddNewMedicine.addActionListener(new ActionListener() {
@@ -292,12 +307,28 @@ public class mainGUI extends JFrame implements ActionListener {
 				JTable table = (JTable) me.getSource();
 				Point p = me.getPoint();
 				int row = table.rowAtPoint(p);
-				String idMedicine;
+				String idMed;
 				if (me.getClickCount() == 2) {
 
 					// Here find by id and go to single medicine panel
-					idMedicine = (String) table.getValueAt(row, 0);
+					idMedicine = Integer.valueOf((String) table.getValueAt(row, 0));
 					System.out.println("Row " + row + " selected" + "id: " + idMedicine);
+					// JSON here
+					try {
+						jsonMedicine = new JSONObject(
+								restController.getMedicineById(idMedicine, Controller.name, Controller.token));
+						medId = jsonMedicine.getInt("id");
+						medName = jsonMedicine.getString("name");
+						medActiveSubstance = jsonMedicine.getString("activeSubstance");
+					} catch (JSONException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						System.out.println("failxd");
+					}
+					txtpnSingleMedicineName.setText(medName);
+					txtpnSingleMedicineActive.setText(medActiveSubstance);
+					lblMedicineDetails.setText("Mecicine Id: " + medId);
+
 					for (Component c : contentPane.getComponents()) {
 						if (c instanceof JPanel) {
 							((JPanel) c).setVisible(false);
@@ -321,18 +352,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		pnlSingleMedicine.setBounds(303, 54, 1071, 817);
 		contentPane.add(pnlSingleMedicine);
 		pnlSingleMedicine.setLayout(null);
-
-		// JSON here
-		try {
-			jsonMedicine = new JSONObject("{\"id\":001,\"name\":\"Apap\",\"activeSubstance\":\"Mystery\"}");
-			medId = jsonMedicine.getInt("id");
-			medName = jsonMedicine.getString("name");
-			medActiveSubstance = jsonMedicine.getString("activeSubstance");
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			System.out.println("failxd");
-		}
 
 		lblMedicineDetails = new JLabel("Medicine Id: " + medId);
 		lblMedicineDetails.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -385,9 +404,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		});
 		btnCancelSingleMedicine.setBounds(10, 743, 141, 44);
 		pnlSingleMedicine.add(btnCancelSingleMedicine);
-
-		txtpnSingleMedicineName.setText(medName);
-		txtpnSingleMedicineActive.setText(medActiveSubstance);
 
 		// koniec SINGLE MEDICINES
 		// *********************************************
@@ -548,47 +564,35 @@ public class mainGUI extends JFrame implements ActionListener {
 			System.out.println("failxd");
 		}
 
-		doctors = new int[jsonDoctors.length()];
+		if (Controller.doctorId != 0) {
 
-		for (int j = 0; j < jsonDoctors.length(); j++) {
-			JSONObject t;
 			try {
-				t = (JSONObject) jsonDoctors.get(j);
-				doctors[j] = t.getInt("userId");
+				doctor = new JSONObject(restController.doctor(Controller.doctorId, Controller.name, Controller.token));
+
+				System.out.println(doctor);
+
 			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		}
 
-		for (int i = 0; i < jsonDoctors.length(); i++)
 
-			if (doctors[i] == Controller.id) {
-				ifdoctor = doctors[i];
-				// TU WYRZUCA BLAD _ WYDAJE MI SIE, ZE BLAD JEST PO STRONIE
-				// RESTA
-				try {
-					doctor = new JSONObject(restController.doctor(i, Controller.name, Controller.token));
-				} catch (JSONException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				lblDoctorName.setText(doctor.getString("firstName"));
+				lblDoctorLastName.setText(doctor.getString("lastName"));
+				lblSpeciality.setText(doctor.getString("speciality"));
+				lblLicence.setText(doctor.getString("licenceNumber"));
+				lblDoctorEmail.setText(doctor.getString("email"));
+				lblDoctorPhone.setText(doctor.getString("phone"));
+			} else {
+				lblDoctorName.setText("You are not");
+				lblDoctorLastName.setText("a doctor.");
+				lblSpeciality.setText("");
+				lblLicence.setText("");
+				lblDoctorEmail.setText("");
+				lblDoctorPhone.setText("");
 			}
-		if (ifdoctor != -1) {
-			lblDoctorName.setText(doctor.getString("firstName"));
-			lblDoctorLastName.setText(doctor.getString("lastName"));
-			lblSpeciality.setText(doctor.getString("speciality"));
-			lblLicence.setText(doctor.getString("licenceNumber"));
-			lblDoctorEmail.setText(doctor.getString("email"));
-			lblDoctorPhone.setText(doctor.getString("phone"));
-		} else {
-			lblDoctorName.setText("You are not");
-			lblDoctorLastName.setText("a doctor.");
-			lblSpeciality.setText("");
-			lblLicence.setText("");
-			lblDoctorEmail.setText("");
-			lblDoctorPhone.setText("");
-		}
+
+	
 
 		// koniec USER
 		// *********************************************
@@ -907,7 +911,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		fillPrescriptionJPanel();
 		createPrescriptionColumns();
-		//populatePrescriptionTable();
+		// populatePrescriptionTable();
 
 		// koniec PRESCRIPTIONS
 		// *********************************************

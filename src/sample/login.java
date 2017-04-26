@@ -19,10 +19,10 @@ public class login {
 
 	Button bLogIn;
 	RestController RestApi;
-	
+
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Panaceum");
-		
+
 		// VBox to arrange elements vertically
 		// Arg in VBox is responsible for distance between elements
 		VBox verticalLayout = new VBox(9);
@@ -85,11 +85,10 @@ public class login {
 		btnLogin.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent e) {
-				//System.out.println(RestApi.login(usernameTextField.getText(), passwordField.getText()));
 				if (loginVerification.verifyLogin(usernameTextField.getText(), passwordField.getText())) {
 					message.setText("Your password has been confirmed");
 					message.setTextFill(Color.rgb(21, 117, 84));
-					
+
 					Controller.name = usernameTextField.getText();
 
 					hide(primaryStage);
@@ -102,8 +101,8 @@ public class login {
 			}
 		});
 		/*
-		 * OLD for purposes to overlook mishaps
-		 * btnLogin.setOnAction(new EventHandler<ActionEvent>() {
+		 * OLD for purposes to overlook mishaps btnLogin.setOnAction(new
+		 * EventHandler<ActionEvent>() {
 		 * 
 		 * @Override public void handle(ActionEvent e){ if
 		 * (loginVerification.verifyLogin(usernameTextField.getText(),
@@ -131,7 +130,6 @@ public class login {
 		primaryStage.setScene(scene);
 		// Show view
 		primaryStage.show();
-		
 
 	}
 

@@ -1,6 +1,5 @@
 package Rest;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,170 +11,178 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
-
 public class RestController {
-	
+
 	private String dataTransfer(JSONObject json, String url_address) {
-        String print_returned = "";
+		String print_returned = "";
 
-        try {
-            URL url = new URL(url_address);
-            URLConnection connection = url.openConnection();
+		try {
+			URL url = new URL(url_address);
+			URLConnection connection = url.openConnection();
 
-            connection.setDoOutput(true);
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
+			connection.setDoOutput(true);
+			connection.setRequestProperty("Content-Type", "application/json");
+			connection.setConnectTimeout(5000);
+			connection.setReadTimeout(5000);
 
-            OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
-            out.write(json.toString());
-            out.close();
+			OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
+			out.write(json.toString());
+			out.close();
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
-            String input;
-            while ((input = in.readLine()) != null) {
-                print_returned += input + "\n";
-            }
+			String input;
+			while ((input = in.readLine()) != null) {
+				print_returned += input + "\n";
+			}
 
-            in.close();
-        } catch (IOException e) {
-            if (e.toString().contains("java.net.ConnectException: Connection refused: connect")) {
-                print_returned += "Zapomniales zalaczyc serwer" + "\n";
-            } else {
-                print_returned += e;
-            }
-        }
+			in.close();
+		} catch (IOException e) {
+			if (e.toString().contains("java.net.ConnectException: Connection refused: connect")) {
+				print_returned += "Zapomniales zalaczyc serwer" + "\n";
+			} else {
+				print_returned += e;
+			}
+		}
 
-        return print_returned;
-    }
-	
+		return print_returned;
+	}
+
 	private String dataReceive(String url_address) {
-        String print_returned = "";
+		String print_returned = "";
 
-        try {
-            URL url = new URL(url_address);
-            URLConnection connection = url.openConnection();
+		try {
+			URL url = new URL(url_address);
+			URLConnection connection = url.openConnection();
 
-            connection.setDoOutput(true);
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
+			connection.setDoOutput(true);
+			connection.setRequestProperty("Content-Type", "application/json");
+			connection.setConnectTimeout(5000);
+			connection.setReadTimeout(5000);
 
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
-            String input;
-            while ((input = in.readLine()) != null) {
-                print_returned += input + "\n";
-            }
+			String input;
+			while ((input = in.readLine()) != null) {
+				print_returned += input + "\n";
+			}
 
-            in.close();
-        } catch (IOException e) {
-            if (e.toString().contains("java.net.ConnectException: Connection refused: connect")) {
-                print_returned += "Zapomniales zalaczyc serwer" + "\n";
-            } else {
-                print_returned += e;
-            }
-        }
+			in.close();
+		} catch (IOException e) {
+			if (e.toString().contains("java.net.ConnectException: Connection refused: connect")) {
+				print_returned += "Zapomniales zalaczyc serwer" + "\n";
+			} else {
+				print_returned += e;
+			}
+		}
 
-        return print_returned;
-    }
-	
+		return print_returned;
+	}
 
-    public String register(String login, String passwd) {
-        JSONObject json = null;
-        try {
-            json = new JSONObject()
-                            .put("login", login)
-                            .put("password", passwd);
-        } catch (JSONException e) {
-            return "Klient: Blad przy tworzeniu JSONa";
-        }
+	public String register(String login, String passwd) {
+		JSONObject json = null;
+		try {
+			json = new JSONObject().put("login", login).put("password", passwd);
+		} catch (JSONException e) {
+			return "Klient: Blad przy tworzeniu JSONa";
+		}
 
-        //String url = "http://localhost:8084/Panaceum/user/register";
-        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/user/register";
+		// String url = "http://localhost:8084/Panaceum/user/register";
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/user/register";
 
-        return dataTransfer(json, url);
-    }
-    
-    public String login(String login, String passwd) {
-        JSONObject json = null;
-        try {
-            json = new JSONObject()
-                            .put("login", login)
-                            .put("password", passwd);
-        } catch (JSONException e) {
-            return "Klient: Blad przy tworzeniu JSONa";
-        }
+		return dataTransfer(json, url);
+	}
 
-        //String url = "http://localhost:8084/Panaceum/user/login";
-        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/user/login";
-        
-        return dataTransfer(json, url);
-    }
-    
-    public String getPrescription(int id, String login, String token) {
-    	
-    	String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getPrescriptions/"+id+"/"+login+"/"+token;
-    	
-    	return dataReceive(url);
-    }
-    
- public String getHospital(int id) {
-    	
-    	String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/hospital/getById/1"+id;
-    	
-    	return dataReceive(url);
-    }
-    
-    
-    
-    
-    public String patientsList(String login, String token) {
+	public String login(String login, String passwd) {
+		JSONObject json = null;
+		try {
+			json = new JSONObject().put("login", login).put("password", passwd);
+		} catch (JSONException e) {
+			return "Klient: Blad przy tworzeniu JSONa";
+		}
 
-        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/patient/getAll/"+login+"/"+token;
-        
-        return dataReceive(url);
-    }
-    
-    public String patient(String pesel, String login, String token) {
+		// String url = "http://localhost:8084/Panaceum/user/login";
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/user/login";
 
-        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/patient/getByPesel/"+pesel+"/"+login+"/"+token;
-        
-        return dataReceive(url);
-    }
-    
-    public String getHistory(String pesel, String login, String token) {
+		return dataTransfer(json, url);
+	}
 
-        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/patient/getHistory/"+pesel+"/"+login+"/"+token;
-        
-        return dataReceive(url);
-    }
-    
-    
-    public String doctorsList(String login, String token) {
+	public String getPrescription(int id, String login, String token) {
 
-        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getAll/"+login+"/"+token;
-        
-        return dataReceive(url);
-    }
-    
-    public String doctor(int id, String login, String token) {
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getPrescriptions/" + id + "/" + login + "/"
+				+ token;
 
-        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getById/"+id+"/"+login+"/"+token;
-        
-        return dataReceive(url);
-    }
+		return dataReceive(url);
+	}
 
+	public String getHospital(int id) {
 
-  /*  public static void main(String[] args) {
-        ClientTest test = new ClientTest();
-        String help = "";
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/hospital/getById/" + id;
 
-        //help = test.register("kluski", "1234");
-        help = test.login("kluski", "1234");
+		return dataReceive(url);
+	}
 
-        System.out.println(help);
-   }*/ 
-    
+	public String patientsList(String login, String token) {
+
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/patient/getAll/" + login + "/" + token;
+
+		return dataReceive(url);
+	}
+
+	public String patient(String pesel, String login, String token) {
+
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/patient/getByPesel/" + pesel + "/" + login + "/"
+				+ token;
+
+		return dataReceive(url);
+	}
+
+	public String getHistory(String pesel, String login, String token) {
+
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/patient/getHistory/" + pesel + "/" + login + "/"
+				+ token;
+
+		return dataReceive(url);
+	}
+
+	public String doctorsList(String login, String token) {
+
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getAll/" + login + "/" + token;
+
+		return dataReceive(url);
+	}
+
+	public String doctor(int id, String login, String token) {
+
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getById/" + id + "/" + login + "/" + token;
+
+		System.out.println(url);
+
+		return dataReceive(url);
+	}
+
+	public String getMedicineList(String login, String token) {
+
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/medicine/getAll/" + login + "/" + token;
+
+		return dataReceive(url);
+	}
+
+	public String getMedicineById(int id, String login, String token) {
+
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/medicine/getById/" + id + "/" + login + "/" + token;
+
+		return dataReceive(url);
+	}
+
+	/*
+	 * public static void main(String[] args) { ClientTest test = new
+	 * ClientTest(); String help = "";
+	 * 
+	 * //help = test.register("kluski", "1234"); help = test.login("kluski",
+	 * "1234");
+	 * 
+	 * System.out.println(help); }
+	 */
+
 }
