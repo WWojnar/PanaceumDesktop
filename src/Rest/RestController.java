@@ -147,6 +147,8 @@ public class RestController {
 
         String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getById/"+id+"/"+login+"/"+token;
         
+        System.out.println(url);
+        
         return dataReceive(url);
     }
 

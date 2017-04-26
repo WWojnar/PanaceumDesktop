@@ -151,7 +151,8 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	/**
 	 * Create the frame.
-	 * @throws JSONException 
+	 * 
+	 * @throws JSONException
 	 */
 	public mainGUI() throws JSONException {
 
@@ -528,49 +529,27 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblDoctorPhone.setBounds(193, 369, 205, 32);
 		pnlUser.add(lblDoctorPhone);
 
-		//JSON doctors list
-		try {
-			jsonDoctors = new JSONArray(
-					restController.doctorsList(Controller.name, Controller.token));
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			System.out.println("failxd");
-		}
-		
-		doctors = new int[jsonDoctors.length()];
 
-		for (int j = 0; j < jsonDoctors.length(); j++) {
-			JSONObject t;
+				
+		if (Controller.doctorId != 0) {
+			
 			try {
-				t = (JSONObject) jsonDoctors.get(j);
-				doctors[j] = t.getInt("userId");
+				doctor = new JSONObject(restController.doctor(Controller.doctorId, Controller.name, Controller.token));
+				
+				System.out.println(doctor);
+				
 			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-		}
-		
-		for (int i=0;i<jsonDoctors.length();i++)
 			
-			if(doctors[i] == Controller.id){
-				ifdoctor = doctors[i];
-				//TU WYRZUCA BLAD _ WYDAJE MI SIE, ZE BLAD JEST PO STRONIE RESTA
-				try {
-					doctor = new JSONObject(restController.doctor(i, Controller.name, Controller.token));
-				} catch (JSONException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
-		if(ifdoctor!=-1){
-		lblDoctorName.setText(doctor.getString("firstName"));
-		lblDoctorLastName.setText(doctor.getString("lastName"));
-		lblSpeciality.setText(doctor.getString("speciality"));
-		lblLicence.setText(doctor.getString("licenceNumber"));
-		lblDoctorEmail.setText(doctor.getString("email"));
-		lblDoctorPhone.setText(doctor.getString("phone"));
-		}
-		else{
+			lblDoctorName.setText(doctor.getString("firstName"));
+			lblDoctorLastName.setText(doctor.getString("lastName"));
+			lblSpeciality.setText(doctor.getString("speciality"));
+			lblLicence.setText(doctor.getString("licenceNumber"));
+			lblDoctorEmail.setText(doctor.getString("email"));
+			lblDoctorPhone.setText(doctor.getString("phone"));
+		} else {
 			lblDoctorName.setText("You are not");
 			lblDoctorLastName.setText("a doctor.");
 			lblSpeciality.setText("");
@@ -578,7 +557,7 @@ public class mainGUI extends JFrame implements ActionListener {
 			lblDoctorEmail.setText("");
 			lblDoctorPhone.setText("");
 		}
-		
+
 		// koniec USER
 		// *********************************************
 
@@ -818,9 +797,9 @@ public class mainGUI extends JFrame implements ActionListener {
 										}
 									}
 									pnlSingleHistory.setVisible(true);
-									
-									 lblHistory.setText((String) data[row][0]);
-									
+
+									lblHistory.setText((String) data[row][0]);
+
 								}
 							}
 						});
@@ -831,15 +810,12 @@ public class mainGUI extends JFrame implements ActionListener {
 				if (!searchConfirmed)
 					JOptionPane.showMessageDialog(null, "Given PESEL is incorrect");
 
-
-
 			}// klikniecie buttnou search
 		});
 
 		// koniec PATIENTS
 		// *********************************************
 
-		
 		// *********************************************
 		// PANEL SINGLE HISTORY
 
@@ -856,7 +832,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblHistory.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblHistory.setBounds(10, 11, 962, 37);
 		pnlSingleHistory.add(lblHistory);
-
 
 		// Go back to history view
 
@@ -894,7 +869,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		// koniec SINGLE HISTORY
 		// *********************************************
-		
+
 		// *********************************************
 		// PANEL PRESCRIPTIONS
 
@@ -946,8 +921,6 @@ public class mainGUI extends JFrame implements ActionListener {
 			// tu bedzie weryfikacja, czy zalogowany jest doktor
 			// rest do doctora
 			// Get information about specific doctor using id
-
-
 
 		} else if (e.getSource() == btnPrescriptions) {
 			for (Component c : contentPane.getComponents()) {

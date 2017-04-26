@@ -8,4 +8,5 @@ public class Controller {
 	static RestController RestApi;
 	static String token = "";
 	static int id=0;
+	static int doctorId = 0;
 }
