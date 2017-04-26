@@ -24,6 +24,7 @@ public class loginVerification {
         } catch (JSONException ex) {
             Logger.getLogger(loginVerification.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Controller.token = token;
         System.err.println(token);
         return true;
     }

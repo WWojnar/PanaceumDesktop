@@ -25,6 +25,8 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+import Rest.RestController;
+
 public class mainGUI extends JFrame implements ActionListener {
 
 	private JSONObject PatientJSON = new JSONObject();
@@ -144,28 +146,34 @@ public class mainGUI extends JFrame implements ActionListener {
 	 */
 	public mainGUI() {
 
+		RestController restController = new RestController();
+
 		// lista pacjentow musi zostac utworzona tutaj, bo ich pesele moga
 		// zostac wyszukane z kazdego miejsca
 		// rest Get list of patients - zwraca JSONArray
-		// jsonPatients = new JSONArray(rest);
+		try {
+			jsonPatients = new JSONArray(restController.patientsList(Controller.name, Controller.token));
 
-		// PeselTable = new String[jsonPatients.length()];
+			System.out.println(jsonPatients);
 
-		// for(int i = 0; i < jsonPatients.length(); i++) {
-		// JSONObject t;
-		// try {
-		// t = (JSONObject) jsonPatients.get(i);
-		// PeselTable[i] = t.getString("pesel");
-		// } catch (JSONException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
-		// }
+		} catch (JSONException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 
-		// TYMCZASOWO PESEL NA SZTYWNO
-		PeselTable = new String[2];
-		PeselTable[0] = "2099227";
-		PeselTable[1] = "997";
+		 PeselTable = new String[jsonPatients.length()];
+
+		for (int i = 0; i < jsonPatients.length(); i++) {
+			JSONObject t;
+			try {
+				t = (JSONObject) jsonPatients.get(i);
+				PeselTable[i] = t.getString("pesel");
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+
 
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -655,8 +663,7 @@ public class mainGUI extends JFrame implements ActionListener {
 						// TU ZOSTANIE WYWOLANE ZAPYTANIE RESTOWE
 						// Get information about specific patient using pesel
 						try {
-							jsonPatient = new JSONObject(
-									"{\"id\":2,\"sex\":\"female\",\"age\":50,\"bloodType\":\"Z\",\"pesel\":\"997\",\"firstName\":\"Adrona\",\"lastName\":\"Stsaa\",\"phone\":\"38483493\",\"email\":\"dsbfidfdis\",\"addressId\":5,\"city\":\"townsville\",\"street\":\"adsdsadasd\",\"buildingNumber\":\"53\",\"flatNumber\":\"xD\",\"zipCode\":\"53-632\"}");
+							jsonPatient = new JSONObject(restController.patient(textField.getText(),Controller.name, Controller.token));
 							pesel = jsonPatient.getString("pesel");
 							firstname = jsonPatient.getString("firstName");
 							lastname = jsonPatient.getString("lastName");

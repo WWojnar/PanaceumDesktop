@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
@@ -48,6 +49,38 @@ public class RestController {
 
         return print_returned;
     }
+	
+	private String dataReceive(String url_address) {
+        String print_returned = "";
+
+        try {
+            URL url = new URL(url_address);
+            URLConnection connection = url.openConnection();
+
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+            String input;
+            while ((input = in.readLine()) != null) {
+                print_returned += input + "\n";
+            }
+
+            in.close();
+        } catch (IOException e) {
+            if (e.toString().contains("java.net.ConnectException: Connection refused: connect")) {
+                print_returned += "Zapomniales zalaczyc serwer" + "\n";
+            } else {
+                print_returned += e;
+            }
+        }
+
+        return print_returned;
+    }
+	
 
     public String register(String login, String passwd) {
         JSONObject json = null;
@@ -80,6 +113,21 @@ public class RestController {
         
         return dataTransfer(json, url);
     }
+    
+    public String patientsList(String login, String token) {
+
+        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/patient/getAll/"+login+"/"+token;
+        
+        return dataReceive(url);
+    }
+    
+    public String patient(String pesel, String login, String token) {
+
+        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/patient/getByPesel/"+pesel+"/"+login+"/"+token;
+        
+        return dataReceive(url);
+    }
+    
 
   /*  public static void main(String[] args) {
         ClientTest test = new ClientTest();
