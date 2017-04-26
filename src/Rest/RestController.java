@@ -150,6 +150,19 @@ public class RestController {
         return dataReceive(url);
     }
 
+    public String getMedicineList(String login, String token){
+    	
+    	String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/medicine/getAll/" + login + "/" + token;
+    	
+    	return dataReceive(url);
+    }
+    
+    public String getMedicineById(int id, String login, String token){
+    	
+    	String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/medicine/getById/"+ id + "/" + login + "/" + token;
+    	
+    	return dataReceive(url);
+    }
 
   /*  public static void main(String[] args) {
         ClientTest test = new ClientTest();
