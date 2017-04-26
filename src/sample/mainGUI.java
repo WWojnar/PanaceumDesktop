@@ -42,6 +42,21 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JTable medicineTable;
 	private JButton btnSearchMedicine;
 	
+	//Single Medicine
+	private JPanel pnlSingleMedicine;
+	private JSONObject jsonMedicine = new JSONObject();
+	private int medId = 0;
+	private String medName = new String();
+	private String medActiveSubstance = new String();
+	
+	private JLabel lblMedicineDetails;
+	private JLabel lblName_2;
+	private JTextPane txtpnSingleMedicineName;
+	private JTextPane txtpnSingleMedicineActive;
+	private JTextPane txtpnMedicineRelationsWith;
+	private JButton btnCancelSingleMedicine;
+	
+	
 	// AddMedicine
 	private JPanel pnlAddMedicine;
 	private JTextPane txtpnAddMedicineName;
@@ -258,12 +273,121 @@ String[] medicineColumnNames = {"Id:", "Name:"};
 				medicineTable.enable(false);
 				medicineTable.getColumn(medicineColumnNames[0]).setWidth(10);
 				scrollPane_1.setViewportView(medicineTable);
+				
+				// 2 clicks on row initializes action
+				medicineTable.addMouseListener(new MouseAdapter() {
+					public void mousePressed(MouseEvent me) {
+						JTable table = (JTable) me.getSource();
+						Point p = me.getPoint();
+						int row = table.rowAtPoint(p);
+						String idMedicine;
+						if (me.getClickCount() == 2) {
+							
+							// Here find by id and go to single medicine panel
+						    idMedicine = (String) table.getValueAt(row, 0);
+						    System.out.println("Row " + row + " selected" + "id: " + idMedicine);
+						    for (Component c : contentPane.getComponents()) {
+								if (c instanceof JPanel) {
+									((JPanel) c).setVisible(false);
+								}
+							}
+						    pnlSingleMedicine.setVisible(true);
+							
+						}
+					}
+				});
 		
 		// koniec MEDICINES
 		// *********************************************
-
-				// *********************************************
-				// PANEL ADD MEDICINES
+				
+				
+		// *********************************************
+		// PANEL SINGLE MEDICINES
+				
+				///
+				
+				pnlSingleMedicine = new JPanel();
+				pnlSingleMedicine.setBounds(303, 54, 1071, 817);
+				contentPane.add(pnlSingleMedicine);
+				pnlSingleMedicine.setLayout(null);
+				
+				// JSON here 
+				try {
+					jsonMedicine = new JSONObject(
+							"{\"id\":001,\"name\":\"Apap\",\"activeSubstance\":\"Mystery\"}");
+					medId = jsonMedicine.getInt("id");
+					medName = jsonMedicine.getString("name");
+					medActiveSubstance = jsonMedicine.getString("activeSubstance");
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					System.out.println("failxd");
+				}
+				
+				lblMedicineDetails = new JLabel("Medicine Id: " + medId);
+				lblMedicineDetails.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				lblMedicineDetails.setBounds(10, 11, 603, 37);
+				pnlSingleMedicine.add(lblMedicineDetails);
+				
+				lblName_2 = new JLabel("Name: ");
+				lblName_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				lblName_2.setBounds(10, 73, 55, 37);
+				pnlSingleMedicine.add(lblName_2);
+				
+				txtpnSingleMedicineName = new JTextPane();
+				txtpnSingleMedicineName.setText("No information");
+				txtpnSingleMedicineName.setBounds(10, 113, 354, 37);
+				pnlSingleMedicine.add(txtpnSingleMedicineName);
+				
+				// 2 times
+				lblActiveSubstances = new JLabel("Active Substances:");
+				lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				lblActiveSubstances.setBounds(10, 179, 130, 37);
+				pnlSingleMedicine.add(lblActiveSubstances);
+				
+				txtpnSingleMedicineActive = new JTextPane();
+				txtpnSingleMedicineActive.setText("No information");
+				txtpnSingleMedicineActive.setBounds(10, 232, 354, 460);
+				pnlSingleMedicine.add(txtpnSingleMedicineActive);
+				
+				// 2 times
+				lblRelations = new JLabel("Relations");
+				lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				lblRelations.setBounds(572, 73, 157, 37);
+				pnlSingleMedicine.add(lblRelations);
+				
+				txtpnMedicineRelationsWith = new JTextPane();
+				txtpnMedicineRelationsWith.setText("Do not mix with alcohol...");
+				txtpnMedicineRelationsWith.setBounds(572, 113, 430, 579);
+				pnlSingleMedicine.add(txtpnMedicineRelationsWith);
+				
+				// Go back to Medicine view 
+				btnCancelSingleMedicine = new JButton("Back");
+				btnCancelSingleMedicine.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						for (Component c : contentPane.getComponents()) {
+							if (c instanceof JPanel) {
+								((JPanel) c).setVisible(false);
+							}
+						}
+						pnlMedicine.setVisible(true);
+					}
+				});
+				btnCancelSingleMedicine.setBounds(10, 743, 141, 44);
+				pnlSingleMedicine.add(btnCancelSingleMedicine);
+				
+				
+				txtpnSingleMedicineName.setText(medName);
+				txtpnSingleMedicineActive.setText(medActiveSubstance);
+				
+				
+				
+		// koniec SINGLE MEDICINES
+		// *********************************************
+				
+				
+		// *********************************************
+		// PANEL ADD MEDICINES
 				
 				pnlAddMedicine = new JPanel();
 				pnlAddMedicine.setBounds(303, 54, 1071, 817);
@@ -309,13 +433,20 @@ String[] medicineColumnNames = {"Id:", "Name:"};
 				btnSubmitNewMedicine = new JButton("Add");
 				btnSubmitNewMedicine.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						
 						// Add function here...(txtpnAddMedicineName.getText(), txtpnAddMedicineActive.getText());
+						JOptionPane.showMessageDialog(null, "New medicine has been added");			
+						for (Component c : contentPane.getComponents()) {
+							if (c instanceof JPanel) {
+								((JPanel) c).setVisible(false);
+							}
+						}
+						pnlMedicine.setVisible(true);
 					}
 				});
 				btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
 				pnlAddMedicine.add(btnSubmitNewMedicine);
 				
+				// Go back to Medicine view 
 				btnCancelAddMedicine = new JButton("Cancel");
 				btnCancelAddMedicine.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
@@ -332,8 +463,8 @@ String[] medicineColumnNames = {"Id:", "Name:"};
 		
 		
 		
-				// koniec przykladu
-				// *********************************************
+		// koniec przykladu ADD medicine
+		// ********************* ************************
 		
 				
 
