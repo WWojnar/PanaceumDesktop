@@ -11,6 +11,7 @@ import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
+@SuppressWarnings("unused")
 public class RestController {
 
 	private String dataTransfer(JSONObject json, String url_address) {

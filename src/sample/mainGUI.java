@@ -911,7 +911,6 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		fillPrescriptionJPanel();
 		createPrescriptionColumns();
-		// populatePrescriptionTable();
 
 		// koniec PRESCRIPTIONS
 		// *********************************************
@@ -980,7 +979,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	}
 
-	private void populatePrescriptionTable(int id, String login, String token) throws JSONException {
+	private void populatePrescriptionTable() throws JSONException {
 
 		/*
 		 * [{"id":1,"dosage":"3 na h","prescriptionDate":"2017-04-26",
@@ -990,13 +989,15 @@ public class mainGUI extends JFrame implements ActionListener {
 		 * "patientFirstName":"Pacjent","patientLastName":"NumerJeden"}]
 		 */
 
-		prescriptionJson = new JSONArray(restController.getPrescription(ifdoctor, Controller.name, Controller.token));
+		prescriptionJson = new JSONArray(restController.getPrescription(Controller.doctorId, Controller.name, Controller.token));
 		for (int i = 0; i < prescriptionJson.length(); i++) {
 			dmPrescription.addRow(new Object[] { prescriptionJson.getJSONObject(i).getInt("id"),
 					prescriptionJson.getJSONObject(i).getString("patientFirstName"),
 					prescriptionJson.getJSONObject(i).getString("patientLastName"),
 					prescriptionJson.getJSONObject(i).getString("prescriptionDate") });
 		}
+		dmPrescription.fireTableDataChanged();
+
 
 	}
 
@@ -1028,6 +1029,12 @@ public class mainGUI extends JFrame implements ActionListener {
 				if (c instanceof JPanel) {
 					((JPanel) c).setVisible(false);
 				}
+			}
+			try {
+				populatePrescriptionTable();
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 			pnlPrescriptions.setVisible(true);
 		}
