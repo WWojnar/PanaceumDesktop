@@ -128,6 +128,12 @@ public class RestController {
         return dataReceive(url);
     }
     
+    public String getHistory(String pesel, String login, String token) {
+
+        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/patient/getHistory/"+pesel+"/"+login+"/"+token;
+        
+        return dataReceive(url);
+    }
 
   /*  public static void main(String[] args) {
         ClientTest test = new ClientTest();

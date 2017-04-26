@@ -101,7 +101,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	private String city = new String();
 	private String street = new String();
 	private String buildingnumber = new String();
-	private String flatnumber = new String();
+	private String flatnumber = "";
 	private String zipcode = new String();
 	private String sex = new String();
 	private int age = 0;
@@ -112,7 +112,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	// patient list
 	private JSONArray jsonPatients = new JSONArray();
 	private String[] PeselTable;
-	private JPanel panelUser;
+	private JSONArray jsonHistory = new JSONArray();
 
 	// panel user
 	private JButton btnUser;
@@ -128,6 +128,10 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JLabel lblDoctorEmail;
 	private JLabel lblDoctorPhoneStr;
 	private JLabel lblDoctorPhone;
+
+	// single history
+	private JLabel lblHistory;
+	private JPanel pnlSingleHistory;
 
 	/**
 	 * Launch the application.
@@ -161,7 +165,7 @@ public class mainGUI extends JFrame implements ActionListener {
 			e2.printStackTrace();
 		}
 
-		 PeselTable = new String[jsonPatients.length()];
+		PeselTable = new String[jsonPatients.length()];
 
 		for (int i = 0; i < jsonPatients.length(); i++) {
 			JSONObject t;
@@ -173,7 +177,6 @@ public class mainGUI extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
-
 
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -646,8 +649,8 @@ public class mainGUI extends JFrame implements ActionListener {
 				searchConfirmed = false;
 				// sprawdzanie, czy podany pesel jest zgodny z ktoryms w tabeli
 				for (String i : PeselTable) {
-					if (textField.getText().equals(i)) {
 
+					if (textField.getText().equals(i)) {
 						searchConfirmed = true;
 
 						for (Component c : contentPane.getComponents()) {
@@ -659,11 +662,11 @@ public class mainGUI extends JFrame implements ActionListener {
 						pnlPatient.setVisible(true);
 						/************************************/
 
-						// PRZYKLADOWY JSON
 						// TU ZOSTANIE WYWOLANE ZAPYTANIE RESTOWE
 						// Get information about specific patient using pesel
 						try {
-							jsonPatient = new JSONObject(restController.patient(textField.getText(),Controller.name, Controller.token));
+							jsonPatient = new JSONObject(
+									restController.patient(textField.getText(), Controller.name, Controller.token));
 							pesel = jsonPatient.getString("pesel");
 							firstname = jsonPatient.getString("firstName");
 							lastname = jsonPatient.getString("lastName");
@@ -673,9 +676,11 @@ public class mainGUI extends JFrame implements ActionListener {
 							city = jsonPatient.getString("city");
 							street = jsonPatient.getString("street");
 							buildingnumber = jsonPatient.getString("buildingNumber");
-							flatnumber = jsonPatient.getString("flatNumber");
+							if (jsonPatient.has(flatnumber))
+								flatnumber = jsonPatient.getString("flatnumber");
 							zipcode = jsonPatient.getString("zipCode");
 							age = jsonPatient.getInt("age");
+							sex = jsonPatient.getString("sex");
 						} catch (JSONException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -698,33 +703,38 @@ public class mainGUI extends JFrame implements ActionListener {
 						// tutaj bedzie rest do historii
 						// getHistory/{pesel}/{login}/{token}
 
-						// jsonHistory = new JSONArray(rest);
+						try {
+							jsonHistories = new JSONArray(
+									restController.getHistory(pesel, Controller.name, Controller.token));
 
-						// data = new Object[jsonHistories.length()][3];
-						//
-						// for(int j = 0; j < jsonHistories.length(); j++) {
-						// JSONObject t;
-						// try {
-						// t = (JSONObject) jsonHistories.get(j);
-						// data[j][0] = t.getString("excerptRecognition");
-						// data[j][0] = t.getString("interviewDate");
-						// data[j][0] = t.getString("excerptDate);
-						// } catch (JSONException e1) {
-						// // TODO Auto-generated catch block
-						// e1.printStackTrace();
-						// }
-						// }
+							System.out.println(jsonHistory);
 
-						// TYMCZASOWO NA SZTYWNO
-						Object[][] data = { { "kamehamehamehameahemaheamehamehaea", "10.07.1410", "10.04.2010" },
-								{ "sidi", "10.07.1410", "10.04.20110" }, { "cos inene", "10.07.1410", "10.04.2010" } };
+						} catch (JSONException e1) {
+							// TODO Auto-generated catch block
+							System.out.println("failxd");
+						}
+
+						data = new Object[jsonHistories.length()][3];
+
+						for (int j = 0; j < jsonHistories.length(); j++) {
+							JSONObject t;
+							try {
+								t = (JSONObject) jsonHistories.get(j);
+								data[j][0] = t.getString("excerptRecognition");
+								data[j][1] = t.getString("interviewDate");
+								data[j][2] = t.getString("excerptDate");
+							} catch (JSONException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						}
 
 						// tabela jest dynamiczna, wiec musi byc tworzona w tym
 						// miejscu
 						// moze w sumie nie musi, ale tak dziala
 						// tak, wiem, ze uzywam deprecjonowanej metody
 						tblHistory = new JTable(data, columnNames);
-						;
+
 						tblHistory.setBounds(0, 343, 1071, 463);
 						tblHistory.enable(false);
 
@@ -745,6 +755,16 @@ public class mainGUI extends JFrame implements ActionListener {
 								if (me.getClickCount() == 2) {
 									// your valueChanged overridden method
 									System.out.println("Row " + row + " selected");
+
+									for (Component c : contentPane.getComponents()) {
+										if (c instanceof JPanel) {
+											((JPanel) c).setVisible(false);
+										}
+									}
+									pnlSingleHistory.setVisible(true);
+									
+									 lblHistory.setText((String) data[row][0]);
+									
 								}
 							}
 						});
@@ -755,12 +775,70 @@ public class mainGUI extends JFrame implements ActionListener {
 				if (!searchConfirmed)
 					JOptionPane.showMessageDialog(null, "Given PESEL is incorrect");
 
+
+
 			}// klikniecie buttnou search
 		});
 
 		// koniec PATIENTS
 		// *********************************************
 
+		
+		// *********************************************
+		// PANEL SINGLE HISTORY
+
+		///
+
+		pnlSingleHistory = new JPanel();
+		pnlSingleHistory.setBounds(303, 54, 1071, 817);
+		contentPane.add(pnlSingleHistory);
+		pnlSingleHistory.setLayout(null);
+
+		// WYBRANA HISTORIA HERE
+
+		lblHistory = new JLabel("xxxxxxxxxxxxxxx");
+		lblHistory.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblHistory.setBounds(10, 11, 962, 37);
+		pnlSingleHistory.add(lblHistory);
+
+
+		// Go back to history view
+
+		JButton btnCancelHistory = new JButton();
+
+		btnCancelHistory = new JButton("Back");
+		btnCancelHistory.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (Component c : contentPane.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				pnlPatient.setVisible(true);
+			}
+		});
+		btnCancelHistory.setBounds(10, 743, 141, 44);
+		pnlSingleHistory.add(btnCancelHistory);
+
+		JButton btnInfection = new JButton("Infection card");
+		btnInfection.setBounds(10, 231, 191, 44);
+		pnlSingleHistory.add(btnInfection);
+
+		JButton btnFirstExamination = new JButton("First Examination");
+		btnFirstExamination.setBounds(10, 156, 191, 44);
+		pnlSingleHistory.add(btnFirstExamination);
+
+		JButton btnInterview = new JButton("Interview");
+		btnInterview.setBounds(10, 81, 191, 44);
+		pnlSingleHistory.add(btnInterview);
+
+		JButton btnExcerpt = new JButton("Excerpt");
+		btnExcerpt.setBounds(10, 307, 191, 44);
+		pnlSingleHistory.add(btnExcerpt);
+
+		// koniec SINGLE HISTORY
+		// *********************************************
+		
 		// *********************************************
 		// PANEL PRESCRIPTIONS
 
