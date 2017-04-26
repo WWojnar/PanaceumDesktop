@@ -532,9 +532,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		try {
 			jsonDoctors = new JSONArray(
 					restController.doctorsList(Controller.name, Controller.token));
-
-			System.out.println(jsonDoctors);
-
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			System.out.println("failxd");
@@ -557,6 +554,7 @@ public class mainGUI extends JFrame implements ActionListener {
 			
 			if(doctors[i] == Controller.id){
 				ifdoctor = doctors[i];
+				//TU WYRZUCA BLAD _ WYDAJE MI SIE, ZE BLAD JEST PO STRONIE RESTA
 				try {
 					doctor = new JSONObject(restController.doctor(i, Controller.name, Controller.token));
 				} catch (JSONException e1) {
@@ -576,9 +574,9 @@ public class mainGUI extends JFrame implements ActionListener {
 			lblDoctorName.setText("You are not");
 			lblDoctorLastName.setText("a doctor.");
 			lblSpeciality.setText("");
-			lblLicence.setText(doctor.getString("licenceNumber"));
-			lblDoctorEmail.setText(doctor.getString("email"));
-			lblDoctorPhone.setText(doctor.getString("phone"));
+			lblLicence.setText("");
+			lblDoctorEmail.setText("");
+			lblDoctorPhone.setText("");
 		}
 		
 		// koniec USER
