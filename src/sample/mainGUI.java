@@ -23,12 +23,14 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import Rest.RestController;
+import javax.swing.ListSelectionModel;
 
 public class mainGUI extends JFrame implements ActionListener {
 
@@ -142,12 +144,19 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	// Prescription panel
 	private JButton btnPrescriptions;
+	private JButton btnPrescriptionBack;
+	private JButton btnPrescriptionAdd;
+	private JButton btnPrescriptionModify;
+	private JButton btnPrescriptionPrint;
 	private JPanel pnlPrescriptions;
+	private JPanel pnlPrescriptionDetails;
+	private JPanel pnlPrescriptionAdd;
+	private JPanel pnlPrescriptionModify;
 	private JTable tblPrescription;
-	private JTextField searchPrescriptionField;
 	private JScrollPane scrollPane;
 	private DefaultTableModel dmPrescription;
 	private JSONArray prescriptionJson = new JSONArray();
+	private JTextField searchPrescriptionField;
 
 	/**
 	 * Launch the application.
@@ -576,23 +585,20 @@ public class mainGUI extends JFrame implements ActionListener {
 				e1.printStackTrace();
 			}
 
-
-				lblDoctorName.setText(doctor.getString("firstName"));
-				lblDoctorLastName.setText(doctor.getString("lastName"));
-				lblSpeciality.setText(doctor.getString("speciality"));
-				lblLicence.setText(doctor.getString("licenceNumber"));
-				lblDoctorEmail.setText(doctor.getString("email"));
-				lblDoctorPhone.setText(doctor.getString("phone"));
-			} else {
-				lblDoctorName.setText("You are not");
-				lblDoctorLastName.setText("a doctor.");
-				lblSpeciality.setText("");
-				lblLicence.setText("");
-				lblDoctorEmail.setText("");
-				lblDoctorPhone.setText("");
-			}
-
-	
+			lblDoctorName.setText(doctor.getString("firstName"));
+			lblDoctorLastName.setText(doctor.getString("lastName"));
+			lblSpeciality.setText(doctor.getString("speciality"));
+			lblLicence.setText(doctor.getString("licenceNumber"));
+			lblDoctorEmail.setText(doctor.getString("email"));
+			lblDoctorPhone.setText(doctor.getString("phone"));
+		} else {
+			lblDoctorName.setText("You are not");
+			lblDoctorLastName.setText("a doctor.");
+			lblSpeciality.setText("");
+			lblLicence.setText("");
+			lblDoctorEmail.setText("");
+			lblDoctorPhone.setText("");
+		}
 
 		// koniec USER
 		// *********************************************
@@ -910,9 +916,20 @@ public class mainGUI extends JFrame implements ActionListener {
 		// PANEL PRESCRIPTIONS
 
 		fillPrescriptionJPanel();
-		createPrescriptionColumns();
 
-		// koniec PRESCRIPTIONS
+		// SECTION OF DETAILS
+
+		fillPrescriptionDetailsJPanel();
+
+		// SECTION OF ADDING PRESCRIPTION
+
+		fillPrescriptionAddJPanel();
+
+		// SECTION OF MODIFYING PRESCRIPTION
+
+		fillPrescriptionModifyJPanel();
+
+		// END OF PRESCRIPTIONS
 		// *********************************************
 
 		// panel user shows after logging in
@@ -942,24 +959,98 @@ public class mainGUI extends JFrame implements ActionListener {
 		scrollPane.setBounds(10, 42, 1051, 764);
 		pnlPrescriptions.add(scrollPane);
 
-		tblPrescription = new JTable();
+		tblPrescription = new JTable() {
+			private static final long serialVersionUID = 4466748965117973844L;
+
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+				Component c = super.prepareRenderer(renderer, row, column);
+
+				this.setRowSelectionAllowed(true);
+
+				return c;
+			}
+		};
+		tblPrescription.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		;
 		scrollPane.setViewportView(tblPrescription);
 		tblPrescription.setFillsViewportHeight(true);
 		tblPrescription.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 
+		createPrescriptionColumns();
+		
+		tblPrescription.addMouseListener(new MouseAdapter() {
+			private Object prescriptionId;
+
+			public void mousePressed(MouseEvent me) {
+				JTable table = (JTable) me.getSource();
+				Point p = me.getPoint();
+				int row = table.rowAtPoint(p);
+				
+				if (me.getClickCount() == 2) {
+
+					// Here find by id and go to single medicine panel
+					prescriptionId = tblPrescription.getModel().getValueAt(row,0);
+					// JSON here
+					refreshPrescriptionData(prescriptionId.toString());
+
+					for (Component c : contentPane.getComponents()) {
+						if (c instanceof JPanel) {
+							((JPanel) c).setVisible(false);
+						}
+					}
+					pnlPrescriptionDetails.setVisible(true);
+
+				}
+			}
+		});
+
 		JButton btnModify = new JButton("Modify");
 		btnModify.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				for (Component c : contentPane.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				pnlPrescriptionModify.setVisible(true);
+
 			}
 		});
 		btnModify.setBounds(316, 8, 128, 23);
 		pnlPrescriptions.add(btnModify);
 
 		JButton btnDetails = new JButton("Details");
+		btnDetails.addActionListener(new ActionListener() {
+			private Object prescriptionId;
+
+			public void actionPerformed(ActionEvent arg0) {
+				
+				prescriptionId = tblPrescription.getModel().getValueAt(tblPrescription.getSelectedRow(), 0);
+				refreshPrescriptionData(prescriptionId.toString());
+				for (Component c : contentPane.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				pnlPrescriptionDetails.setVisible(true);
+
+			}
+		});
 		btnDetails.setBounds(155, 8, 128, 23);
 		pnlPrescriptions.add(btnDetails);
 
 		JButton btnAdd = new JButton("Add");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for (Component c : contentPane.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				pnlPrescriptionAdd.setVisible(true);
+
+			}
+		});
 		btnAdd.setBounds(933, 8, 128, 23);
 		pnlPrescriptions.add(btnAdd);
 
@@ -969,13 +1060,17 @@ public class mainGUI extends JFrame implements ActionListener {
 		searchPrescriptionField.setColumns(3);
 
 	}
+	
+	private void refreshPrescriptionData(String string) {
+		
+	}
 
 	private void createPrescriptionColumns() {
 		dmPrescription = (DefaultTableModel) tblPrescription.getModel();
-		dmPrescription.addColumn("Id");
+		dmPrescription.addColumn("excerptId");
 		dmPrescription.addColumn("Surname");
 		dmPrescription.addColumn("Name");
-		dmPrescription.addColumn("Date");
+		dmPrescription.addColumn("Issue date");
 
 	}
 
@@ -989,16 +1084,112 @@ public class mainGUI extends JFrame implements ActionListener {
 		 * "patientFirstName":"Pacjent","patientLastName":"NumerJeden"}]
 		 */
 
-		prescriptionJson = new JSONArray(restController.getPrescription(Controller.doctorId, Controller.name, Controller.token));
+		prescriptionJson = new JSONArray(
+				restController.getPrescription(Controller.doctorId, Controller.name, Controller.token));
 		for (int i = 0; i < prescriptionJson.length(); i++) {
-			dmPrescription.addRow(new Object[] { prescriptionJson.getJSONObject(i).getInt("id"),
+			dmPrescription.addRow(new Object[] { prescriptionJson.getJSONObject(i).getInt("excerptId"),
 					prescriptionJson.getJSONObject(i).getString("patientFirstName"),
 					prescriptionJson.getJSONObject(i).getString("patientLastName"),
 					prescriptionJson.getJSONObject(i).getString("prescriptionDate") });
 		}
 		dmPrescription.fireTableDataChanged();
 
+	}
 
+	private void fillPrescriptionDetailsJPanel() {
+
+		pnlPrescriptionDetails = new JPanel();
+		pnlPrescriptionDetails.setBounds(303, 54, 1071, 817);
+		contentPane.add(pnlPrescriptionDetails);
+		pnlPrescriptionDetails.setLayout(null);
+
+		btnPrescriptionBack = new JButton("Back");
+		btnPrescriptionBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (Component c : contentPane.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				pnlPrescriptions.setVisible(true);
+			}
+		});
+		btnPrescriptionBack.setBounds(10, 743, 141, 44);
+		pnlPrescriptionDetails.add(btnPrescriptionBack);
+
+		btnPrescriptionPrint = new JButton("Print");
+		btnPrescriptionPrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// PrintButtan
+			}
+		});
+		btnPrescriptionPrint.setBounds(200, 743, 141, 44);
+		pnlPrescriptionDetails.add(btnPrescriptionPrint);
+
+	}
+
+	private void fillPrescriptionModifyJPanel() {
+
+		pnlPrescriptionModify = new JPanel();
+		pnlPrescriptionModify.setBounds(303, 54, 1071, 817);
+		contentPane.add(pnlPrescriptionModify);
+		pnlPrescriptionModify.setLayout(null);
+
+		btnPrescriptionBack = new JButton("Back");
+		btnPrescriptionBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (Component c : contentPane.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				pnlPrescriptions.setVisible(true);
+			}
+		});
+		btnPrescriptionBack.setBounds(10, 743, 141, 44);
+		pnlPrescriptionModify.add(btnPrescriptionBack);
+
+		btnPrescriptionModify = new JButton("Modify");
+		btnPrescriptionModify.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				// Modify the Prescription JSON
+			}
+		});
+		btnPrescriptionModify.setBounds(200, 743, 141, 44);
+		pnlPrescriptionModify.add(btnPrescriptionModify);
+
+	}
+
+	private void fillPrescriptionAddJPanel() {
+
+		pnlPrescriptionAdd = new JPanel();
+		pnlPrescriptionAdd.setBounds(303, 54, 1071, 817);
+		contentPane.add(pnlPrescriptionAdd);
+		pnlPrescriptionAdd.setLayout(null);
+
+		btnPrescriptionBack = new JButton("Back");
+		btnPrescriptionBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (Component c : contentPane.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				pnlPrescriptions.setVisible(true);
+			}
+		});
+		btnPrescriptionBack.setBounds(10, 743, 141, 44);
+		pnlPrescriptionAdd.add(btnPrescriptionBack);
+
+		btnPrescriptionAdd = new JButton("Add");
+		btnPrescriptionAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Add the prescription JSON
+			}
+		});
+		btnPrescriptionAdd.setBounds(200, 743, 141, 44);
+		pnlPrescriptionAdd.add(btnPrescriptionAdd);
 	}
 
 	public void actionPerformed(ActionEvent e) {
