@@ -157,9 +157,14 @@ public class RestController {
 
 		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getById/" + id + "/" + login + "/" + token;
 
-		System.out.println(url);
-
 		return dataReceive(url);
+	}
+	
+	public JSONObject doctorJson(int id, String login, String token) throws JSONException {
+		
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/doctor/getById/" + id + "/" + login + "/" + token;
+		
+		return new JSONObject(dataReceive(url));
 	}
 
 	public String getMedicineList(String login, String token) {
