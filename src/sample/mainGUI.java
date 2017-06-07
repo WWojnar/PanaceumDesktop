@@ -625,12 +625,12 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblDoctorName.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblDoctorName.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		//lblDoctorName.setBounds(71, 41, 237, 66);
-		pnlUser.add(lblDoctorName);
+		pnlUser.add(lblDoctorName, "spanx 2,wrap");
 
 		lblDoctorLastName = new JLabel("xxxxxxxxxxxxxxxx");
 		lblDoctorLastName.setFont(new Font("Tahoma", Font.BOLD, 25));
 		//lblDoctorLastName.setBounds(375, 41, 385, 66);
-		pnlUser.add(lblDoctorLastName);
+		pnlUser.add(lblDoctorLastName, "spanx 2,wrap");
 
 		lblSpecialityStr = new JLabel("Speciality:");
 		lblSpecialityStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -640,21 +640,19 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblSpeciality = new JLabel("xxxxxxxxxxxxxxxxxxxxx");
 		lblSpeciality.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		//lblSpeciality.setBounds(193, 148, 303, 32);
-		pnlUser.add(lblSpeciality);
+		pnlUser.add(lblSpeciality, "wrap");
 
 		lblLicenceStr = new JLabel("Licence number:");
 		lblLicenceStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		//lblLicenceStr.setBounds(71, 208, 112, 32);
-		pnlUser.add(lblLicenceStr);
+		pnlUser.add(lblLicenceStr, "");
 
 		lblLicence = new JLabel("xxxxxxxxxxxxxxxxxxxxx");
 		lblLicence.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	//	lblLicence.setBounds(193, 208, 205, 32);
-		pnlUser.add(lblLicence);
+		pnlUser.add(lblLicence, "wrap");
 
-		btnAddPatient = new JButton("Add Patient");
-		//btnAddPatient.setBounds(789, 155, 153, 32);
-		pnlUser.add(btnAddPatient);
+		
 
 		lblDoctorEmailStr = new JLabel("Email:");
 		lblDoctorEmailStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -664,7 +662,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblDoctorEmail = new JLabel("xxxxxxxxxxxxxxxxxxxxx");
 		lblDoctorEmail.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	//	lblDoctorEmail.setBounds(193, 308, 205, 32);
-		pnlUser.add(lblDoctorEmail);
+		pnlUser.add(lblDoctorEmail, "wrap");
 
 		lblDoctorPhoneStr = new JLabel("Phone:");
 		lblDoctorPhoneStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -674,8 +672,12 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblDoctorPhone = new JLabel("xxxxxxxxxxxxxxxxxxxxx");
 		lblDoctorPhone.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	//	lblDoctorPhone.setBounds(193, 369, 205, 32);
-		pnlUser.add(lblDoctorPhone);
+		pnlUser.add(lblDoctorPhone, "wrap");
 
+		btnAddPatient = new JButton("Add Patient");
+		//btnAddPatient.setBounds(789, 155, 153, 32);
+		pnlUser.add(btnAddPatient);
+		
 		// JSON doctors list
 		try {
 			jsonDoctors = new JSONArray(restController.doctorsList(Controller.name, Controller.token));
@@ -721,7 +723,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblName.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 28));
 		//lblName.setBounds(10, 12, 251, 83);
-		pnlPatient.add(lblName);
+		pnlPatient.add(lblName, "spanx 2");
 
 		String[] columnNames = { "Recognition", "Begin of hospitalization", "End of hospitalization" };
 
@@ -729,7 +731,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblSurname.setHorizontalAlignment(SwingConstants.LEFT);
 		lblSurname.setFont(new Font("Tahoma", Font.BOLD, 28));
 		//lblSurname.setBounds(295, 12, 742, 83);
-		pnlPatient.add(lblSurname);
+		pnlPatient.add(lblSurname, "spanx 2,wrap");
 
 		lblBloodStr = new JLabel("Blood Type:");
 		lblBloodStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -739,7 +741,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblBloodType = new JLabel("xx");
 		lblBloodType.setFont(new Font("Tahoma", Font.PLAIN, 15));
 	//	lblBloodType.setBounds(135, 106, 82, 24);
-		pnlPatient.add(lblBloodType);
+		pnlPatient.add(lblBloodType, "wrap");
 
 		lblPhoneStr = new JLabel("Phone number:");
 		lblPhoneStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -749,7 +751,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblPhone = new JLabel("xxxxxx");
 		lblPhone.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		//lblPhone.setBounds(687, 106, 113, 24);
-		pnlPatient.add(lblPhone);
+		pnlPatient.add(lblPhone, "wrap");
 
 		lblEmailStr = new JLabel("Email:");
 		lblEmailStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -759,12 +761,12 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblEmail = new JLabel("xxxxxxxxxxxxxxxxxxxxxxxxx");
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		//lblEmail.setBounds(687, 141, 363, 24);
-		pnlPatient.add(lblEmail);
+		pnlPatient.add(lblEmail, "wrap");
 
 		lblAddressStr = new JLabel("Address:");
 		lblAddressStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		//lblAddressStr.setBounds(564, 176, 113, 24);
-		pnlPatient.add(lblAddressStr);
+		pnlPatient.add(lblAddressStr, "split 2,wrap");
 
 		lblSexStr = new JLabel("Sex:");
 		lblSexStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -774,7 +776,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblSex = new JLabel("yes");
 		lblSex.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		//lblSex.setBounds(135, 157, 82, 24);
-		pnlPatient.add(lblSex);
+		pnlPatient.add(lblSex, "wrap");
 
 		lblAgeStr = new JLabel("Age:");
 		lblAgeStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -784,12 +786,12 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblAge = new JLabel("xx");
 		lblAge.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		//lblAge.setBounds(135, 207, 82, 24);
-		pnlPatient.add(lblAge);
+		pnlPatient.add(lblAge, "wrap");
 
 		lblStreet = new JLabel("xxxxxxxxxxxxxxxxxxxxxxxxx");
 		lblStreet.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		//lblStreet.setBounds(687, 183, 261, 24);
-		pnlPatient.add(lblStreet);
+		pnlPatient.add(lblStreet, "wrap");
 
 		lblFlat = new JLabel("xx");
 		lblFlat.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -809,7 +811,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblCity = new JLabel("xxxxxxxxxxxxxxxxxxxxxxxxx");
 		lblCity.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		//lblCity.setBounds(779, 218, 261, 24);
-		pnlPatient.add(lblCity);
+		pnlPatient.add(lblCity, "wrap");
 
 		JLabel lblHistoryStr = new JLabel("History of hospitalization:");
 		lblHistoryStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
