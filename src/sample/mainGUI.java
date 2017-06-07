@@ -194,6 +194,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JLabel lblPrescriptionDetails;
 	private JLabel lblPrescriptionILicence;
 	private CardLayout cardLayout = new CardLayout();
+
 	/**
 	 * Launch the application.
 	 */
@@ -243,7 +244,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -251,8 +252,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		contentPane.setLayout(new MigLayout("insets 10", "[5%!][10%!]20[60%!, center]", "[]20[grow]"));
 		setBounds(100, 100, 1380, 900);
 		contentPane.setBackground(Color.LIGHT_GRAY);
-		
-		
+
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
@@ -260,111 +260,95 @@ public class mainGUI extends JFrame implements ActionListener {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
-		
-		
-		
+
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Image image = toolkit.getImage("images/cursos2.png");
-		Cursor c = toolkit.createCustomCursor(image , new Point(contentPane.getX(), 
-		           contentPane.getY()), "img");
-		contentPane.setCursor (c);
-		
-		
-		
-		
-		
+		Cursor c = toolkit.createCustomCursor(image, new Point(contentPane.getX(), contentPane.getY()), "img");
+		contentPane.setCursor(c);
+
 		//////////////////////////////////////////////////
-		//Layout Creation
-		
-		
-		
-		
-		
+		// Layout Creation
+
 		btnSearch = new JButton("Search:");
 		contentPane.add(btnSearch);
-		
-		
+
 		textField = new JTextField();
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		contentPane.add(textField, "grow");
 		textField.setColumns(10);
-		
-		
+
 		JLabel lblWelcome = new JLabel("Welcome " + Controller.name);
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcome.setFont(new Font("Tahoma", Font.BOLD, 20));
 		contentPane.add(lblWelcome, "alignx center,aligny center,wrap");
 
-		
-		
-		
-		/*JSeparator separator_1 = new JSeparator();
-		contentPane.add(separator_1);
+		/*
+		 * JSeparator separator_1 = new JSeparator();
+		 * contentPane.add(separator_1);
+		 * 
+		 * JSeparator separator = new JSeparator();
+		 * separator.setToolTipText("");
+		 * separator.setOrientation(SwingConstants.VERTICAL);
+		 * contentPane.add(separator);
+		 */
 
-		JSeparator separator = new JSeparator();
-		separator.setToolTipText("");
-		separator.setOrientation(SwingConstants.VERTICAL);
-		contentPane.add(separator);*/
-		
 		sideBar = new JPanel();
 		contentPane.add(sideBar, "flowy,spanx 2,alignx center,aligny top,grow");
 		sideBar.setLayout(new MigLayout("", "[100%]", "[]20[]20[]"));
-		
+
 		btnMedicines = new JButton("Medicine database");
 		sideBar.add(btnMedicines, "wrap, grow");
 		btnMedicines.addActionListener(this);
-		
+
 		btnUser = new JButton("User panel");
 		sideBar.add(btnUser, "wrap, grow");
 		btnUser.addActionListener(this);
-		
+
 		btnPrescriptions = new JButton("Prescriptions");
 		sideBar.add(btnPrescriptions, "grow");
 		btnPrescriptions.addActionListener(this);
 
 		mainPanelStorage = new JPanel(cardLayout);
-		mainPanelStorage.setPreferredSize(new Dimension( 1071, 817));
+		mainPanelStorage.setPreferredSize(new Dimension(1071, 817));
 		contentPane.add(mainPanelStorage, "alignx left");
 
-		
-		
-		
 		pnlMedicine = new JPanel();
 		mainPanelStorage.add(pnlMedicine);
 		pnlMedicine.setLayout(new MigLayout("", "[][]5[]", "[][][]"));
-		
+
 		pnlSingleMedicine = new JPanel();
 		mainPanelStorage.add(pnlSingleMedicine);
-		pnlSingleMedicine.setLayout(new MigLayout("","[]40[]40[]", "[]40[][][]"));
-		
+		pnlSingleMedicine.setLayout(new MigLayout("", "[]40[]40[]", "[]40[][][]"));
+
 		pnlAddMedicine = new JPanel();
 		mainPanelStorage.add(pnlAddMedicine);
-		pnlAddMedicine.setLayout(new MigLayout("","[]40[]40[]", "[]40[][][]"));
-		
+		pnlAddMedicine.setLayout(new MigLayout("", "[]40[]40[]", "[]40[][][]"));
+
 		pnlUser = new JPanel();
 		mainPanelStorage.add(pnlUser);
 		pnlUser.setLayout(new MigLayout());
-		
+
 		pnlPatient = new JPanel();
 		mainPanelStorage.add(pnlPatient);
 		pnlPatient.setLayout(new MigLayout());
-		
+
 		pnlSingleHistory = new JPanel();
 		mainPanelStorage.add(pnlSingleHistory);
-		pnlSingleHistory.setLayout(new MigLayout("insets 40", "[30%!]", "[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]"));
+		pnlSingleHistory.setLayout(new MigLayout("insets 40", "[30%!]",
+				"[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]"));
 
 		pnlPrescriptions = new JPanel();
 		mainPanelStorage.add(pnlPrescriptions);
 		pnlPrescriptions.setLayout(new MigLayout("", "[]20[30%][20%]", "[][]"));
-		
+
 		pnlPrescriptionDetails = new JPanel();
 		mainPanelStorage.add(pnlPrescriptionDetails);
 		pnlPrescriptionDetails.setLayout(new MigLayout());
-		
+
 		pnlPrescriptionAdd = new JPanel();
 		mainPanelStorage.add(pnlPrescriptionAdd);
 		pnlPrescriptionAdd.setLayout(new MigLayout());
-	
+
 		/////////////////////////////////////////////
 
 		// *********************************************
@@ -414,23 +398,23 @@ public class mainGUI extends JFrame implements ActionListener {
 			}
 		});
 
-		//btnAddNewMedicine.setBounds(933, 8, 128, 23);
+		// btnAddNewMedicine.setBounds(933, 8, 128, 23);
 		pnlMedicine.add(btnAddNewMedicine);
 
 		// Pole tekstowe do wyszukiwania
 		txtSearchMedicine = new JTextField();
 		txtSearchMedicine.setText("Search..");
-		//txtSearchMedicine.setBounds(10, 9, 86, 20);
+		// txtSearchMedicine.setBounds(10, 9, 86, 20);
 		pnlMedicine.add(txtSearchMedicine);
 		txtSearchMedicine.setColumns(10);
 
 		// przycisk do wyszukiwania
 		btnSearchMedicine = new JButton("Search");
-		//btnSearchMedicine.setBounds(120, 8, 107, 23);
+		// btnSearchMedicine.setBounds(120, 8, 107, 23);
 		pnlMedicine.add(btnSearchMedicine, "wrap");
 
 		JScrollPane scrollPane_1 = new JScrollPane();
-		//scrollPane_1.setBounds(10, 42, 1051, 764);
+		// scrollPane_1.setBounds(10, 42, 1051, 764);
 		pnlMedicine.add(scrollPane_1, "span");
 
 		medicineTable = new JTable(medicineData, medicineColumnNames);
@@ -444,7 +428,7 @@ public class mainGUI extends JFrame implements ActionListener {
 				JTable table = (JTable) me.getSource();
 				Point p = me.getPoint();
 				int row = table.rowAtPoint(p);
-				//String idMed;
+				// String idMed;
 				if (me.getClickCount() == 2) {
 
 					// Here find by id and go to single medicine panel
@@ -485,43 +469,41 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		///
 
-		
-
 		lblMedicineDetails = new JLabel("Medicine Id: " + medId);
 		lblMedicineDetails.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		//lblMedicineDetails.setBounds(10, 11, 603, 37);
+		// lblMedicineDetails.setBounds(10, 11, 603, 37);
 		pnlSingleMedicine.add(lblMedicineDetails, "cell 0 0 2 0");
 
 		lblName_2 = new JLabel("Name: ");
 		lblName_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		//lblName_2.setBounds(10, 73, 55, 37);
+		// lblName_2.setBounds(10, 73, 55, 37);
 		pnlSingleMedicine.add(lblName_2, "cell 0 1");
 
 		txtpnSingleMedicineName = new JTextPane();
 		txtpnSingleMedicineName.setText("No information");
-		//txtpnSingleMedicineName.setBounds(10, 113, 354, 37);
+		// txtpnSingleMedicineName.setBounds(10, 113, 354, 37);
 		pnlSingleMedicine.add(txtpnSingleMedicineName, "cell 0 2");
 
 		// 2 times
 		lblActiveSubstances = new JLabel("Active Substances:");
 		lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		//lblActiveSubstances.setBounds(10, 179, 130, 37);
+		// lblActiveSubstances.setBounds(10, 179, 130, 37);
 		pnlSingleMedicine.add(lblActiveSubstances, "cell 1 1");
 
 		txtpnSingleMedicineActive = new JTextPane();
 		txtpnSingleMedicineActive.setText("No information");
-		//txtpnSingleMedicineActive.setBounds(10, 232, 354, 460);
+		// txtpnSingleMedicineActive.setBounds(10, 232, 354, 460);
 		pnlSingleMedicine.add(txtpnSingleMedicineActive, "cell 1 2");
 
 		// 2 times
 		lblRelations = new JLabel("Relations");
 		lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		//lblRelations.setBounds(572, 73, 157, 37);
+		// lblRelations.setBounds(572, 73, 157, 37);
 		pnlSingleMedicine.add(lblRelations, "cell 2 1");
 
 		txtpnMedicineRelationsWith = new JTextPane();
 		txtpnMedicineRelationsWith.setText("Do not mix with alcohol...");
-		//txtpnMedicineRelationsWith.setBounds(572, 113, 430, 579);
+		// txtpnMedicineRelationsWith.setBounds(572, 113, 430, 579);
 		pnlSingleMedicine.add(txtpnMedicineRelationsWith, "cell 2 2");
 
 		// Go back to Medicine view
@@ -536,7 +518,7 @@ public class mainGUI extends JFrame implements ActionListener {
 				pnlMedicine.setVisible(true);
 			}
 		});
-		//btnCancelSingleMedicine.setBounds(10, 743, 141, 44);
+		// btnCancelSingleMedicine.setBounds(10, 743, 141, 44);
 		pnlSingleMedicine.add(btnCancelSingleMedicine, "cell 0 4");
 
 		// koniec SINGLE MEDICINES
@@ -545,52 +527,51 @@ public class mainGUI extends JFrame implements ActionListener {
 		// *********************************************
 		// PANEL ADD MEDICINES
 
-		
-
 		lblToAddNew = new JLabel("To add new medicine, fill all the fields and press \"Add\" button.");
 		lblToAddNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		//lblToAddNew.setBounds(10, 11, 603, 37);
+		// lblToAddNew.setBounds(10, 11, 603, 37);
 		pnlAddMedicine.add(lblToAddNew, "cell 0 0 2 0");
 
 		lblName_1 = new JLabel("Name: ");
 		lblName_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		//lblName_1.setBounds(10, 73, 55, 37);
+		// lblName_1.setBounds(10, 73, 55, 37);
 		pnlAddMedicine.add(lblName_1, "cell 0 1");
 
 		txtpnAddMedicineName = new JTextPane();
 		txtpnAddMedicineName.setText("");
-		//txtpnAddMedicineName.setBounds(10, 113, 354, 37);
+		// txtpnAddMedicineName.setBounds(10, 113, 354, 37);
 		pnlAddMedicine.add(txtpnAddMedicineName, "cell 0 2");
 
 		lblActiveSubstances = new JLabel("Active Substances:");
 		lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		//lblActiveSubstances.setBounds(10, 179, 130, 37);
+		// lblActiveSubstances.setBounds(10, 179, 130, 37);
 		pnlAddMedicine.add(lblActiveSubstances, "cell 1 1");
 
 		txtpnAddMedicineActive = new JTextPane();
 		txtpnAddMedicineActive.setText("");
-		//txtpnAddMedicineActive.setBounds(10, 232, 354, 460);
+		// txtpnAddMedicineActive.setBounds(10, 232, 354, 460);
 		pnlAddMedicine.add(txtpnAddMedicineActive, "cell 1 2");
 
 		lblRelations = new JLabel("Relations");
 		lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		//lblRelations.setBounds(572, 73, 157, 37);
+		// lblRelations.setBounds(572, 73, 157, 37);
 		pnlAddMedicine.add(lblRelations, "cell 2 1");
 
 		txtpnAddRelationsWith = new JTextPane();
 		txtpnAddRelationsWith.setText("");
-		//txtpnAddRelationsWith.setBounds(572, 113, 430, 579);
+		// txtpnAddRelationsWith.setBounds(572, 113, 430, 579);
 		pnlAddMedicine.add(txtpnAddRelationsWith, "cell 2 2");
 
 		// Adding new medicine
 		btnSubmitNewMedicine = new JButton("Add");
 		btnSubmitNewMedicine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Add function here...(txtpnAddMedicineName.getText(), ---------------------------------------------------------------
-//				(txtpnAddMedicineActive.getText());
+				// Add function here...(txtpnAddMedicineName.getText(),
+				// ---------------------------------------------------------------
+				// (txtpnAddMedicineActive.getText());
 				try {
-					jsonAddMedicine = new JSONObject(
-							restController.postMedicine(Controller.name, Controller.token, txtpnAddMedicineName.getText(), txtpnAddMedicineActive.getText()));
+					jsonAddMedicine = new JSONObject(restController.postMedicine(Controller.name, Controller.token,
+							txtpnAddMedicineName.getText(), txtpnAddMedicineActive.getText()));
 				} catch (JSONException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -605,7 +586,7 @@ public class mainGUI extends JFrame implements ActionListener {
 				pnlMedicine.setVisible(true);
 			}
 		});
-		//btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
+		// btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
 		pnlAddMedicine.add(btnSubmitNewMedicine, "cell 2 3");
 
 		// Go back to Medicine view
@@ -620,7 +601,7 @@ public class mainGUI extends JFrame implements ActionListener {
 				pnlMedicine.setVisible(true);
 			}
 		});
-		//btnCancelAddMedicine.setBounds(10, 743, 141, 44);
+		// btnCancelAddMedicine.setBounds(10, 743, 141, 44);
 		pnlAddMedicine.add(btnCancelAddMedicine, "cell 0 3");
 
 		// koniec przykladu ADD medicine
@@ -629,7 +610,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		// *********************************************
 		// PANEL USER (DODAWANIE PACJENTA I WSZYSTKIE AKCJE, KTORE NIE PASUJA DO
 		// INNYCH PANELI)
-
 
 		lblDoctorName = new JLabel("xxxxxxxxxxxxxxxxxxxxx");
 		lblDoctorName.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -656,8 +636,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblLicence.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlUser.add(lblLicence, "wrap");
 
-		
-
 		lblDoctorEmailStr = new JLabel("Email:");
 		lblDoctorEmailStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlUser.add(lblDoctorEmailStr);
@@ -676,7 +654,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		btnAddPatient = new JButton("Add Patient");
 		pnlUser.add(btnAddPatient);
-		
+
 		// JSON doctors list
 		try {
 			jsonDoctors = new JSONArray(restController.doctorsList(Controller.name, Controller.token));
@@ -1006,7 +984,6 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	private void fillPrescriptionJPanel() {
 
-		
 		btnPrescriptionModify = new JButton("Details");
 		btnPrescriptionModify.addActionListener(new ActionListener() {
 			private Object prescriptionId;
@@ -1032,12 +1009,10 @@ public class mainGUI extends JFrame implements ActionListener {
 		});
 		pnlPrescriptions.add(btnPrescriptionModify);
 
-		
 		searchPrescriptionField = new JTextField();
 		pnlPrescriptions.add(searchPrescriptionField, "width 50:60:70,alignx center,aligny center");
 		searchPrescriptionField.setColumns(3);
-		
-		
+
 		btnPrescriptionAdd = new JButton("Add");
 		btnPrescriptionAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -1058,9 +1033,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		});
 		pnlPrescriptions.add(btnPrescriptionAdd, "wrap");
 
-		
-		
-		
 		scrollPane = new JScrollPane();
 		pnlPrescriptions.add(scrollPane, "dock south");
 
@@ -1113,7 +1085,6 @@ public class mainGUI extends JFrame implements ActionListener {
 				}
 			}
 		});
-
 
 	}
 
@@ -1189,14 +1160,11 @@ public class mainGUI extends JFrame implements ActionListener {
 	}
 
 	private void fillPrescriptionDetailsJPanel() {
-
-		
 		lblPrescriptionDetails = new JLabel("Prescription Details");
 		lblPrescriptionDetails.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionDetails.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		pnlPrescriptionDetails.add(lblPrescriptionDetails, "span 4, wrap");
-		
-		
+
 		lblPrescriptionName = new JLabel("Name");
 		lblPrescriptionName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionName.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -1206,12 +1174,12 @@ public class mainGUI extends JFrame implements ActionListener {
 		txtfdPrescriptionName.setDisabledTextColor(Color.BLACK);
 		pnlPrescriptionDetails.add(txtfdPrescriptionName, "");
 		txtfdPrescriptionName.setColumns(10);
-		
+
 		lblPrescriptionIName = new JLabel("Issuer name");
 		lblPrescriptionIName.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionIName.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPrescriptionDetails.add(lblPrescriptionIName);
-		
+
 		txtfdPrescriptionIName = new JTextField();
 		txtfdPrescriptionIName.setDisabledTextColor(Color.BLACK);
 		txtfdPrescriptionIName.setColumns(10);
@@ -1221,22 +1189,22 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblPrescriptionSurname.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionSurname.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPrescriptionDetails.add(lblPrescriptionSurname);
-		
+
 		txtfdPrescriptionSurname = new JTextField();
 		txtfdPrescriptionSurname.setDisabledTextColor(Color.BLACK);
 		pnlPrescriptionDetails.add(txtfdPrescriptionSurname, "");
 		txtfdPrescriptionSurname.setColumns(10);
-		
+
 		lblPrescriptionILicence = new JLabel("Issuer licence");
 		lblPrescriptionILicence.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionILicence.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPrescriptionDetails.add(lblPrescriptionILicence);
-		
+
 		txtfdPrescriptionILicence = new JTextField();
 		txtfdPrescriptionILicence.setDisabledTextColor(Color.BLACK);
 		txtfdPrescriptionILicence.setColumns(10);
 		pnlPrescriptionDetails.add(txtfdPrescriptionILicence, "wrap");
-		
+
 		lblPrescriptionPesel = new JLabel("Pesel");
 		lblPrescriptionPesel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionPesel.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -1246,7 +1214,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		txtfdPrescriptionPesel.setDisabledTextColor(Color.BLACK);
 		pnlPrescriptionDetails.add(txtfdPrescriptionPesel, "");
 		txtfdPrescriptionPesel.setColumns(10);
-		
+
 		lblPrescriptionDate = new JLabel("Date of issue");
 		lblPrescriptionDate.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionDate.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -1256,7 +1224,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		txtfdPrescriptionDate.setDisabledTextColor(Color.BLACK);
 		txtfdPrescriptionDate.setColumns(10);
 		pnlPrescriptionDetails.add(txtfdPrescriptionDate, "wrap");
-		
+
 		lblPrescriptionMedicine = new JLabel("Medicine");
 		lblPrescriptionMedicine.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionMedicine.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -1271,12 +1239,12 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblPrescriptionExpiry.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionExpiry.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPrescriptionDetails.add(lblPrescriptionExpiry);
-		
+
 		txtfdPrescriptionExpiry = new JTextField();
 		txtfdPrescriptionExpiry.setDisabledTextColor(Color.BLACK);
 		txtfdPrescriptionExpiry.setColumns(10);
 		pnlPrescriptionDetails.add(txtfdPrescriptionExpiry, "wrap");
-		
+
 		lblPrescriptionDosage = new JLabel("Dosage");
 		lblPrescriptionDosage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionDosage.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -1286,19 +1254,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		txtfdPrescriptionDosage.setDisabledTextColor(Color.BLACK);
 		txtfdPrescriptionDosage.setColumns(10);
 		pnlPrescriptionDetails.add(txtfdPrescriptionDosage, "wrap");
-		
 
-
-
-
-
-
-		
-
-
-
-
-		
 		btnPrescriptionBack = new JButton("Back");
 		btnPrescriptionBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1313,13 +1269,11 @@ public class mainGUI extends JFrame implements ActionListener {
 		});
 		pnlPrescriptionDetails.add(btnPrescriptionBack);
 
-		
-		
 		btnPrescriptionAccept = new JButton("Accept");
 		btnPrescriptionAccept.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				//JSONquery to modify
+				// JSONquery to modify
 				disablePrescriptionDetails();
 				btnPrescriptionAccept.setVisible(false);
 				btnPrescriptionPrint.setVisible(true);
@@ -1328,10 +1282,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		});
 		pnlPrescriptionDetails.add(btnPrescriptionAccept);
 		btnPrescriptionAccept.setVisible(false);
-		
-		
-		
-		
+
 		btnPrescriptionModify = new JButton("Modify");
 		btnPrescriptionModify.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1352,13 +1303,107 @@ public class mainGUI extends JFrame implements ActionListener {
 			}
 		});
 		pnlPrescriptionDetails.add(btnPrescriptionPrint);
-		
 
 	}
 
 	private void fillPrescriptionAddJPanel() {
 
+		lblPrescriptionDetails = new JLabel("Prescription Details");
+		lblPrescriptionDetails.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionDetails.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		pnlPrescriptionAdd.add(lblPrescriptionDetails, "span 4, wrap");
 
+		lblPrescriptionName = new JLabel("Name");
+		lblPrescriptionName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionName.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionAdd.add(lblPrescriptionName);
+
+		txtfdPrescriptionName = new JTextField();
+		txtfdPrescriptionName.setDisabledTextColor(Color.BLACK);
+		pnlPrescriptionAdd.add(txtfdPrescriptionName, "");
+		txtfdPrescriptionName.setColumns(10);
+
+		lblPrescriptionIName = new JLabel("Issuer name");
+		lblPrescriptionIName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionIName.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionAdd.add(lblPrescriptionIName);
+
+		txtfdPrescriptionIName = new JTextField();
+		txtfdPrescriptionIName.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionIName.setColumns(10);
+		pnlPrescriptionAdd.add(txtfdPrescriptionIName, "wrap");
+
+		lblPrescriptionSurname = new JLabel("Surname");
+		lblPrescriptionSurname.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionSurname.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionAdd.add(lblPrescriptionSurname);
+
+		txtfdPrescriptionSurname = new JTextField();
+		txtfdPrescriptionSurname.setDisabledTextColor(Color.BLACK);
+		pnlPrescriptionAdd.add(txtfdPrescriptionSurname, "");
+		txtfdPrescriptionSurname.setColumns(10);
+
+		lblPrescriptionILicence = new JLabel("Issuer licence");
+		lblPrescriptionILicence.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionILicence.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionAdd.add(lblPrescriptionILicence);
+
+		txtfdPrescriptionILicence = new JTextField();
+		txtfdPrescriptionILicence.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionILicence.setColumns(10);
+		pnlPrescriptionAdd.add(txtfdPrescriptionILicence, "wrap");
+
+		lblPrescriptionPesel = new JLabel("Pesel");
+		lblPrescriptionPesel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionPesel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionAdd.add(lblPrescriptionPesel);
+
+		txtfdPrescriptionPesel = new JTextField();
+		txtfdPrescriptionPesel.setDisabledTextColor(Color.BLACK);
+		pnlPrescriptionAdd.add(txtfdPrescriptionPesel, "");
+		txtfdPrescriptionPesel.setColumns(10);
+
+		lblPrescriptionDate = new JLabel("Date of issue");
+		lblPrescriptionDate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionDate.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionAdd.add(lblPrescriptionDate);
+
+		txtfdPrescriptionDate = new JTextField();
+		txtfdPrescriptionDate.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionDate.setColumns(10);
+		pnlPrescriptionAdd.add(txtfdPrescriptionDate, "wrap");
+
+		lblPrescriptionMedicine = new JLabel("Medicine");
+		lblPrescriptionMedicine.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionMedicine.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionAdd.add(lblPrescriptionMedicine);
+
+		txtfdPrescriptionMedicine = new JTextField();
+		txtfdPrescriptionMedicine.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionMedicine.setColumns(10);
+		pnlPrescriptionAdd.add(txtfdPrescriptionMedicine, "");
+
+		lblPrescriptionExpiry = new JLabel("Expiry date");
+		lblPrescriptionExpiry.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionExpiry.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionAdd.add(lblPrescriptionExpiry);
+
+		txtfdPrescriptionExpiry = new JTextField();
+		txtfdPrescriptionExpiry.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionExpiry.setColumns(10);
+		pnlPrescriptionAdd.add(txtfdPrescriptionExpiry, "wrap");
+
+		lblPrescriptionDosage = new JLabel("Dosage");
+		lblPrescriptionDosage.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionDosage.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionAdd.add(lblPrescriptionDosage);
+
+		txtfdPrescriptionDosage = new JTextField();
+		txtfdPrescriptionDosage.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionDosage.setColumns(10);
+		pnlPrescriptionAdd.add(txtfdPrescriptionDosage, "wrap");
+		
+		
 		btnPrescriptionBack = new JButton("Back");
 		btnPrescriptionBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1370,7 +1415,7 @@ public class mainGUI extends JFrame implements ActionListener {
 				pnlPrescriptions.setVisible(true);
 			}
 		});
-		pnlPrescriptionAdd.add(btnPrescriptionBack);
+		pnlPrescriptionAdd.add(btnPrescriptionBack, "skip 2");
 
 		btnPrescriptionAdd = new JButton("Add");
 		btnPrescriptionAdd.addActionListener(new ActionListener() {
@@ -1379,92 +1424,6 @@ public class mainGUI extends JFrame implements ActionListener {
 			}
 		});
 		pnlPrescriptionAdd.add(btnPrescriptionAdd);
-
-		txtfdPrescriptionName = new JTextField();
-		pnlPrescriptionAdd.add(txtfdPrescriptionName);
-		txtfdPrescriptionName.setColumns(10);
-
-		txtfdPrescriptionSurname = new JTextField();
-		pnlPrescriptionAdd.add(txtfdPrescriptionSurname);
-		txtfdPrescriptionSurname.setColumns(10);
-
-		txtfdPrescriptionPesel = new JTextField();
-		pnlPrescriptionAdd.add(txtfdPrescriptionPesel);
-		txtfdPrescriptionPesel.setColumns(10);
-
-		lblPrescriptionName = new JLabel("Name");
-		lblPrescriptionName.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionName.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionAdd.add(lblPrescriptionName);
-
-		lblPrescriptionSurname = new JLabel("Surname");
-		lblPrescriptionSurname.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionSurname.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionAdd.add(lblPrescriptionSurname);
-
-		lblPrescriptionPesel = new JLabel("Pesel");
-		lblPrescriptionPesel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionPesel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionAdd.add(lblPrescriptionPesel);
-
-		lblPrescriptionIName = new JLabel("Issuer name");
-		lblPrescriptionIName.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionIName.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionAdd.add(lblPrescriptionIName);
-
-		lblPrescriptionDosage = new JLabel("Dosage");
-		lblPrescriptionDosage.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionDosage.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionAdd.add(lblPrescriptionDosage);
-
-		lblPrescriptionMedicine = new JLabel("Medicine");
-		lblPrescriptionMedicine.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionMedicine.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionAdd.add(lblPrescriptionMedicine);
-
-		txtfdPrescriptionMedicine = new JTextField();
-		txtfdPrescriptionMedicine.setColumns(10);
-		pnlPrescriptionAdd.add(txtfdPrescriptionMedicine);
-
-		txtfdPrescriptionDosage = new JTextField();
-		txtfdPrescriptionDosage.setColumns(10);
-		pnlPrescriptionAdd.add(txtfdPrescriptionDosage);
-
-		txtfdPrescriptionIName = new JTextField();
-		txtfdPrescriptionIName.setColumns(10);
-		pnlPrescriptionAdd.add(txtfdPrescriptionIName);
-
-		lblPrescriptionExpiry = new JLabel("Expiry date");
-		lblPrescriptionExpiry.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionExpiry.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionAdd.add(lblPrescriptionExpiry);
-
-		lblPrescriptionDate = new JLabel("Date of issue");
-		lblPrescriptionDate.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionDate.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionAdd.add(lblPrescriptionDate);
-
-		txtfdPrescriptionDate = new JTextField();
-		txtfdPrescriptionDate.setColumns(10);
-		pnlPrescriptionAdd.add(txtfdPrescriptionDate);
-
-		txtfdPrescriptionExpiry = new JTextField();
-		txtfdPrescriptionExpiry.setColumns(10);
-		pnlPrescriptionAdd.add(txtfdPrescriptionExpiry);
-
-		lblPrescriptionDetails = new JLabel("Prescription Details");
-		lblPrescriptionDetails.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionDetails.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		pnlPrescriptionAdd.add(lblPrescriptionDetails);
-
-		txtfdPrescriptionILicence = new JTextField();
-		txtfdPrescriptionILicence.setColumns(10);
-		pnlPrescriptionAdd.add(txtfdPrescriptionILicence);
-
-		lblPrescriptionILicence = new JLabel("Issuer licence");
-		lblPrescriptionILicence.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionILicence.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionAdd.add(lblPrescriptionILicence);
 
 	}
 
@@ -1535,10 +1494,5 @@ public class mainGUI extends JFrame implements ActionListener {
 		}
 
 	}
-	
-	
+
 }
-
-
-
-
