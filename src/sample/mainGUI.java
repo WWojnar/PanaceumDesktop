@@ -287,6 +287,8 @@ public class mainGUI extends JFrame implements ActionListener {
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -295,6 +297,9 @@ public class mainGUI extends JFrame implements ActionListener {
 		setBounds(100, 100, 1100, 900);
 		contentPane.setBackground(Color.LIGHT_GRAY);
 
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+		
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
@@ -1223,7 +1228,12 @@ public class mainGUI extends JFrame implements ActionListener {
 		 * "doctorid":2,"patientId":1,"patientPesel":"55555555555",
 		 * "patientFirstName":"Pacjent","patientLastName":"NumerJeden"}]
 		 */
-
+		if (dmPrescription.getRowCount() > 0) {
+		    for (int i = dmPrescription.getRowCount() - 1; i > -1; i--) {
+		    	dmPrescription.removeRow(i);
+		    }
+		}
+		
 		prescriptionJson = new JSONArray(
 				restController.getPrescription(Controller.doctorId, Controller.name, Controller.token));
 		for (int i = 0; i < prescriptionJson.length(); i++) {
