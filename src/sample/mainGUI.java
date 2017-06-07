@@ -1175,7 +1175,12 @@ public class mainGUI extends JFrame implements ActionListener {
 		 * "doctorid":2,"patientId":1,"patientPesel":"55555555555",
 		 * "patientFirstName":"Pacjent","patientLastName":"NumerJeden"}]
 		 */
-
+		if (dmPrescription.getRowCount() > 0) {
+		    for (int i = dmPrescription.getRowCount() - 1; i > -1; i--) {
+		    	dmPrescription.removeRow(i);
+		    }
+		}
+		
 		prescriptionJson = new JSONArray(
 				restController.getPrescription(Controller.doctorId, Controller.name, Controller.token));
 		for (int i = 0; i < prescriptionJson.length(); i++) {
