@@ -247,7 +247,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		this.setTitle("Panaceum");
-		contentPane.setLayout(new MigLayout("insets 10", "[5%!][10%!]20[center]", "[]20[]"));
+		contentPane.setLayout(new MigLayout("insets 10", "[5%!][10%!]20[60%!, center]", "[]20[grow]"));
 		setBounds(100, 100, 1380, 900);
 		contentPane.setBackground(Color.LIGHT_GRAY);
 		
@@ -1007,7 +1007,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		
 		searchPrescriptionField = new JTextField();
-		pnlPrescriptions.add(searchPrescriptionField);
+		pnlPrescriptions.add(searchPrescriptionField, "width 50:60:70,alignx center,aligny center");
 		searchPrescriptionField.setColumns(3);
 		
 		
@@ -1163,6 +1163,115 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	private void fillPrescriptionDetailsJPanel() {
 
+		
+		lblPrescriptionDetails = new JLabel("Prescription Details");
+		lblPrescriptionDetails.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionDetails.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		pnlPrescriptionDetails.add(lblPrescriptionDetails, "span 4, wrap");
+		
+		
+		lblPrescriptionName = new JLabel("Name");
+		lblPrescriptionName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionName.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionDetails.add(lblPrescriptionName);
+
+		txtfdPrescriptionName = new JTextField();
+		txtfdPrescriptionName.setDisabledTextColor(Color.BLACK);
+		pnlPrescriptionDetails.add(txtfdPrescriptionName, "");
+		txtfdPrescriptionName.setColumns(10);
+		
+		lblPrescriptionIName = new JLabel("Issuer name");
+		lblPrescriptionIName.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionIName.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionDetails.add(lblPrescriptionIName);
+		
+		txtfdPrescriptionIName = new JTextField();
+		txtfdPrescriptionIName.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionIName.setColumns(10);
+		pnlPrescriptionDetails.add(txtfdPrescriptionIName, "wrap");
+
+		lblPrescriptionSurname = new JLabel("Surname");
+		lblPrescriptionSurname.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionSurname.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionDetails.add(lblPrescriptionSurname);
+		
+		txtfdPrescriptionSurname = new JTextField();
+		txtfdPrescriptionSurname.setDisabledTextColor(Color.BLACK);
+		pnlPrescriptionDetails.add(txtfdPrescriptionSurname, "");
+		txtfdPrescriptionSurname.setColumns(10);
+		
+		lblPrescriptionILicence = new JLabel("Issuer licence");
+		lblPrescriptionILicence.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionILicence.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionDetails.add(lblPrescriptionILicence);
+		
+		txtfdPrescriptionILicence = new JTextField();
+		txtfdPrescriptionILicence.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionILicence.setColumns(10);
+		pnlPrescriptionDetails.add(txtfdPrescriptionILicence, "wrap");
+		
+		lblPrescriptionPesel = new JLabel("Pesel");
+		lblPrescriptionPesel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionPesel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionDetails.add(lblPrescriptionPesel);
+
+		txtfdPrescriptionPesel = new JTextField();
+		txtfdPrescriptionPesel.setDisabledTextColor(Color.BLACK);
+		pnlPrescriptionDetails.add(txtfdPrescriptionPesel, "");
+		txtfdPrescriptionPesel.setColumns(10);
+		
+		lblPrescriptionDate = new JLabel("Date of issue");
+		lblPrescriptionDate.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionDate.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionDetails.add(lblPrescriptionDate);
+
+		txtfdPrescriptionDate = new JTextField();
+		txtfdPrescriptionDate.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionDate.setColumns(10);
+		pnlPrescriptionDetails.add(txtfdPrescriptionDate, "wrap");
+		
+		lblPrescriptionMedicine = new JLabel("Medicine");
+		lblPrescriptionMedicine.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionMedicine.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionDetails.add(lblPrescriptionMedicine);
+
+		txtfdPrescriptionMedicine = new JTextField();
+		txtfdPrescriptionMedicine.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionMedicine.setColumns(10);
+		pnlPrescriptionDetails.add(txtfdPrescriptionMedicine, "");
+
+		lblPrescriptionExpiry = new JLabel("Expiry date");
+		lblPrescriptionExpiry.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionExpiry.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionDetails.add(lblPrescriptionExpiry);
+		
+		txtfdPrescriptionExpiry = new JTextField();
+		txtfdPrescriptionExpiry.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionExpiry.setColumns(10);
+		pnlPrescriptionDetails.add(txtfdPrescriptionExpiry, "wrap");
+		
+		lblPrescriptionDosage = new JLabel("Dosage");
+		lblPrescriptionDosage.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrescriptionDosage.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPrescriptionDetails.add(lblPrescriptionDosage);
+
+		txtfdPrescriptionDosage = new JTextField();
+		txtfdPrescriptionDosage.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionDosage.setColumns(10);
+		pnlPrescriptionDetails.add(txtfdPrescriptionDosage, "wrap");
+		
+
+
+
+
+
+
+		
+
+
+
+
+		
 		btnPrescriptionBack = new JButton("Back");
 		btnPrescriptionBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1216,101 +1325,7 @@ public class mainGUI extends JFrame implements ActionListener {
 			}
 		});
 		pnlPrescriptionDetails.add(btnPrescriptionPrint);
-
-		txtfdPrescriptionName = new JTextField();
-		txtfdPrescriptionName.setDisabledTextColor(Color.BLACK);
-		pnlPrescriptionDetails.add(txtfdPrescriptionName);
-		txtfdPrescriptionName.setColumns(10);
-
-		txtfdPrescriptionSurname = new JTextField();
-		txtfdPrescriptionSurname.setDisabledTextColor(Color.BLACK);
-		pnlPrescriptionDetails.add(txtfdPrescriptionSurname);
-		txtfdPrescriptionSurname.setColumns(10);
-
-		txtfdPrescriptionPesel = new JTextField();
-		txtfdPrescriptionPesel.setDisabledTextColor(Color.BLACK);
-		pnlPrescriptionDetails.add(txtfdPrescriptionPesel);
-		txtfdPrescriptionPesel.setColumns(10);
-
-		lblPrescriptionName = new JLabel("Name");
-		lblPrescriptionName.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionName.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionDetails.add(lblPrescriptionName);
-
-		lblPrescriptionSurname = new JLabel("Surname");
-		lblPrescriptionSurname.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionSurname.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionDetails.add(lblPrescriptionSurname);
-
-		lblPrescriptionPesel = new JLabel("Pesel");
-		lblPrescriptionPesel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionPesel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionDetails.add(lblPrescriptionPesel);
-
-		lblPrescriptionIName = new JLabel("Issuer name");
-		lblPrescriptionIName.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionIName.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionDetails.add(lblPrescriptionIName);
-
-		lblPrescriptionDosage = new JLabel("Dosage");
-		lblPrescriptionDosage.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionDosage.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionDetails.add(lblPrescriptionDosage);
-
-		lblPrescriptionMedicine = new JLabel("Medicine");
-		lblPrescriptionMedicine.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionMedicine.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionDetails.add(lblPrescriptionMedicine);
-
-		txtfdPrescriptionMedicine = new JTextField();
-		txtfdPrescriptionMedicine.setDisabledTextColor(Color.BLACK);
-		txtfdPrescriptionMedicine.setColumns(10);
-		pnlPrescriptionDetails.add(txtfdPrescriptionMedicine);
-
-		txtfdPrescriptionDosage = new JTextField();
-		txtfdPrescriptionDosage.setDisabledTextColor(Color.BLACK);
-		txtfdPrescriptionDosage.setColumns(10);
-		pnlPrescriptionDetails.add(txtfdPrescriptionDosage);
-
-		txtfdPrescriptionIName = new JTextField();
-		txtfdPrescriptionIName.setDisabledTextColor(Color.BLACK);
-		txtfdPrescriptionIName.setColumns(10);
-		pnlPrescriptionDetails.add(txtfdPrescriptionIName);
-
-		lblPrescriptionExpiry = new JLabel("Expiry date");
-		lblPrescriptionExpiry.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionExpiry.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionDetails.add(lblPrescriptionExpiry);
-
-		lblPrescriptionDate = new JLabel("Date of issue");
-		lblPrescriptionDate.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionDate.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionDetails.add(lblPrescriptionDate);
-
-		txtfdPrescriptionDate = new JTextField();
-		txtfdPrescriptionDate.setDisabledTextColor(Color.BLACK);
-		txtfdPrescriptionDate.setColumns(10);
-		pnlPrescriptionDetails.add(txtfdPrescriptionDate);
-
-		txtfdPrescriptionExpiry = new JTextField();
-		txtfdPrescriptionExpiry.setDisabledTextColor(Color.BLACK);
-		txtfdPrescriptionExpiry.setColumns(10);
-		pnlPrescriptionDetails.add(txtfdPrescriptionExpiry);
-
-		lblPrescriptionDetails = new JLabel("Prescription Details");
-		lblPrescriptionDetails.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionDetails.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		pnlPrescriptionDetails.add(lblPrescriptionDetails);
-
-		txtfdPrescriptionILicence = new JTextField();
-		txtfdPrescriptionILicence.setDisabledTextColor(Color.BLACK);
-		txtfdPrescriptionILicence.setColumns(10);
-		pnlPrescriptionDetails.add(txtfdPrescriptionILicence);
-
-		lblPrescriptionILicence = new JLabel("Issuer licence");
-		lblPrescriptionILicence.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPrescriptionILicence.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPrescriptionDetails.add(lblPrescriptionILicence);
+		
 
 	}
 
