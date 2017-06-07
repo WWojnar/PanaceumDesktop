@@ -236,12 +236,12 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//setBounds(100, 100, 1380, 900);
+		setBounds(100, 100, 1380, 900);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		this.setTitle("Panaceum");
-		contentPane.setLayout(new MigLayout("", "[5%!][10%!]20[center]", "[]20[]"));
+		contentPane.setLayout(new MigLayout("insets 10", "[5%!][10%!]20[center]", "[]20[]"));
 		
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
@@ -261,13 +261,13 @@ public class mainGUI extends JFrame implements ActionListener {
 		
 		btnSearch = new JButton("Search:");
 		//btnSearch.setBounds(10, 0, 82, 30);
-		contentPane.add(btnSearch, "cell 0 0");
+		contentPane.add(btnSearch);
 		
 		
 		textField = new JTextField();
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		//textField.setBounds(91, 0, 202, 30);
-		contentPane.add(textField, "cell 1 0,grow");
+		contentPane.add(textField, "grow");
 		textField.setColumns(10);
 		
 		
@@ -275,7 +275,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcome.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		//lblWelcome.setBounds(288, 0, 1076, 47);
-		contentPane.add(lblWelcome, "cell 2 0");
+		contentPane.add(lblWelcome, "alignx center,aligny center,wrap");
 
 		
 		
@@ -291,8 +291,8 @@ public class mainGUI extends JFrame implements ActionListener {
 		contentPane.add(separator);*/
 		
 		sideBar = new JPanel();
-		contentPane.add(sideBar, "cell 0 1 2 1,alignx center,aligny top");
-		sideBar.setLayout(new MigLayout("", "[]", "[][][]"));
+		contentPane.add(sideBar, "flowy,spanx 2,alignx center,aligny top,grow");
+		sideBar.setLayout(new MigLayout("", "[100%]", "[]20[]20[]"));
 		
 		btnMedicines = new JButton("Medicine database");
 		sideBar.add(btnMedicines, "wrap, grow");
@@ -308,9 +308,9 @@ public class mainGUI extends JFrame implements ActionListener {
 		btnPrescriptions.addActionListener(this);
 
 		mainPanelStorage = new JPanel(cardLayout);
-		//mainPanelStorage.setPreferredSize(new Dimension(1071, 817));
-		mainPanelStorage.setBounds(303, 54, 700, 817);
-		contentPane.add(mainPanelStorage, "cell 2 1");
+		mainPanelStorage.setPreferredSize(new Dimension( 1071, 817));
+		//mainPanelStorage.setBounds(303, 54, 1071, 817);
+		contentPane.add(mainPanelStorage, "alignx left");
 
 		
 		
