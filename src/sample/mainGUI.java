@@ -520,6 +520,33 @@ public class mainGUI extends JFrame implements ActionListener {
 		});
 		// btnCancelSingleMedicine.setBounds(10, 743, 141, 44);
 		pnlSingleMedicine.add(btnCancelSingleMedicine, "cell 0 4");
+		
+		JButton btnDeleteMedicine = new JButton("Delete");
+		btnDeleteMedicine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Add function here...(txtpnAddMedicineName.getText(), ---------------------------------------------------------------
+//				(txtpnAddMedicineActive.getText());
+				try {
+					jsonAddMedicine = new JSONObject(
+							restController.deleteMedicineById(Controller.name, Controller.token, medId));
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Zupa byla za slona");
+					e1.printStackTrace();
+					System.out.println("Error json, delete medicine wywolanie");
+				}
+				JOptionPane.showMessageDialog(null, "Medicine has been deleted");
+				for (Component c : mainPanelStorage.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				pnlMedicine.setVisible(true);
+			}
+		});
+		//btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
+		pnlSingleMedicine.add(btnDeleteMedicine, "cell 2 4");
+		
 
 		// koniec SINGLE MEDICINES
 		// *********************************************

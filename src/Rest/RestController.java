@@ -195,6 +195,24 @@ public class RestController {
 		return dataTransfer(json, url);
 	}
 
+	public String deleteMedicineById(String login, String token, int id) {
+
+		JSONObject json = null;
+		try {
+			json = new JSONObject().put("login", login).put("token", token);
+		} catch (JSONException e) {
+			return "Klient: Blad przy tworzeniu JSONa deleteMedicineById";
+		}
+
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/medicine/delete/" + id;
+
+		return dataTransfer(json, url);
+	}
+
+
+
+
+
 	/*
 	 * public static void main(String[] args) { ClientTest test = new
 	 * ClientTest(); String help = "";
