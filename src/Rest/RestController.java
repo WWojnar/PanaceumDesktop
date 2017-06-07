@@ -209,6 +209,30 @@ public class RestController {
 		return dataTransfer(json, url);
 	}
 
+	
+	
+	/*"login":"[string]",
+	"token":"[string]",
+	"dosage":"[string]",
+	"expiryDate":"[string]",         (note:format: RRRR-MM-DD)
+	"medicineName":"[string]",
+	"doctorId":[integer],
+	"patientId":[integer]}*/
+	
+	public String postReceipt(String login, String token, String dosage, String expiryDate, String medicineName, int doctorId, int patientId) {
+
+		JSONObject json = null;
+		try {
+			json = new JSONObject().put("login", login).put("token", token).put("dosage", dosage).put("expiryDate", expiryDate).put("medicineName", medicineName).put("doctorId",doctorId).put("patientId", patientId);
+		} catch (JSONException e) {
+			return "Klient: Blad przy tworzeniu JSONa postReceipt";
+		}
+
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/prescription/add";
+
+		return dataTransfer(json, url);
+	}
+
 
 
 

@@ -8,22 +8,18 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -52,7 +48,6 @@ import java.awt.Desktop;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.ListSelectionModel;
-import java.awt.FlowLayout;
 import java.io.FileOutputStream;
 import java.net.URI;
 
@@ -172,6 +167,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JButton btnPrescriptions;
 	private JButton btnPrescriptionBack;
 	private JButton btnPrescriptionAdd;
+	private JButton btnPrescriptionAddInside;
 	private JButton btnPrescriptionModify;
 	private JButton btnPrescriptionPrint;
 	private JButton btnPrescriptionAccept;
@@ -395,7 +391,7 @@ public class mainGUI extends JFrame implements ActionListener {
 				t = (JSONObject) jsonMedicineList.get(i);
 				medicineData[i][0] = t.getString("id");
 				medicineData[i][1] = t.getString("name");
-
+				
 			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				System.out.println("Fail Json Medicine list");
@@ -1324,6 +1320,12 @@ public class mainGUI extends JFrame implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
 
 				// JSONquery to modify
+				try {
+					populatePrescriptionTable();
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				disablePrescriptionDetails();
 				btnPrescriptionAccept.setVisible(false);
 				btnPrescriptionPrint.setVisible(true);
@@ -1336,7 +1338,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		btnPrescriptionModify = new JButton("Modify");
 		btnPrescriptionModify.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				
 				enablePrescriptionDetails();
 				btnPrescriptionAccept.setVisible(true);
 				btnPrescriptionModify.setVisible(false);
@@ -1344,6 +1346,7 @@ public class mainGUI extends JFrame implements ActionListener {
 			}
 		});
 		pnlPrescriptionDetails.add(btnPrescriptionModify);
+		btnPrescriptionModify.setVisible(false);
 
 		btnPrescriptionPrint = new JButton("Print");
 		btnPrescriptionPrint.addActionListener(new ActionListener() {
@@ -1467,13 +1470,26 @@ public class mainGUI extends JFrame implements ActionListener {
 		});
 		pnlPrescriptionAdd.add(btnPrescriptionBack, "skip 2");
 
-		btnPrescriptionAdd = new JButton("Add");
-		btnPrescriptionAdd.addActionListener(new ActionListener() {
+		btnPrescriptionAddInside = new JButton("Add");
+		btnPrescriptionAddInside.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Add the prescription JSON
+				addPrescription();
+				
+				for (Component c : mainPanelStorage.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				pnlPrescriptions.setVisible(true);
+				try {
+					populatePrescriptionTable();
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
-		pnlPrescriptionAdd.add(btnPrescriptionAdd);
+		pnlPrescriptionAdd.add(btnPrescriptionAddInside);
 
 	}
 
@@ -1504,6 +1520,21 @@ public class mainGUI extends JFrame implements ActionListener {
 		txtfdPrescriptionILicence.setEnabled(false);
 
 	}
+	
+
+	private void addPrescription() {
+		
+		/*"login":"[string]",
+		"token":"[string]",
+		"dosage":"[string]",
+		"expiryDate":"[string]",         (note:format: RRRR-MM-DD)
+		"medicineName":"[string]",
+		"doctorId":[integer],
+		"patientId":[integer]}*/
+		
+	}
+	
+	
 
 	public void actionPerformed(ActionEvent e) {
 
