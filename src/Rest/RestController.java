@@ -180,6 +180,20 @@ public class RestController {
 
 		return dataReceive(url);
 	}
+	
+	public String postMedicine(String login, String token, String name, String activeSubstance) {
+
+		JSONObject json = null;
+		try {
+			json = new JSONObject().put("login", login).put("token", token).put("name", name).put("activeSubstance", activeSubstance);
+		} catch (JSONException e) {
+			return "Klient: Blad przy tworzeniu JSONa addMedicine";
+		}
+
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/medicine/add";
+
+		return dataTransfer(json, url);
+	}
 
 	/*
 	 * public static void main(String[] args) { ClientTest test = new
