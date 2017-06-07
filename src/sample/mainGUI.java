@@ -40,10 +40,21 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import Rest.RestController;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfImportedPage;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.ListSelectionModel;
 import java.awt.FlowLayout;
+import java.io.FileOutputStream;
+import java.net.URI;
 
 public class mainGUI extends JFrame implements ActionListener {
 
@@ -1338,7 +1349,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		btnPrescriptionPrint.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				// Modify the Prescription JSON
+				printPrescription();
 			}
 		});
 		pnlPrescriptionDetails.add(btnPrescriptionPrint);
@@ -1533,5 +1544,65 @@ public class mainGUI extends JFrame implements ActionListener {
 		}
 
 	}
+        
+    private void printPrescription() {
+        try {
+            com.itextpdf.text.Document document = new com.itextpdf.text.Document(PageSize.A4);
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("printable.pdf"));
+            document.open();
+            PdfContentByte cb = writer.getDirectContent();
+
+            PdfReader reader = new PdfReader("wzor_recepty_rp.pdf");
+            PdfImportedPage page = writer.getImportedPage(reader, 1);
+
+            document.newPage();
+            cb.addTemplate(page, 0, 0);
+
+            ColumnText ct = new ColumnText(cb);
+            Phrase phrase = new Phrase(txtfdPrescriptionName.getText());
+            ct.setSimpleColumn(phrase, 200, 570, 580, 317, 15, Element.ALIGN_LEFT);
+            ct.go();
+
+            phrase = new Phrase(txtfdPrescriptionSurname.getText());
+            ct.setSimpleColumn(phrase, 260, 570, 580, 317, 15, Element.ALIGN_LEFT);
+            ct.go();
+
+            phrase = new Phrase(txtfdPrescriptionPesel.getText());
+            ct.setSimpleColumn(phrase, 200, 540, 580, 317, 15, Element.ALIGN_LEFT);
+            ct.go();
+
+            phrase = new Phrase(txtfdPrescriptionMedicine.getText());
+            ct.setSimpleColumn(phrase, 180, 440, 580, 317, 15, Element.ALIGN_LEFT);
+            ct.go();
+
+            phrase = new Phrase(txtfdPrescriptionDosage.getText());
+            ct.setSimpleColumn(phrase, 200, 400, 580, 317, 15, Element.ALIGN_LEFT);
+            ct.go();
+
+            phrase = new Phrase(txtfdPrescriptionIName.getText());
+            ct.setSimpleColumn(phrase, 300, 0, 580, 165, 15, Element.ALIGN_LEFT);
+            ct.go();
+
+            phrase = new Phrase(txtfdPrescriptionILicence.getText());
+            ct.setSimpleColumn(phrase, 300, 0, 580, 150, 15, Element.ALIGN_LEFT);
+            ct.go();
+
+            phrase = new Phrase(txtfdPrescriptionDate.getText());
+            ct.setSimpleColumn(phrase, 200, 0, 580, 160, 15, Element.ALIGN_LEFT);
+            ct.go();
+
+            phrase = new Phrase(txtfdPrescriptionExpiry.getText());
+            ct.setSimpleColumn(phrase, 200, 0, 580, 110, 15, Element.ALIGN_LEFT);
+            ct.go();
+
+            document.close();
+
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().browse(new URI("printable.pdf"));
+            }
+        } catch (Exception ex) {
+
+        }
+    }
 
 }
