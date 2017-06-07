@@ -1,5 +1,6 @@
 package sample;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -20,8 +21,6 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
@@ -32,6 +31,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
 
 import Rest.RestController;
+import net.miginfocom.swing.MigLayout;
+
 import javax.swing.ListSelectionModel;
 
 public class mainGUI extends JFrame implements ActionListener {
@@ -43,7 +44,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JTextField textField;
 	private JButton btnMedicines;
 	private JPanel pnlMedicine;
-
+	private JPanel mainPanelStorage;
 	// Medicine fields
 
 	private JTextField txtSearchMedicine;
@@ -180,7 +181,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JLabel lblPrescriptionDate;
 	private JLabel lblPrescriptionDetails;
 	private JLabel lblPrescriptionILicence;
-
+	private CardLayout cardLayout = new CardLayout();
 	/**
 	 * Launch the application.
 	 */
@@ -200,19 +201,6 @@ public class mainGUI extends JFrame implements ActionListener {
 	 */
 	public mainGUI() throws JSONException {
 
-		
-		try {
-		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
-		        if ("Nimbus".equals(info.getName())) {
-		            UIManager.setLookAndFeel(info.getClassName());
-		            break;
-		        }
-		    }
-		} catch (Exception e) {
-		    // If Nimbus is not available, you can set the GUI to another look and feel.
-		}
-		
-		
 		restController = new RestController();
 
 		// lista pacjentow musi zostac utworzona tutaj, bo ich pesele moga
@@ -249,14 +237,27 @@ public class mainGUI extends JFrame implements ActionListener {
 		setContentPane(contentPane);
 		this.setTitle("Panaceum");
 		contentPane.setLayout(null);
-
+		
+		
+		
+		
+		//////////////////////////////////////////////////
+		//Layout Creation
+		
 		JLabel lblWelcome = new JLabel("Welcome " + Controller.name);
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcome.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		lblWelcome.setBounds(288, 0, 1076, 47);
 		contentPane.add(lblWelcome);
 
-		JSeparator separator_1 = new JSeparator();
+		textField = new JTextField();
+		textField.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		textField.setBounds(91, 0, 202, 30);
+		contentPane.add(textField);
+		textField.setColumns(10);
+		
+		
+		/*JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(10, 45, 1364, 2);
 		contentPane.add(separator_1);
 
@@ -264,19 +265,84 @@ public class mainGUI extends JFrame implements ActionListener {
 		separator.setToolTipText("");
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setBounds(298, 0, 2, 871);
-		contentPane.add(separator);
-
-		// *********************************************
-		// PANEL MEDICINES
-
+		contentPane.add(separator);*/
+		
+		btnSearch = new JButton("Search:");
+		btnSearch.setBounds(10, 0, 82, 30);
+		contentPane.add(btnSearch);
+		
 		btnMedicines = new JButton("Medicine database");
 		btnMedicines.setBounds(10, 120, 283, 23);
 		contentPane.add(btnMedicines);
 		btnMedicines.addActionListener(this);
+		
+		btnUser = new JButton("User panel");
+		btnUser.setBounds(10, 86, 283, 23);
+		contentPane.add(btnUser);
+		btnUser.addActionListener(this);
+		
+		btnPrescriptions = new JButton("Prescriptions");
+		btnPrescriptions.setBounds(10, 154, 283, 23);
+		contentPane.add(btnPrescriptions);
+		btnPrescriptions.addActionListener(this);
 
+		mainPanelStorage = new JPanel(cardLayout);
+		mainPanelStorage.setBounds(303, 54, 1071, 817);
+		contentPane.add(mainPanelStorage);
+
+		
 		pnlMedicine = new JPanel();
-		pnlMedicine.setBounds(303, 54, 1071, 817);
-		contentPane.add(pnlMedicine);
+		//pnlMedicine.setBounds(303, 54, 1071, 817);
+		mainPanelStorage.add(pnlMedicine);
+		pnlMedicine.setLayout(new MigLayout());
+		
+		pnlSingleMedicine = new JPanel();
+		//pnlSingleMedicine.setBounds(303, 54, 1071, 817);
+		mainPanelStorage.add(pnlSingleMedicine);
+		pnlSingleMedicine.setLayout(new MigLayout());
+		
+		pnlAddMedicine = new JPanel();
+		//pnlAddMedicine.setBounds(303, 54, 1071, 817);
+		mainPanelStorage.add(pnlAddMedicine);
+		pnlAddMedicine.setLayout(new MigLayout());
+		
+		pnlUser = new JPanel();
+		//pnlUser.setBounds(303, 54, 1071, 817);
+		mainPanelStorage.add(pnlUser);
+		pnlUser.setLayout(new MigLayout());
+		
+		pnlPatient = new JPanel();
+		//pnlPatient.setBounds(303, 54, 1071, 817);
+		mainPanelStorage.add(pnlPatient);
+		pnlPatient.setLayout(new MigLayout());
+		
+		pnlSingleHistory = new JPanel();
+		//pnlSingleHistory.setBounds(303, 54, 1071, 817);
+		mainPanelStorage.add(pnlSingleHistory);
+		pnlSingleHistory.setLayout(new MigLayout());
+
+		pnlPrescriptions = new JPanel();
+		//pnlPrescriptions.setBounds(303, 54, 1071, 817);
+		mainPanelStorage.add(pnlPrescriptions);
+		pnlPrescriptions.setLayout(new MigLayout("", "[30%][30%,fill][40%]", "[][]"));
+		
+		pnlPrescriptionDetails = new JPanel();
+		//pnlPrescriptionDetails.setBounds(303, 54, 1071, 817);
+		mainPanelStorage.add(pnlPrescriptionDetails);
+		pnlPrescriptionDetails.setLayout(new MigLayout());
+		
+		pnlPrescriptionAdd = new JPanel();
+		//pnlPrescriptionAdd.setBounds(303, 54, 1071, 817);
+		mainPanelStorage.add(pnlPrescriptionAdd);
+		pnlPrescriptionAdd.setLayout(new MigLayout());
+	
+		/////////////////////////////////////////////
+
+		// *********************************************
+		// PANEL MEDICINES
+
+		
+		
 
 		String[] medicineColumnNames = { "Id:", "Name:" };
 
@@ -312,7 +378,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		JButton btnAddNewMedicine = new JButton("Add new");
 		btnAddNewMedicine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				for (Component c : contentPane.getComponents()) {
+				for (Component c : mainPanelStorage.getComponents()) {
 					if (c instanceof JPanel) {
 						((JPanel) c).setVisible(false);
 					}
@@ -321,7 +387,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 			}
 		});
-		pnlMedicine.setLayout(null);
+
 		btnAddNewMedicine.setBounds(933, 8, 128, 23);
 		pnlMedicine.add(btnAddNewMedicine);
 
@@ -374,7 +440,7 @@ public class mainGUI extends JFrame implements ActionListener {
 					txtpnSingleMedicineActive.setText(medActiveSubstance);
 					lblMedicineDetails.setText("Mecicine Id: " + medId);
 
-					for (Component c : contentPane.getComponents()) {
+					for (Component c : mainPanelStorage.getComponents()) {
 						if (c instanceof JPanel) {
 							((JPanel) c).setVisible(false);
 						}
@@ -393,10 +459,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		///
 
-		pnlSingleMedicine = new JPanel();
-		pnlSingleMedicine.setBounds(303, 54, 1071, 817);
-		contentPane.add(pnlSingleMedicine);
-		pnlSingleMedicine.setLayout(null);
+		
 
 		lblMedicineDetails = new JLabel("Medicine Id: " + medId);
 		lblMedicineDetails.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -439,7 +502,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		btnCancelSingleMedicine = new JButton("Back");
 		btnCancelSingleMedicine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				for (Component c : contentPane.getComponents()) {
+				for (Component c : mainPanelStorage.getComponents()) {
 					if (c instanceof JPanel) {
 						((JPanel) c).setVisible(false);
 					}
@@ -456,10 +519,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		// *********************************************
 		// PANEL ADD MEDICINES
 
-		pnlAddMedicine = new JPanel();
-		pnlAddMedicine.setBounds(303, 54, 1071, 817);
-		contentPane.add(pnlAddMedicine);
-		pnlAddMedicine.setLayout(null);
+		
 
 		lblToAddNew = new JLabel("To add new medicine, fill all the fields and press \"Add\" button.");
 		lblToAddNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -503,7 +563,7 @@ public class mainGUI extends JFrame implements ActionListener {
 				// Add function here...(txtpnAddMedicineName.getText(),
 				// txtpnAddMedicineActive.getText());
 				JOptionPane.showMessageDialog(null, "New medicine has been added");
-				for (Component c : contentPane.getComponents()) {
+				for (Component c : mainPanelStorage.getComponents()) {
 					if (c instanceof JPanel) {
 						((JPanel) c).setVisible(false);
 					}
@@ -518,7 +578,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		btnCancelAddMedicine = new JButton("Cancel");
 		btnCancelAddMedicine.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				for (Component c : contentPane.getComponents()) {
+				for (Component c : mainPanelStorage.getComponents()) {
 					if (c instanceof JPanel) {
 						((JPanel) c).setVisible(false);
 					}
@@ -536,15 +596,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		// PANEL USER (DODAWANIE PACJENTA I WSZYSTKIE AKCJE, KTORE NIE PASUJA DO
 		// INNYCH PANELI)
 
-		btnUser = new JButton("User panel");
-		btnUser.setBounds(10, 86, 283, 23);
-		contentPane.add(btnUser);
-		btnUser.addActionListener(this);
-
-		pnlUser = new JPanel();
-		pnlUser.setLayout(null);
-		pnlUser.setBounds(303, 54, 1071, 817);
-		contentPane.add(pnlUser);
 
 		lblDoctorName = new JLabel("xxxxxxxxxxxxxxxxxxxxx");
 		lblDoctorName.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -641,21 +692,6 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		// *********************************************
 		// PANEL PATIENT
-
-		btnSearch = new JButton("Search:");
-		btnSearch.setBounds(10, 0, 82, 30);
-		contentPane.add(btnSearch);
-
-		textField = new JTextField();
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		textField.setBounds(91, 0, 202, 30);
-		contentPane.add(textField);
-		textField.setColumns(10);
-
-		pnlPatient = new JPanel();
-		pnlPatient.setBounds(303, 54, 1071, 817);
-		contentPane.add(pnlPatient);
-		pnlPatient.setLayout(null);
 
 		JLabel lblName = new JLabel("New label");
 		lblName.setHorizontalAlignment(SwingConstants.RIGHT);
@@ -766,7 +802,7 @@ public class mainGUI extends JFrame implements ActionListener {
 					if (textField.getText().equals(i)) {
 						searchConfirmed = true;
 
-						for (Component c : contentPane.getComponents()) {
+						for (Component c : mainPanelStorage.getComponents()) {
 							if (c instanceof JPanel) {
 								((JPanel) c).setVisible(false);
 							}
@@ -869,7 +905,7 @@ public class mainGUI extends JFrame implements ActionListener {
 									// your valueChanged overridden method
 									System.out.println("Row " + row + " selected");
 
-									for (Component c : contentPane.getComponents()) {
+									for (Component c : mainPanelStorage.getComponents()) {
 										if (c instanceof JPanel) {
 											((JPanel) c).setVisible(false);
 										}
@@ -899,11 +935,6 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		///
 
-		pnlSingleHistory = new JPanel();
-		pnlSingleHistory.setBounds(303, 54, 1071, 817);
-		contentPane.add(pnlSingleHistory);
-		pnlSingleHistory.setLayout(null);
-
 		// WYBRANA HISTORIA HERE
 
 		lblHistory = new JLabel("xxxxxxxxxxxxxxx");
@@ -918,7 +949,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		btnCancelHistory = new JButton("Back");
 		btnCancelHistory.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				for (Component c : contentPane.getComponents()) {
+				for (Component c : mainPanelStorage.getComponents()) {
 					if (c instanceof JPanel) {
 						((JPanel) c).setVisible(false);
 					}
@@ -965,7 +996,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		// *********************************************
 
 		// panel user shows after logging in
-		for (Component c : contentPane.getComponents()) {
+		for (Component c : mainPanelStorage.getComponents()) {
 			if (c instanceof JPanel) {
 				((JPanel) c).setVisible(false);
 			}
@@ -977,19 +1008,67 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	private void fillPrescriptionJPanel() {
 
-		btnPrescriptions = new JButton("Prescriptions");
-		btnPrescriptions.setBounds(10, 154, 283, 23);
-		contentPane.add(btnPrescriptions);
-		btnPrescriptions.addActionListener(this);
+		
+		btnPrescriptionModify = new JButton("Details");
+		btnPrescriptionModify.addActionListener(new ActionListener() {
+			private Object prescriptionId;
 
-		pnlPrescriptions = new JPanel();
-		pnlPrescriptions.setBounds(303, 54, 1071, 817);
-		contentPane.add(pnlPrescriptions);
-		pnlPrescriptions.setLayout(null);
+			public void actionPerformed(ActionEvent arg0) {
 
+				prescriptionId = tblPrescription.getModel().getValueAt(tblPrescription.getSelectedRow(), 0);
+				try {
+					refreshPrescriptionData(prescriptionId.toString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				for (Component c : mainPanelStorage.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				pnlPrescriptionDetails.setVisible(true);
+
+			}
+		});
+		//btnPrescriptionModify.setBounds(155, 8, 128, 23);
+		pnlPrescriptions.add(btnPrescriptionModify);
+
+		
+		searchPrescriptionField = new JTextField();
+		//searchPrescriptionField.setBounds(10, 8, 122, 23);
+		pnlPrescriptions.add(searchPrescriptionField);
+		searchPrescriptionField.setColumns(3);
+		
+		
+		btnPrescriptionAdd = new JButton("Add");
+		btnPrescriptionAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for (Component c : mainPanelStorage.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
+					}
+				}
+				try {
+					clearPrescriptionData();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				pnlPrescriptionAdd.setVisible(true);
+
+			}
+		});
+		//btnPrescriptionAdd.setBounds(933, 8, 128, 23);
+		pnlPrescriptions.add(btnPrescriptionAdd, "wrap");
+
+		
+		
+		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 42, 1051, 764);
-		pnlPrescriptions.add(scrollPane);
+		//scrollPane.setBounds(10, 42, 1051, 764);
+		pnlPrescriptions.add(scrollPane, "span, grow");
 
 		tblPrescription = new JTable() {
 			private static final long serialVersionUID = 4466748965117973844L;
@@ -1030,7 +1109,7 @@ public class mainGUI extends JFrame implements ActionListener {
 						e.printStackTrace();
 					}
 
-					for (Component c : contentPane.getComponents()) {
+					for (Component c : mainPanelStorage.getComponents()) {
 						if (c instanceof JPanel) {
 							((JPanel) c).setVisible(false);
 						}
@@ -1041,57 +1120,6 @@ public class mainGUI extends JFrame implements ActionListener {
 			}
 		});
 
-		btnPrescriptionModify = new JButton("Details");
-		btnPrescriptionModify.addActionListener(new ActionListener() {
-			private Object prescriptionId;
-
-			public void actionPerformed(ActionEvent arg0) {
-
-				prescriptionId = tblPrescription.getModel().getValueAt(tblPrescription.getSelectedRow(), 0);
-				try {
-					refreshPrescriptionData(prescriptionId.toString());
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				for (Component c : contentPane.getComponents()) {
-					if (c instanceof JPanel) {
-						((JPanel) c).setVisible(false);
-					}
-				}
-				pnlPrescriptionDetails.setVisible(true);
-
-			}
-		});
-		btnPrescriptionModify.setBounds(155, 8, 128, 23);
-		pnlPrescriptions.add(btnPrescriptionModify);
-
-		btnPrescriptionAdd = new JButton("Add");
-		btnPrescriptionAdd.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				for (Component c : contentPane.getComponents()) {
-					if (c instanceof JPanel) {
-						((JPanel) c).setVisible(false);
-					}
-				}
-				try {
-					clearPrescriptionData();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				pnlPrescriptionAdd.setVisible(true);
-
-			}
-		});
-		btnPrescriptionAdd.setBounds(933, 8, 128, 23);
-		pnlPrescriptions.add(btnPrescriptionAdd);
-
-		searchPrescriptionField = new JTextField();
-		searchPrescriptionField.setBounds(10, 8, 122, 23);
-		pnlPrescriptions.add(searchPrescriptionField);
-		searchPrescriptionField.setColumns(3);
 
 	}
 
@@ -1168,15 +1196,10 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	private void fillPrescriptionDetailsJPanel() {
 
-		pnlPrescriptionDetails = new JPanel();
-		pnlPrescriptionDetails.setBounds(303, 54, 1071, 817);
-		contentPane.add(pnlPrescriptionDetails);
-		pnlPrescriptionDetails.setLayout(null);
-
 		btnPrescriptionBack = new JButton("Back");
 		btnPrescriptionBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				for (Component c : contentPane.getComponents()) {
+				for (Component c : mainPanelStorage.getComponents()) {
 					if (c instanceof JPanel) {
 						((JPanel) c).setVisible(false);
 					}
@@ -1349,15 +1372,11 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	private void fillPrescriptionAddJPanel() {
 
-		pnlPrescriptionAdd = new JPanel();
-		pnlPrescriptionAdd.setBounds(303, 54, 1071, 817);
-		contentPane.add(pnlPrescriptionAdd);
-		pnlPrescriptionAdd.setLayout(null);
 
 		btnPrescriptionBack = new JButton("Back");
 		btnPrescriptionBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				for (Component c : contentPane.getComponents()) {
+				for (Component c : mainPanelStorage.getComponents()) {
 					if (c instanceof JPanel) {
 						((JPanel) c).setVisible(false);
 					}
@@ -1515,7 +1534,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == btnMedicines) {
-			for (Component c : contentPane.getComponents()) {
+			for (Component c : mainPanelStorage.getComponents()) {
 				if (c instanceof JPanel) {
 					((JPanel) c).setVisible(false);
 				}
@@ -1523,7 +1542,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 			pnlMedicine.setVisible(true);
 		} else if (e.getSource() == btnUser) {
-			for (Component c : contentPane.getComponents()) {
+			for (Component c : mainPanelStorage.getComponents()) {
 				if (c instanceof JPanel) {
 					((JPanel) c).setVisible(false);
 				}
@@ -1536,7 +1555,7 @@ public class mainGUI extends JFrame implements ActionListener {
 			// Get information about specific doctor using id
 
 		} else if (e.getSource() == btnPrescriptions) {
-			for (Component c : contentPane.getComponents()) {
+			for (Component c : mainPanelStorage.getComponents()) {
 				if (c instanceof JPanel) {
 					((JPanel) c).setVisible(false);
 				}
