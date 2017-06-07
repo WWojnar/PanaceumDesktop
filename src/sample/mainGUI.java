@@ -57,7 +57,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JPanel mainPanelStorage;
 	private JPanel sideBar;
 	// Medicine fields
-
+	JScrollPane scrollPane_medicine = new JScrollPane();
 	private JTextField txtSearchMedicine;
 	private JTable medicineTable;
 	private JButton btnSearchMedicine;
@@ -212,6 +212,48 @@ public class mainGUI extends JFrame implements ActionListener {
 	 * 
 	 * @throws JSONException
 	 */
+	//////////////////////////////////////////////////////////////// Medicine metody
+	private Object[][] setTableOfMedicines(){
+
+
+		Object[][] medicineData;
+		JSONArray jsonMedicineList = null;
+
+		try {
+			jsonMedicineList = new JSONArray(restController.getMedicineList(Controller.name, Controller.token));
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			System.out.println("Fail Json Medicine list");
+		}
+		medicineData = new Object[jsonMedicineList.length()][2];
+
+		for (int i = 0; i < jsonMedicineList.length(); i++) {
+			JSONObject t;
+			try {
+				t = (JSONObject) jsonMedicineList.get(i);
+				medicineData[i][0] = t.getString("id");
+				medicineData[i][1] = t.getString("name");
+
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				System.out.println("Fail Json Medicine list");
+				e1.printStackTrace();
+			}
+		}
+		return medicineData;
+	}
+	
+	private void createTableOfMedicines(Object[][] medicineData, String[] medicineColumnNames){
+	medicineTable = new JTable(medicineData, medicineColumnNames);
+	//medicineTable.enable(false);
+	medicineTable.getColumn(medicineColumnNames[0]).setWidth(10);
+	scrollPane_medicine.setViewportView(medicineTable);
+	}
+	
+	//////////////////////////////////////////////////////////////// Medicine metody koniec
+	
+	
+	
 	public mainGUI() throws JSONException {
 
 		restController = new RestController();
@@ -356,6 +398,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		// *********************************************
 		// PANEL MEDICINES
 
+		
 		String[] medicineColumnNames = { "Id:", "Name:" };
 
 		// tutaj bedzie rest do leków
@@ -364,7 +407,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		Object[][] medicineData;
 		JSONArray jsonMedicineList = null;
 		// JSON do tablicy
-
+//---------
 		try {
 			jsonMedicineList = new JSONArray(restController.getMedicineList(Controller.name, Controller.token));
 		} catch (JSONException e1) {
@@ -396,7 +439,6 @@ public class mainGUI extends JFrame implements ActionListener {
 					}
 				}
 				pnlAddMedicine.setVisible(true);
-
 			}
 		});
 
@@ -415,14 +457,18 @@ public class mainGUI extends JFrame implements ActionListener {
 		// btnSearchMedicine.setBounds(120, 8, 107, 23);
 		pnlMedicine.add(btnSearchMedicine, "wrap");
 
-		JScrollPane scrollPane_1 = new JScrollPane();
+		//JScrollPane scrollPane_medicine = new JScrollPane();
 		// scrollPane_1.setBounds(10, 42, 1051, 764);
-		pnlMedicine.add(scrollPane_1, "span");
-
-		medicineTable = new JTable(medicineData, medicineColumnNames);
-		medicineTable.enable(false);
-		medicineTable.getColumn(medicineColumnNames[0]).setWidth(10);
-		scrollPane_1.setViewportView(medicineTable);
+		pnlMedicine.add(scrollPane_medicine, "span");
+		
+		createTableOfMedicines(medicineData, medicineColumnNames);
+//-------
+//		medicineTable = new JTable(medicineData, medicineColumnNames);
+//		//medicineTable.enable(false);
+//		medicineTable.getColumn(medicineColumnNames[0]).setWidth(10);
+//		scrollPane_medicine.setViewportView(medicineTable);
+//----------
+		
 
 		// 2 clicks on row initializes action
 		medicineTable.addMouseListener(new MouseAdapter() {
@@ -533,9 +579,9 @@ public class mainGUI extends JFrame implements ActionListener {
 							restController.deleteMedicineById(Controller.name, Controller.token, medId));
 				} catch (JSONException e1) {
 					// TODO Auto-generated catch block
-					System.out.println("Zupa byla za slona");
+					System.out.println("Error json, delete medicine wywolanie, nizej:");
 					e1.printStackTrace();
-					System.out.println("Error json, delete medicine wywolanie");
+					System.out.println("Error json, delete medicine wywolanie, wyzej");
 				}
 				JOptionPane.showMessageDialog(null, "Medicine has been deleted");
 				for (Component c : mainPanelStorage.getComponents()) {
@@ -601,6 +647,8 @@ public class mainGUI extends JFrame implements ActionListener {
 				try {
 					jsonAddMedicine = new JSONObject(restController.postMedicine(Controller.name, Controller.token,
 							txtpnAddMedicineName.getText(), txtpnAddMedicineActive.getText()));
+					String[] medicineColumnNames = { "Id:", "Name:" };
+					createTableOfMedicines(setTableOfMedicines(), medicineColumnNames);
 				} catch (JSONException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -1487,6 +1535,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == btnMedicines) {
+			
 			for (Component c : mainPanelStorage.getComponents()) {
 				if (c instanceof JPanel) {
 					((JPanel) c).setVisible(false);
@@ -1495,6 +1544,8 @@ public class mainGUI extends JFrame implements ActionListener {
 
 			pnlMedicine.setVisible(true);
 		} else if (e.getSource() == btnUser) {
+			String[] medicineColumnNames = { "Id:", "Name:" };
+			createTableOfMedicines(setTableOfMedicines(), medicineColumnNames);
 			for (Component c : mainPanelStorage.getComponents()) {
 				if (c instanceof JPanel) {
 					((JPanel) c).setVisible(false);
