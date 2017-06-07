@@ -3,17 +3,23 @@ package sample;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -243,6 +249,9 @@ public class mainGUI extends JFrame implements ActionListener {
 		this.setTitle("Panaceum");
 		contentPane.setLayout(new MigLayout("insets 10", "[5%!][10%!]20[center]", "[]20[]"));
 		
+		contentPane.setBackground(Color.LIGHT_GRAY);
+		
+		
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
@@ -250,6 +259,17 @@ public class mainGUI extends JFrame implements ActionListener {
 			// TODO Auto-generated catch block
 			e2.printStackTrace();
 		}
+		
+		
+		
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image image = toolkit.getImage("images/cursos2.png");
+		Cursor c = toolkit.createCustomCursor(image , new Point(contentPane.getX(), 
+		           contentPane.getY()), "img");
+		contentPane.setCursor (c);
+		
+		
+		
 		
 		
 		//////////////////////////////////////////////////
@@ -273,7 +293,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		
 		JLabel lblWelcome = new JLabel("Welcome " + Controller.name);
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
-		lblWelcome.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblWelcome.setFont(new Font("Tahoma", Font.BOLD, 20));
 		//lblWelcome.setBounds(288, 0, 1076, 47);
 		contentPane.add(lblWelcome, "alignx center,aligny center,wrap");
 
@@ -343,12 +363,12 @@ public class mainGUI extends JFrame implements ActionListener {
 		pnlSingleHistory = new JPanel();
 		//pnlSingleHistory.setBounds(303, 54, 1071, 817);
 		mainPanelStorage.add(pnlSingleHistory);
-		pnlSingleHistory.setLayout(new MigLayout());
+		pnlSingleHistory.setLayout(new MigLayout("insets 40", "[30%!]", "[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]10:20:30[30:40:50]"));
 
 		pnlPrescriptions = new JPanel();
 		//pnlPrescriptions.setBounds(303, 54, 1071, 817);
 		mainPanelStorage.add(pnlPrescriptions);
-		pnlPrescriptions.setLayout(new MigLayout("", "[][][]", "[][]"));
+		pnlPrescriptions.setLayout(new MigLayout("", "[]20[30%][20%]", "[][]"));
 		
 		pnlPrescriptionDetails = new JPanel();
 		//pnlPrescriptionDetails.setBounds(303, 54, 1071, 817);
@@ -966,7 +986,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblHistory = new JLabel("xxxxxxxxxxxxxxx");
 		lblHistory.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		//lblHistory.setBounds(10, 11, 962, 37);
-		pnlSingleHistory.add(lblHistory);
+		pnlSingleHistory.add(lblHistory, "wrap");
 
 		// Go back to history view
 
@@ -984,23 +1004,23 @@ public class mainGUI extends JFrame implements ActionListener {
 			}
 		});
 		//btnCancelHistory.setBounds(10, 743, 141, 44);
-		pnlSingleHistory.add(btnCancelHistory);
+		pnlSingleHistory.add(btnCancelHistory, "grow,wrap");
 
 		JButton btnInfection = new JButton("Infection card");
 		//btnInfection.setBounds(10, 231, 191, 44);
-		pnlSingleHistory.add(btnInfection);
+		pnlSingleHistory.add(btnInfection, "grow,wrap");
 
 		JButton btnFirstExamination = new JButton("First Examination");
 	//	btnFirstExamination.setBounds(10, 156, 191, 44);
-		pnlSingleHistory.add(btnFirstExamination);
+		pnlSingleHistory.add(btnFirstExamination, "grow,wrap");
 
 		JButton btnInterview = new JButton("Interview");
 		//btnInterview.setBounds(10, 81, 191, 44);
-		pnlSingleHistory.add(btnInterview);
+		pnlSingleHistory.add(btnInterview, "grow,wrap");
 
 		JButton btnExcerpt = new JButton("Excerpt");
 		//btnExcerpt.setBounds(10, 307, 191, 44);
-		pnlSingleHistory.add(btnExcerpt);
+		pnlSingleHistory.add(btnExcerpt, "grow,wrap");
 
 		// koniec SINGLE HISTORY
 		// *********************************************
@@ -1022,9 +1042,9 @@ public class mainGUI extends JFrame implements ActionListener {
 		// *********************************************
 
 		// panel user shows after logging in
-		for (Component c : mainPanelStorage.getComponents()) {
-			if (c instanceof JPanel) {
-				((JPanel) c).setVisible(false);
+		for (Component d : mainPanelStorage.getComponents()) {
+			if (d instanceof JPanel) {
+				((JPanel) d).setVisible(false);
 			}
 		}
 
@@ -1596,4 +1616,10 @@ public class mainGUI extends JFrame implements ActionListener {
 		}
 
 	}
+	
+	
 }
+
+
+
+
