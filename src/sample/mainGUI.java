@@ -249,8 +249,8 @@ public class mainGUI extends JFrame implements ActionListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		this.setTitle("Panaceum");
-		contentPane.setLayout(new MigLayout("insets 10", "[5%!][10%!]20[60%!, center]", "[]20[grow]"));
-		setBounds(100, 100, 1380, 900);
+		contentPane.setLayout(new MigLayout("insets 20", "[5%][15%]30[80%, center]", "[]30[grow]"));
+		setBounds(100, 100, 1100, 900);
 		contentPane.setBackground(Color.LIGHT_GRAY);
 
 		try {
@@ -280,7 +280,9 @@ public class mainGUI extends JFrame implements ActionListener {
 		JLabel lblWelcome = new JLabel("Welcome " + Controller.name);
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcome.setFont(new Font("Tahoma", Font.BOLD, 20));
-		contentPane.add(lblWelcome, "alignx center,aligny center,wrap");
+		lblWelcome.setBackground(new Color(240,240,240));
+		lblWelcome.setOpaque(true);
+		contentPane.add(lblWelcome, "grow,wrap");
 
 		/*
 		 * JSeparator separator_1 = new JSeparator();
