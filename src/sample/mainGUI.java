@@ -1681,6 +1681,28 @@ public class mainGUI extends JFrame implements ActionListener {
 			phrase = new Phrase(txtfdPrescriptionExpiry.getText());
 			ct.setSimpleColumn(phrase, 200, 0, 580, 110, 15, Element.ALIGN_LEFT);
 			ct.go();
+                        
+                        JSONObject json = this.restController.getHospitalByDoctor(Controller.doctorId);
+
+                        phrase = new Phrase(json.getString("name"));
+                        ct.setSimpleColumn(phrase, 200, 680, 580, 317, 15, Element.ALIGN_LEFT);
+                        ct.go();
+
+                        phrase = new Phrase(json.getString("street") + " " + json.getString("buildingNumber") + " " + json.getString("flatNumber"));
+                        ct.setSimpleColumn(phrase, 200, 665, 580, 317, 15, Element.ALIGN_LEFT);
+                        ct.go();
+
+                        phrase = new Phrase(json.getString("zipCode") + " " + json.getString("city"));
+                        ct.setSimpleColumn(phrase, 200, 650, 580, 317, 15, Element.ALIGN_LEFT);
+                        ct.go();
+
+                        phrase = new Phrase("TEL. " + json.getString("phone"));
+                        ct.setSimpleColumn(phrase, 200, 635, 580, 317, 15, Element.ALIGN_LEFT);
+                        ct.go();
+
+                        phrase = new Phrase("REGON: " + json.getString("regon"));
+                        ct.setSimpleColumn(phrase, 200, 620, 580, 317, 15, Element.ALIGN_LEFT);
+                        ct.go();
 
 			document.close();
 

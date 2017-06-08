@@ -180,6 +180,22 @@ public class RestController {
 
 		return dataReceive(url);
 	}
+        
+        public JSONObject getHospitalByDoctor(int id) throws JSONException {
+
+		String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/hospital/getByDoctor/" + id;
+
+		return new JSONObject(dataReceive(url));
+	}
+	
+
+	
+        public JSONObject getPatientByPesel(String pesel, String login, String token) throws JSONException {
+
+                        String url = "http://panaceum.iiar.pwr.edu.pl:8080/Panaceum/patient/getByPesel/" + pesel + "/" + login + "/" + token;
+        System.err.println(url);
+                        return new JSONObject(dataReceive(url));
+                }
 	
 	public String postMedicine(String login, String token, String name, String activeSubstance) {
 
