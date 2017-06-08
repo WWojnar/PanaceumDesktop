@@ -785,14 +785,14 @@ public class mainGUI extends JFrame implements ActionListener {
 		JLabel lblName = new JLabel("New label");
 		lblName.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblName.setFont(new Font("Tahoma", Font.PLAIN, 28));
-		pnlPatient.add(lblName, "spanx 2");
+		pnlPatient.add(lblName, "spanx 1");
 
 		String[] columnNames = { "Recognition", "Begin of hospitalization", "End of hospitalization" };
 
 		lblSurname = new JLabel("New label");
 		lblSurname.setHorizontalAlignment(SwingConstants.LEFT);
 		lblSurname.setFont(new Font("Tahoma", Font.BOLD, 28));
-		pnlPatient.add(lblSurname, "spanx 2,wrap");
+		pnlPatient.add(lblSurname, "spanx 1,wrap"); // spanx 2
 
 		lblBloodStr = new JLabel("Blood Type:");
 		lblBloodStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -818,10 +818,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPatient.add(lblEmail, "wrap");
 
-		lblAddressStr = new JLabel("Address:");
-		lblAddressStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPatient.add(lblAddressStr, "split 2,wrap");
-
 		lblSexStr = new JLabel("Sex:");
 		lblSexStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPatient.add(lblSexStr);
@@ -837,10 +833,14 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblAge = new JLabel("xx");
 		lblAge.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPatient.add(lblAge, "wrap");
+		
+		lblAddressStr = new JLabel("Address:");
+		lblAddressStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		pnlPatient.add(lblAddressStr);
 
 		lblStreet = new JLabel("xxxxxxxxxxxxxxxxxxxxxxxxx");
 		lblStreet.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPatient.add(lblStreet, "wrap");
+		pnlPatient.add(lblStreet);
 
 		lblFlat = new JLabel("xx");
 		lblFlat.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -860,7 +860,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		JLabel lblHistoryStr = new JLabel("History of hospitalization:");
 		lblHistoryStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		pnlPatient.add(lblHistoryStr);
+		pnlPatient.add(lblHistoryStr, "wrap");
 
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
