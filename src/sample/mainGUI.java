@@ -204,6 +204,12 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JLabel lblPrescriptionDetails;
 	private JLabel lblPrescriptionILicence;
 	private CardLayout cardLayout = new CardLayout();
+	
+	//duplicate for chosen fields
+	JTextField txtfdPrescriptionDosage2;
+	JTextField txtfdPrescriptionMedicine2;
+	JTextField txtfdPrescriptionExpiry2;
+	JTextField txtfdPrescriptionPesel2;
 
 	/**
 	 * Launch the application.
@@ -411,7 +417,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		String[] medicineColumnNames = { "Id:", "Name:" };
 
-		// tutaj bedzie rest do leków
+		// tutaj bedzie rest do lekï¿½w
 		// Object[][] medicineData = { { "001", "Apap" }, { "002", "Ibuprom" }
 		// };
 		Object[][] medicineData;
@@ -1064,7 +1070,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		// SECTION OF ADDING PRESCRIPTION
 
-		fillPrescriptionAddJPanel();
+		fillPrescriptionAddJPanel2();
 
 		// SECTION OF MODIFYING PRESCRIPTION
 
@@ -1420,7 +1426,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	}
 
-	private void fillPrescriptionAddJPanel() {
+	private void fillPrescriptionAddJPanel2() {
 
 		lblPrescriptionDetails = new JLabel("Prescription Details");
 		lblPrescriptionDetails.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1472,10 +1478,10 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblPrescriptionPesel.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPrescriptionAdd.add(lblPrescriptionPesel);
 
-		txtfdPrescriptionPesel = new JTextField();
-		txtfdPrescriptionPesel.setDisabledTextColor(Color.BLACK);
-		pnlPrescriptionAdd.add(txtfdPrescriptionPesel, "");
-		txtfdPrescriptionPesel.setColumns(10);
+		txtfdPrescriptionPesel2 = new JTextField();
+		txtfdPrescriptionPesel2.setDisabledTextColor(Color.BLACK);
+		pnlPrescriptionAdd.add(txtfdPrescriptionPesel2, "");
+		txtfdPrescriptionPesel2.setColumns(10);
 
 		/*lblPrescriptionDate = new JLabel("Date of issue");
 		lblPrescriptionDate.setHorizontalAlignment(SwingConstants.CENTER);
@@ -1492,30 +1498,30 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblPrescriptionMedicine.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPrescriptionAdd.add(lblPrescriptionMedicine);
 
-		txtfdPrescriptionMedicine = new JTextField();
-		txtfdPrescriptionMedicine.setDisabledTextColor(Color.BLACK);
-		txtfdPrescriptionMedicine.setColumns(10);
-		pnlPrescriptionAdd.add(txtfdPrescriptionMedicine, "");
+		txtfdPrescriptionMedicine2 = new JTextField();
+		txtfdPrescriptionMedicine2.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionMedicine2.setColumns(10);
+		pnlPrescriptionAdd.add(txtfdPrescriptionMedicine2, "");
 
 		lblPrescriptionExpiry = new JLabel("Expiry date");
 		lblPrescriptionExpiry.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionExpiry.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPrescriptionAdd.add(lblPrescriptionExpiry);
 
-		txtfdPrescriptionExpiry = new JTextField();
-		txtfdPrescriptionExpiry.setDisabledTextColor(Color.BLACK);
-		txtfdPrescriptionExpiry.setColumns(10);
-		pnlPrescriptionAdd.add(txtfdPrescriptionExpiry, "wrap");
+		txtfdPrescriptionExpiry2 = new JTextField();
+		txtfdPrescriptionExpiry2.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionExpiry2.setColumns(10);
+		pnlPrescriptionAdd.add(txtfdPrescriptionExpiry2, "wrap");
 
 		lblPrescriptionDosage = new JLabel("Dosage");
 		lblPrescriptionDosage.setHorizontalAlignment(SwingConstants.CENTER);
 		lblPrescriptionDosage.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPrescriptionAdd.add(lblPrescriptionDosage);
 
-		txtfdPrescriptionDosage = new JTextField();
-		txtfdPrescriptionDosage.setDisabledTextColor(Color.BLACK);
-		txtfdPrescriptionDosage.setColumns(10);
-		pnlPrescriptionAdd.add(txtfdPrescriptionDosage, "wrap");
+		txtfdPrescriptionDosage2 = new JTextField();
+		txtfdPrescriptionDosage2.setDisabledTextColor(Color.BLACK);
+		txtfdPrescriptionDosage2.setColumns(10);
+		pnlPrescriptionAdd.add(txtfdPrescriptionDosage2, "wrap");
 
 		btnPrescriptionBack = new JButton("Back");
 		btnPrescriptionBack.addActionListener(new ActionListener() {
@@ -1532,7 +1538,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 		btnPrescriptionAddInside = new JButton("Add");
 		btnPrescriptionAddInside.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {System.err.println(txtfdPrescriptionPesel2.getText());
                             /*System.err.println(txtfdPrescriptionName.getText() + txtfdPrescriptionSurname.getText() + txtfdPrescriptionILicence.getText()
                                     + txtfdPrescriptionPesel.getText() + txtfdPrescriptionDate.getText() + txtfdPrescriptionMedicine.getText()
                                     + txtfdPrescriptionExpiry.getText() + txtfdPrescriptionDosage.getText());*/
@@ -1585,13 +1591,14 @@ public class mainGUI extends JFrame implements ActionListener {
 	}
 
 	private void addPrescription() {
+		/*System.out.println("fcuk");
 		txtfdPrescriptionPesel.setText("93101809719");
                 txtfdPrescriptionDosage.setText("1/12h");
                 txtfdPrescriptionExpiry.setText("10-06-2017");
-                txtfdPrescriptionMedicine.setText("Gripex");
+                txtfdPrescriptionMedicine.setText("Gripex");*/
             try {
-                JSONObject json = this.restController.getPatientByPesel(this.txtfdPrescriptionPesel.getText(), Controller.name, Controller.token);
-                this.restController.postPrescription(Controller.name, Controller.token, this.txtfdPrescriptionDosage.getText(), this.txtfdPrescriptionExpiry.getText(), this.txtfdPrescriptionMedicine.getText(), Controller.doctorId, json.getInt("id"));
+                JSONObject json = this.restController.getPatientByPesel(this.txtfdPrescriptionPesel2.getText(), Controller.name, Controller.token);
+                this.restController.postPrescription(Controller.name, Controller.token, this.txtfdPrescriptionDosage2.getText(), this.txtfdPrescriptionExpiry2.getText(), this.txtfdPrescriptionMedicine2.getText(), Controller.doctorId, json.getInt("id"));
                         
                         } catch (JSONException ex) {
                 Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -1658,6 +1665,7 @@ public class mainGUI extends JFrame implements ActionListener {
 			Phrase phrase = new Phrase(txtfdPrescriptionName.getText());
 			ct.setSimpleColumn(phrase, 200, 570, 580, 317, 15, Element.ALIGN_LEFT);
 			ct.go();
+			
 
 			phrase = new Phrase(txtfdPrescriptionSurname.getText());
 			ct.setSimpleColumn(phrase, 260, 570, 580, 317, 15, Element.ALIGN_LEFT);
