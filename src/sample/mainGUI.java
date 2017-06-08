@@ -63,7 +63,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JPanel mainPanelStorage;
 	private JPanel sideBar;
 	// Medicine fields
-
+	JScrollPane scrollPane_medicine = new JScrollPane();
 	private JTextField txtSearchMedicine;
 	private JTable medicineTable;
 	private JButton btnSearchMedicine;
@@ -219,6 +219,48 @@ public class mainGUI extends JFrame implements ActionListener {
 	 * 
 	 * @throws JSONException
 	 */
+	
+////////////////////////////////////////////////////////////////Medicine metody
+private Object[][] setTableOfMedicines(){
+
+
+Object[][] medicineData;
+JSONArray jsonMedicineList = null;
+
+try {
+jsonMedicineList = new JSONArray(restController.getMedicineList(Controller.name, Controller.token));
+} catch (JSONException e1) {
+// TODO Auto-generated catch block
+System.out.println("Fail Json Medicine list");
+}
+medicineData = new Object[jsonMedicineList.length()][2];
+
+for (int i = 0; i < jsonMedicineList.length(); i++) {
+JSONObject t;
+try {
+t = (JSONObject) jsonMedicineList.get(i);
+medicineData[i][0] = t.getString("id");
+medicineData[i][1] = t.getString("name");
+
+} catch (JSONException e1) {
+// TODO Auto-generated catch block
+System.out.println("Fail Json Medicine list");
+e1.printStackTrace();
+}
+}
+return medicineData;
+}
+
+private void createTableOfMedicines(Object[][] medicineData, String[] medicineColumnNames){
+medicineTable = new JTable(medicineData, medicineColumnNames);
+//medicineTable.enable(false);
+medicineTable.getColumn(medicineColumnNames[0]).setWidth(10);
+scrollPane_medicine.setViewportView(medicineTable);
+}
+
+//////////////////////////////////////////////////////////////// Medicine metody koniec
+
+	
 	public mainGUI() throws JSONException {
 
 		restController = new RestController();
@@ -364,8 +406,8 @@ public class mainGUI extends JFrame implements ActionListener {
 		pnlPrescriptionAdd.setLayout(new MigLayout());
 
 		/////////////////////////////////////////////
-
 		// *********************************************
+<<<<<<< HEAD
 		// PANEL MEDICINES
 
 		String[] medicineColumnNames = { "Id:", "Name:" };
@@ -406,247 +448,296 @@ public class mainGUI extends JFrame implements ActionListener {
 					if (c instanceof JPanel) {
 						((JPanel) c).setVisible(false);
 					}
+=======
+				// PANEL MEDICINES
+
+				
+				String[] medicineColumnNames = { "Id:", "Name:" };
+
+				// tutaj bedzie rest do leków
+				// Object[][] medicineData = { { "001", "Apap" }, { "002", "Ibuprom" }
+				// };
+				Object[][] medicineData;
+				JSONArray jsonMedicineList = null;
+				// JSON do tablicy
+		//---------
+				try {
+					jsonMedicineList = new JSONArray(restController.getMedicineList(Controller.name, Controller.token));
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Fail Json Medicine list");
+>>>>>>> cf2fe57956a92fb129124a7edc8167afeafe53b7
 				}
-				pnlAddMedicine.setVisible(true);
+				medicineData = new Object[jsonMedicineList.length()][2];
 
-			}
-		});
-
-		// btnAddNewMedicine.setBounds(933, 8, 128, 23);
-		pnlMedicine.add(btnAddNewMedicine);
-
-		// Pole tekstowe do wyszukiwania
-		txtSearchMedicine = new JTextField();
-		txtSearchMedicine.setText("Search..");
-		// txtSearchMedicine.setBounds(10, 9, 86, 20);
-		pnlMedicine.add(txtSearchMedicine);
-		txtSearchMedicine.setColumns(10);
-
-		// przycisk do wyszukiwania
-		btnSearchMedicine = new JButton("Search");
-		// btnSearchMedicine.setBounds(120, 8, 107, 23);
-		pnlMedicine.add(btnSearchMedicine, "wrap");
-
-		JScrollPane scrollPane_1 = new JScrollPane();
-		// scrollPane_1.setBounds(10, 42, 1051, 764);
-		pnlMedicine.add(scrollPane_1, "span");
-
-		medicineTable = new JTable(medicineData, medicineColumnNames);
-		medicineTable.enable(false);
-		medicineTable.getColumn(medicineColumnNames[0]).setWidth(10);
-		scrollPane_1.setViewportView(medicineTable);
-
-		// 2 clicks on row initializes action
-		medicineTable.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent me) {
-				JTable table = (JTable) me.getSource();
-				Point p = me.getPoint();
-				int row = table.rowAtPoint(p);
-				// String idMed;
-				if (me.getClickCount() == 2) {
-
-					// Here find by id and go to single medicine panel
-					idMedicine = Integer.valueOf((String) table.getValueAt(row, 0));
-					System.out.println("Row " + row + " selected" + "id: " + idMedicine);
-					// JSON here
+				for (int i = 0; i < jsonMedicineList.length(); i++) {
+					JSONObject t;
 					try {
-						jsonMedicine = new JSONObject(
-								restController.getMedicineById(idMedicine, Controller.name, Controller.token));
-						medId = jsonMedicine.getInt("id");
-						medName = jsonMedicine.getString("name");
-						medActiveSubstance = jsonMedicine.getString("activeSubstance");
+						t = (JSONObject) jsonMedicineList.get(i);
+						medicineData[i][0] = t.getString("id");
+						medicineData[i][1] = t.getString("name");
+
 					} catch (JSONException e1) {
 						// TODO Auto-generated catch block
+						System.out.println("Fail Json Medicine list");
 						e1.printStackTrace();
-						System.out.println("failxd");
 					}
-					txtpnSingleMedicineName.setText(medName);
-					txtpnSingleMedicineActive.setText(medActiveSubstance);
-					lblMedicineDetails.setText("Mecicine Id: " + medId);
+				}
 
-					for (Component c : mainPanelStorage.getComponents()) {
-						if (c instanceof JPanel) {
-							((JPanel) c).setVisible(false);
+				JButton btnAddNewMedicine = new JButton("Add new");
+				btnAddNewMedicine.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						for (Component c : mainPanelStorage.getComponents()) {
+							if (c instanceof JPanel) {
+								((JPanel) c).setVisible(false);
+							}
+						}
+						pnlAddMedicine.setVisible(true);
+					}
+				});
+
+				// btnAddNewMedicine.setBounds(933, 8, 128, 23);
+				pnlMedicine.add(btnAddNewMedicine);
+
+				// Pole tekstowe do wyszukiwania
+				txtSearchMedicine = new JTextField();
+				txtSearchMedicine.setText("Search..");
+				// txtSearchMedicine.setBounds(10, 9, 86, 20);
+				pnlMedicine.add(txtSearchMedicine);
+				txtSearchMedicine.setColumns(10);
+
+				// przycisk do wyszukiwania
+				btnSearchMedicine = new JButton("Search");
+				// btnSearchMedicine.setBounds(120, 8, 107, 23);
+				pnlMedicine.add(btnSearchMedicine, "wrap");
+
+				//JScrollPane scrollPane_medicine = new JScrollPane();
+				// scrollPane_1.setBounds(10, 42, 1051, 764);
+				pnlMedicine.add(scrollPane_medicine, "span");
+				
+				createTableOfMedicines(medicineData, medicineColumnNames);
+		//-------
+//				medicineTable = new JTable(medicineData, medicineColumnNames);
+//				//medicineTable.enable(false);
+//				medicineTable.getColumn(medicineColumnNames[0]).setWidth(10);
+//				scrollPane_medicine.setViewportView(medicineTable);
+		//----------
+				
+
+				// 2 clicks on row initializes action
+				medicineTable.addMouseListener(new MouseAdapter() {
+					public void mousePressed(MouseEvent me) {
+						JTable table = (JTable) me.getSource();
+						Point p = me.getPoint();
+						int row = table.rowAtPoint(p);
+						// String idMed;
+						if (me.getClickCount() == 2) {
+
+							// Here find by id and go to single medicine panel
+							idMedicine = Integer.valueOf((String) table.getValueAt(row, 0));
+							System.out.println("Row " + row + " selected" + "id: " + idMedicine);
+							// JSON here
+							try {
+								jsonMedicine = new JSONObject(
+										restController.getMedicineById(idMedicine, Controller.name, Controller.token));
+								medId = jsonMedicine.getInt("id");
+								medName = jsonMedicine.getString("name");
+								medActiveSubstance = jsonMedicine.getString("activeSubstance");
+							} catch (JSONException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+								System.out.println("failxd");
+							}
+							txtpnSingleMedicineName.setText(medName);
+							txtpnSingleMedicineActive.setText(medActiveSubstance);
+							lblMedicineDetails.setText("Mecicine Id: " + medId);
+
+							for (Component c : mainPanelStorage.getComponents()) {
+								if (c instanceof JPanel) {
+									((JPanel) c).setVisible(false);
+								}
+							}
+							pnlSingleMedicine.setVisible(true);
+
 						}
 					}
-					pnlSingleMedicine.setVisible(true);
+				});
 
-				}
-			}
-		});
+				// koniec MEDICINES
+				// *********************************************
 
-		// koniec MEDICINES
-		// *********************************************
+				// *********************************************
+				// PANEL SINGLE MEDICINES
 
-		// *********************************************
-		// PANEL SINGLE MEDICINES
+				///
 
-		///
+				lblMedicineDetails = new JLabel("Medicine Id: " + medId);
+				lblMedicineDetails.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				// lblMedicineDetails.setBounds(10, 11, 603, 37);
+				pnlSingleMedicine.add(lblMedicineDetails, "cell 0 0 2 0");
 
-		lblMedicineDetails = new JLabel("Medicine Id: " + medId);
-		lblMedicineDetails.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		// lblMedicineDetails.setBounds(10, 11, 603, 37);
-		pnlSingleMedicine.add(lblMedicineDetails, "cell 0 0 2 0");
+				lblName_2 = new JLabel("Name: ");
+				lblName_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				// lblName_2.setBounds(10, 73, 55, 37);
+				pnlSingleMedicine.add(lblName_2, "cell 0 1");
 
-		lblName_2 = new JLabel("Name: ");
-		lblName_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		// lblName_2.setBounds(10, 73, 55, 37);
-		pnlSingleMedicine.add(lblName_2, "cell 0 1");
+				txtpnSingleMedicineName = new JTextPane();
+				txtpnSingleMedicineName.setText("No information");
+				// txtpnSingleMedicineName.setBounds(10, 113, 354, 37);
+				pnlSingleMedicine.add(txtpnSingleMedicineName, "cell 0 2");
 
-		txtpnSingleMedicineName = new JTextPane();
-		txtpnSingleMedicineName.setText("No information");
-		// txtpnSingleMedicineName.setBounds(10, 113, 354, 37);
-		pnlSingleMedicine.add(txtpnSingleMedicineName, "cell 0 2");
+				// 2 times
+				lblActiveSubstances = new JLabel("Active Substances:");
+				lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				// lblActiveSubstances.setBounds(10, 179, 130, 37);
+				pnlSingleMedicine.add(lblActiveSubstances, "cell 1 1");
 
-		// 2 times
-		lblActiveSubstances = new JLabel("Active Substances:");
-		lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		// lblActiveSubstances.setBounds(10, 179, 130, 37);
-		pnlSingleMedicine.add(lblActiveSubstances, "cell 1 1");
+				txtpnSingleMedicineActive = new JTextPane();
+				txtpnSingleMedicineActive.setText("No information");
+				// txtpnSingleMedicineActive.setBounds(10, 232, 354, 460);
+				pnlSingleMedicine.add(txtpnSingleMedicineActive, "cell 1 2");
 
-		txtpnSingleMedicineActive = new JTextPane();
-		txtpnSingleMedicineActive.setText("No information");
-		// txtpnSingleMedicineActive.setBounds(10, 232, 354, 460);
-		pnlSingleMedicine.add(txtpnSingleMedicineActive, "cell 1 2");
+				// 2 times
+				lblRelations = new JLabel("Relations");
+				lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				// lblRelations.setBounds(572, 73, 157, 37);
+				pnlSingleMedicine.add(lblRelations, "cell 2 1");
 
-		// 2 times
-		lblRelations = new JLabel("Relations");
-		lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		// lblRelations.setBounds(572, 73, 157, 37);
-		pnlSingleMedicine.add(lblRelations, "cell 2 1");
+				txtpnMedicineRelationsWith = new JTextPane();
+				txtpnMedicineRelationsWith.setText("Do not mix with alcohol...");
+				// txtpnMedicineRelationsWith.setBounds(572, 113, 430, 579);
+				pnlSingleMedicine.add(txtpnMedicineRelationsWith, "cell 2 2");
 
-		txtpnMedicineRelationsWith = new JTextPane();
-		txtpnMedicineRelationsWith.setText("Do not mix with alcohol...");
-		// txtpnMedicineRelationsWith.setBounds(572, 113, 430, 579);
-		pnlSingleMedicine.add(txtpnMedicineRelationsWith, "cell 2 2");
-
-		// Go back to Medicine view
-		btnCancelSingleMedicine = new JButton("Back");
-		btnCancelSingleMedicine.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				for (Component c : mainPanelStorage.getComponents()) {
-					if (c instanceof JPanel) {
-						((JPanel) c).setVisible(false);
+				// Go back to Medicine view
+				btnCancelSingleMedicine = new JButton("Back");
+				btnCancelSingleMedicine.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						for (Component c : mainPanelStorage.getComponents()) {
+							if (c instanceof JPanel) {
+								((JPanel) c).setVisible(false);
+							}
+						}
+						pnlMedicine.setVisible(true);
 					}
-				}
-				pnlMedicine.setVisible(true);
-			}
-		});
-		// btnCancelSingleMedicine.setBounds(10, 743, 141, 44);
-		pnlSingleMedicine.add(btnCancelSingleMedicine, "cell 0 4");
-		
-		JButton btnDeleteMedicine = new JButton("Delete");
-		btnDeleteMedicine.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Add function here...(txtpnAddMedicineName.getText(), ---------------------------------------------------------------
-//				(txtpnAddMedicineActive.getText());
-				try {
-					jsonAddMedicine = new JSONObject(
-							restController.deleteMedicineById(Controller.name, Controller.token, medId));
-				} catch (JSONException e1) {
-					// TODO Auto-generated catch block
-					System.out.println("Zupa byla za slona");
-					e1.printStackTrace();
-					System.out.println("Error json, delete medicine wywolanie");
-				}
-				JOptionPane.showMessageDialog(null, "Medicine has been deleted");
-				for (Component c : mainPanelStorage.getComponents()) {
-					if (c instanceof JPanel) {
-						((JPanel) c).setVisible(false);
+				});
+				// btnCancelSingleMedicine.setBounds(10, 743, 141, 44);
+				pnlSingleMedicine.add(btnCancelSingleMedicine, "cell 0 4");
+				
+				JButton btnDeleteMedicine = new JButton("Delete");
+				btnDeleteMedicine.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// Add function here...(txtpnAddMedicineName.getText(), ---------------------------------------------------------------
+//						(txtpnAddMedicineActive.getText());
+						try {
+							jsonAddMedicine = new JSONObject(
+									restController.deleteMedicineById(Controller.name, Controller.token, medId));
+						} catch (JSONException e1) {
+							// TODO Auto-generated catch block
+							System.out.println("Error json, delete medicine wywolanie, nizej:");
+							e1.printStackTrace();
+							System.out.println("Error json, delete medicine wywolanie, wyzej");
+						}
+						JOptionPane.showMessageDialog(null, "Medicine has been deleted");
+						for (Component c : mainPanelStorage.getComponents()) {
+							if (c instanceof JPanel) {
+								((JPanel) c).setVisible(false);
+							}
+						}
+						pnlMedicine.setVisible(true);
 					}
-				}
-				pnlMedicine.setVisible(true);
-			}
-		});
-		//btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
-		pnlSingleMedicine.add(btnDeleteMedicine, "cell 2 4");
-		
+				});
+				//btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
+				pnlSingleMedicine.add(btnDeleteMedicine, "cell 2 4");
+				
 
-		// koniec SINGLE MEDICINES
-		// *********************************************
+				// koniec SINGLE MEDICINES
+				// *********************************************
 
-		// *********************************************
-		// PANEL ADD MEDICINES
+				// *********************************************
+				// PANEL ADD MEDICINES
 
-		lblToAddNew = new JLabel("To add new medicine, fill all the fields and press \"Add\" button.");
-		lblToAddNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		// lblToAddNew.setBounds(10, 11, 603, 37);
-		pnlAddMedicine.add(lblToAddNew, "cell 0 0 2 0");
+				lblToAddNew = new JLabel("To add new medicine, fill all the fields and press \"Add\" button.");
+				lblToAddNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				// lblToAddNew.setBounds(10, 11, 603, 37);
+				pnlAddMedicine.add(lblToAddNew, "cell 0 0 2 0");
 
-		lblName_1 = new JLabel("Name: ");
-		lblName_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		// lblName_1.setBounds(10, 73, 55, 37);
-		pnlAddMedicine.add(lblName_1, "cell 0 1");
+				lblName_1 = new JLabel("Name: ");
+				lblName_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				// lblName_1.setBounds(10, 73, 55, 37);
+				pnlAddMedicine.add(lblName_1, "cell 0 1");
 
-		txtpnAddMedicineName = new JTextPane();
-		txtpnAddMedicineName.setText("");
-		// txtpnAddMedicineName.setBounds(10, 113, 354, 37);
-		pnlAddMedicine.add(txtpnAddMedicineName, "cell 0 2");
+				txtpnAddMedicineName = new JTextPane();
+				txtpnAddMedicineName.setText("");
+				// txtpnAddMedicineName.setBounds(10, 113, 354, 37);
+				pnlAddMedicine.add(txtpnAddMedicineName, "cell 0 2");
 
-		lblActiveSubstances = new JLabel("Active Substances:");
-		lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		// lblActiveSubstances.setBounds(10, 179, 130, 37);
-		pnlAddMedicine.add(lblActiveSubstances, "cell 1 1");
+				lblActiveSubstances = new JLabel("Active Substances:");
+				lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				// lblActiveSubstances.setBounds(10, 179, 130, 37);
+				pnlAddMedicine.add(lblActiveSubstances, "cell 1 1");
 
-		txtpnAddMedicineActive = new JTextPane();
-		txtpnAddMedicineActive.setText("");
-		// txtpnAddMedicineActive.setBounds(10, 232, 354, 460);
-		pnlAddMedicine.add(txtpnAddMedicineActive, "cell 1 2");
+				txtpnAddMedicineActive = new JTextPane();
+				txtpnAddMedicineActive.setText("");
+				// txtpnAddMedicineActive.setBounds(10, 232, 354, 460);
+				pnlAddMedicine.add(txtpnAddMedicineActive, "cell 1 2");
 
-		lblRelations = new JLabel("Relations");
-		lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		// lblRelations.setBounds(572, 73, 157, 37);
-		pnlAddMedicine.add(lblRelations, "cell 2 1");
+				lblRelations = new JLabel("Relations");
+				lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
+				// lblRelations.setBounds(572, 73, 157, 37);
+				pnlAddMedicine.add(lblRelations, "cell 2 1");
 
-		txtpnAddRelationsWith = new JTextPane();
-		txtpnAddRelationsWith.setText("");
-		// txtpnAddRelationsWith.setBounds(572, 113, 430, 579);
-		pnlAddMedicine.add(txtpnAddRelationsWith, "cell 2 2");
+				txtpnAddRelationsWith = new JTextPane();
+				txtpnAddRelationsWith.setText("");
+				// txtpnAddRelationsWith.setBounds(572, 113, 430, 579);
+				pnlAddMedicine.add(txtpnAddRelationsWith, "cell 2 2");
 
-		// Adding new medicine
-		btnSubmitNewMedicine = new JButton("Add");
-		btnSubmitNewMedicine.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Add function here...(txtpnAddMedicineName.getText(),
-				// ---------------------------------------------------------------
-				// (txtpnAddMedicineActive.getText());
-				try {
-					jsonAddMedicine = new JSONObject(restController.postMedicine(Controller.name, Controller.token,
-							txtpnAddMedicineName.getText(), txtpnAddMedicineActive.getText()));
-				} catch (JSONException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-					System.out.println("Error json, add medicine wywolanie");
-				}
-				JOptionPane.showMessageDialog(null, "New medicine has been added");
-				for (Component c : mainPanelStorage.getComponents()) {
-					if (c instanceof JPanel) {
-						((JPanel) c).setVisible(false);
+				// Adding new medicine
+				btnSubmitNewMedicine = new JButton("Add");
+				btnSubmitNewMedicine.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						// Add function here...(txtpnAddMedicineName.getText(),
+						// ---------------------------------------------------------------
+						// (txtpnAddMedicineActive.getText());
+						try {
+							jsonAddMedicine = new JSONObject(restController.postMedicine(Controller.name, Controller.token,
+									txtpnAddMedicineName.getText(), txtpnAddMedicineActive.getText()));
+							String[] medicineColumnNames = { "Id:", "Name:" };
+							createTableOfMedicines(setTableOfMedicines(), medicineColumnNames);
+						} catch (JSONException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+							System.out.println("Error json, add medicine wywolanie");
+						}
+						JOptionPane.showMessageDialog(null, "New medicine has been added");
+						for (Component c : mainPanelStorage.getComponents()) {
+							if (c instanceof JPanel) {
+								((JPanel) c).setVisible(false);
+							}
+						}
+						pnlMedicine.setVisible(true);
 					}
-				}
-				pnlMedicine.setVisible(true);
-			}
-		});
-		// btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
-		pnlAddMedicine.add(btnSubmitNewMedicine, "cell 2 3");
+				});
+				// btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
+				pnlAddMedicine.add(btnSubmitNewMedicine, "cell 2 3");
 
-		// Go back to Medicine view
-		btnCancelAddMedicine = new JButton("Cancel");
-		btnCancelAddMedicine.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				for (Component c : mainPanelStorage.getComponents()) {
-					if (c instanceof JPanel) {
-						((JPanel) c).setVisible(false);
+				// Go back to Medicine view
+				btnCancelAddMedicine = new JButton("Cancel");
+				btnCancelAddMedicine.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						for (Component c : mainPanelStorage.getComponents()) {
+							if (c instanceof JPanel) {
+								((JPanel) c).setVisible(false);
+							}
+						}
+						pnlMedicine.setVisible(true);
 					}
-				}
-				pnlMedicine.setVisible(true);
-			}
-		});
-		// btnCancelAddMedicine.setBounds(10, 743, 141, 44);
-		pnlAddMedicine.add(btnCancelAddMedicine, "cell 0 3");
+				});
+				// btnCancelAddMedicine.setBounds(10, 743, 141, 44);
+				pnlAddMedicine.add(btnCancelAddMedicine, "cell 0 3");
 
-		// koniec przykladu ADD medicine
-		// ********************* ************************
+				// koniec przykladu ADD medicine
+				// ********************* ************************
+
 
 		// *********************************************
 		// PANEL USER (DODAWANIE PACJENTA I WSZYSTKIE AKCJE, KTORE NIE PASUJA DO
@@ -1539,6 +1630,8 @@ public class mainGUI extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == btnMedicines) {
+			String[] medicineColumnNames = { "Id:", "Name:" };
+			createTableOfMedicines(setTableOfMedicines(), medicineColumnNames);
 			for (Component c : mainPanelStorage.getComponents()) {
 				if (c instanceof JPanel) {
 					((JPanel) c).setVisible(false);
