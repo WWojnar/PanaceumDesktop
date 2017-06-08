@@ -254,7 +254,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 	private void createTableOfMedicines(Object[][] medicineData, String[] medicineColumnNames) {
 		dmMedicine = (DefaultTableModel) medicineTable.getModel();
-		dmMedicine.setDataVector(medicineData,medicineColumnNames);
+		dmMedicine.setDataVector(medicineData, medicineColumnNames);
 
 	}
 	//////////////////////////////////////////////////////////////// Medicine
@@ -469,9 +469,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		// scrollPane_1.setBounds(10, 42, 1051, 764);
 		pnlMedicine.add(scrollPane_medicine, "span");
 
-		
-		
-		
 		medicineTable = new JTable() {
 			private static final long serialVersionUID = 4466748965117973844L;
 
@@ -485,7 +482,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		};
 		medicineTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane_medicine.setViewportView(medicineTable);
-		
+
 		createTableOfMedicines(medicineData, medicineColumnNames);
 		// -------
 		// medicineTable = new JTable(medicineData, medicineColumnNames);
@@ -909,6 +906,7 @@ public class mainGUI extends JFrame implements ActionListener {
 							email = jsonPatient.getString("email");
 							bloodtype = jsonPatient.getString("bloodType");
 							city = jsonPatient.getString("city");
+							System.out.println(city);
 							street = jsonPatient.getString("street");
 							buildingnumber = jsonPatient.getString("buildingNumber");
 							if (jsonPatient.has(flatnumber))
