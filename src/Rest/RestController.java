@@ -249,7 +249,7 @@ public class RestController {
 		return dataTransfer(json, url);
 	}
 
-	public String postPrescription(String login, String token, String dosage, String expiryDate, String medicineName, String doctorId, String patientId) {
+	public String postPrescription(String login, String token, String dosage, String expiryDate, String medicineName, int doctorId, int patientId) {
 
 		JSONObject json = null;
 		try {
