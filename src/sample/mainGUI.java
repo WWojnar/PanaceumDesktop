@@ -67,6 +67,7 @@ public class mainGUI extends JFrame implements ActionListener {
 	private JTextField txtSearchMedicine;
 	private JTable medicineTable;
 	private JButton btnSearchMedicine;
+	private DefaultTableModel dmMedicine;
 
 	// Single Medicine
 	private JPanel pnlSingleMedicine;
@@ -220,7 +221,8 @@ public class mainGUI extends JFrame implements ActionListener {
 	 * @throws JSONException
 	 */
 
-////////////////////////////////////////////////////////////////Medicine metody
+	//////////////////////////////////////////////////////////////// Medicine
+	//////////////////////////////////////////////////////////////// metody
 	private Object[][] setTableOfMedicines() {
 
 		Object[][] medicineData;
@@ -243,7 +245,7 @@ public class mainGUI extends JFrame implements ActionListener {
 
 			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
-				System.out.println("Fail Json Medicine list");
+				System.out.println("Fail Json Medicine list2");
 				e1.printStackTrace();
 			}
 		}
@@ -251,12 +253,13 @@ public class mainGUI extends JFrame implements ActionListener {
 	}
 
 	private void createTableOfMedicines(Object[][] medicineData, String[] medicineColumnNames) {
-		medicineTable = new JTable(medicineData, medicineColumnNames);
-		//medicineTable.enable(false);
-		medicineTable.getColumn(medicineColumnNames[0]).setWidth(10);
-		scrollPane_medicine.setViewportView(medicineTable);
-		}
-//////////////////////////////////////////////////////////////// Medicine metody koniec
+		dmMedicine = (DefaultTableModel) medicineTable.getModel();
+		dmMedicine.setDataVector(medicineData,medicineColumnNames);
+
+	}
+	//////////////////////////////////////////////////////////////// Medicine
+	//////////////////////////////////////////////////////////////// metody
+	//////////////////////////////////////////////////////////////// koniec
 
 	public mainGUI() throws JSONException {
 
@@ -291,8 +294,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		
-		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -302,8 +303,8 @@ public class mainGUI extends JFrame implements ActionListener {
 		contentPane.setBackground(Color.LIGHT_GRAY);
 
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-		
+		this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+
 		try {
 			UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
@@ -331,7 +332,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		JLabel lblWelcome = new JLabel("Welcome " + Controller.name);
 		lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
 		lblWelcome.setFont(new Font("Tahoma", Font.BOLD, 20));
-		lblWelcome.setBackground(new Color(240,240,240));
+		lblWelcome.setBackground(new Color(240, 240, 240));
 		lblWelcome.setOpaque(true);
 		contentPane.add(lblWelcome, "grow,wrap");
 
@@ -406,7 +407,6 @@ public class mainGUI extends JFrame implements ActionListener {
 		// *********************************************
 		// PANEL MEDICINES
 
-		
 		String[] medicineColumnNames = { "Id:", "Name:" };
 
 		// tutaj bedzie rest do leków
@@ -415,7 +415,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		Object[][] medicineData;
 		JSONArray jsonMedicineList = null;
 		// JSON do tablicy
-//---------
+		// ---------
 		try {
 			jsonMedicineList = new JSONArray(restController.getMedicineList(Controller.name, Controller.token));
 		} catch (JSONException e1) {
@@ -465,18 +465,34 @@ public class mainGUI extends JFrame implements ActionListener {
 		// btnSearchMedicine.setBounds(120, 8, 107, 23);
 		pnlMedicine.add(btnSearchMedicine, "wrap");
 
-		//JScrollPane scrollPane_medicine = new JScrollPane();
+		// JScrollPane scrollPane_medicine = new JScrollPane();
 		// scrollPane_1.setBounds(10, 42, 1051, 764);
 		pnlMedicine.add(scrollPane_medicine, "span");
+
+		
+		
+		
+		medicineTable = new JTable() {
+			private static final long serialVersionUID = 4466748965117973844L;
+
+			public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+				Component c = super.prepareRenderer(renderer, row, column);
+
+				this.setRowSelectionAllowed(true);
+
+				return c;
+			}
+		};
+		medicineTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPane_medicine.setViewportView(medicineTable);
 		
 		createTableOfMedicines(medicineData, medicineColumnNames);
-//-------
-//		medicineTable = new JTable(medicineData, medicineColumnNames);
-//		//medicineTable.enable(false);
-//		medicineTable.getColumn(medicineColumnNames[0]).setWidth(10);
-//		scrollPane_medicine.setViewportView(medicineTable);
-//----------
-		
+		// -------
+		// medicineTable = new JTable(medicineData, medicineColumnNames);
+		// //medicineTable.enable(false);
+		// medicineTable.getColumn(medicineColumnNames[0]).setWidth(10);
+		// scrollPane_medicine.setViewportView(medicineTable);
+		// ----------
 
 		// 2 clicks on row initializes action
 		medicineTable.addMouseListener(new MouseAdapter() {
@@ -485,11 +501,12 @@ public class mainGUI extends JFrame implements ActionListener {
 				Point p = me.getPoint();
 				int row = table.rowAtPoint(p);
 				// String idMed;
+				System.out.println("Row " + row);
 				if (me.getClickCount() == 2) {
 
 					// Here find by id and go to single medicine panel
-					idMedicine = Integer.valueOf((String) table.getValueAt(row, 0));
-					System.out.println("Row " + row + " selected" + "id: " + idMedicine);
+					idMedicine = Integer.valueOf((String) table.getModel().getValueAt(row, 0));
+					System.out.println("Row " + row + " selected " + "id: " + idMedicine);
 					// JSON here
 					try {
 						jsonMedicine = new JSONObject(
@@ -517,181 +534,180 @@ public class mainGUI extends JFrame implements ActionListener {
 			}
 		});
 
-				// koniec MEDICINES
-				// *********************************************
+		// koniec MEDICINES
+		// *********************************************
 
-				// *********************************************
-				// PANEL SINGLE MEDICINES
+		// *********************************************
+		// PANEL SINGLE MEDICINES
 
-				///
+		///
 
-				lblMedicineDetails = new JLabel("Medicine Id: " + medId);
-				lblMedicineDetails.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				// lblMedicineDetails.setBounds(10, 11, 603, 37);
-				pnlSingleMedicine.add(lblMedicineDetails, "cell 0 0 2 0");
+		lblMedicineDetails = new JLabel("Medicine Id: " + medId);
+		lblMedicineDetails.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		// lblMedicineDetails.setBounds(10, 11, 603, 37);
+		pnlSingleMedicine.add(lblMedicineDetails, "cell 0 0 2 0");
 
-				lblName_2 = new JLabel("Name: ");
-				lblName_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				// lblName_2.setBounds(10, 73, 55, 37);
-				pnlSingleMedicine.add(lblName_2, "cell 0 1");
+		lblName_2 = new JLabel("Name: ");
+		lblName_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		// lblName_2.setBounds(10, 73, 55, 37);
+		pnlSingleMedicine.add(lblName_2, "cell 0 1");
 
-				txtpnSingleMedicineName = new JTextPane();
-				txtpnSingleMedicineName.setText("No information");
-				// txtpnSingleMedicineName.setBounds(10, 113, 354, 37);
-				pnlSingleMedicine.add(txtpnSingleMedicineName, "cell 0 2");
+		txtpnSingleMedicineName = new JTextPane();
+		txtpnSingleMedicineName.setText("No information");
+		// txtpnSingleMedicineName.setBounds(10, 113, 354, 37);
+		pnlSingleMedicine.add(txtpnSingleMedicineName, "cell 0 2");
 
-				// 2 times
-				lblActiveSubstances = new JLabel("Active Substances:");
-				lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				// lblActiveSubstances.setBounds(10, 179, 130, 37);
-				pnlSingleMedicine.add(lblActiveSubstances, "cell 1 1");
+		// 2 times
+		lblActiveSubstances = new JLabel("Active Substances:");
+		lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		// lblActiveSubstances.setBounds(10, 179, 130, 37);
+		pnlSingleMedicine.add(lblActiveSubstances, "cell 1 1");
 
-				txtpnSingleMedicineActive = new JTextPane();
-				txtpnSingleMedicineActive.setText("No information");
-				// txtpnSingleMedicineActive.setBounds(10, 232, 354, 460);
-				pnlSingleMedicine.add(txtpnSingleMedicineActive, "cell 1 2");
+		txtpnSingleMedicineActive = new JTextPane();
+		txtpnSingleMedicineActive.setText("No information");
+		// txtpnSingleMedicineActive.setBounds(10, 232, 354, 460);
+		pnlSingleMedicine.add(txtpnSingleMedicineActive, "cell 1 2");
 
-				// 2 times
-				lblRelations = new JLabel("Relations");
-				lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				// lblRelations.setBounds(572, 73, 157, 37);
-				pnlSingleMedicine.add(lblRelations, "cell 2 1");
+		// 2 times
+		lblRelations = new JLabel("Relations");
+		lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		// lblRelations.setBounds(572, 73, 157, 37);
+		pnlSingleMedicine.add(lblRelations, "cell 2 1");
 
-				txtpnMedicineRelationsWith = new JTextPane();
-				txtpnMedicineRelationsWith.setText("Do not mix with alcohol...");
-				// txtpnMedicineRelationsWith.setBounds(572, 113, 430, 579);
-				pnlSingleMedicine.add(txtpnMedicineRelationsWith, "cell 2 2");
+		txtpnMedicineRelationsWith = new JTextPane();
+		txtpnMedicineRelationsWith.setText("Do not mix with alcohol...");
+		// txtpnMedicineRelationsWith.setBounds(572, 113, 430, 579);
+		pnlSingleMedicine.add(txtpnMedicineRelationsWith, "cell 2 2");
 
-				// Go back to Medicine view
-				btnCancelSingleMedicine = new JButton("Back");
-				btnCancelSingleMedicine.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						for (Component c : mainPanelStorage.getComponents()) {
-							if (c instanceof JPanel) {
-								((JPanel) c).setVisible(false);
-							}
-						}
-						pnlMedicine.setVisible(true);
+		// Go back to Medicine view
+		btnCancelSingleMedicine = new JButton("Back");
+		btnCancelSingleMedicine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (Component c : mainPanelStorage.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
 					}
-				});
-				// btnCancelSingleMedicine.setBounds(10, 743, 141, 44);
-				pnlSingleMedicine.add(btnCancelSingleMedicine, "cell 0 4");
-				
-				JButton btnDeleteMedicine = new JButton("Delete");
-				btnDeleteMedicine.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						// Add function here...(txtpnAddMedicineName.getText(), ---------------------------------------------------------------
-//						(txtpnAddMedicineActive.getText());
-						try {
-							jsonAddMedicine = new JSONObject(
-									restController.deleteMedicineById(Controller.name, Controller.token, medId));
-						} catch (JSONException e1) {
-							// TODO Auto-generated catch block
-							System.out.println("Error json, delete medicine wywolanie, nizej:");
-							e1.printStackTrace();
-							System.out.println("Error json, delete medicine wywolanie, wyzej");
-						}
-						JOptionPane.showMessageDialog(null, "Medicine has been deleted");
-						for (Component c : mainPanelStorage.getComponents()) {
-							if (c instanceof JPanel) {
-								((JPanel) c).setVisible(false);
-							}
-						}
-						pnlMedicine.setVisible(true);
+				}
+				pnlMedicine.setVisible(true);
+			}
+		});
+		// btnCancelSingleMedicine.setBounds(10, 743, 141, 44);
+		pnlSingleMedicine.add(btnCancelSingleMedicine, "cell 0 4");
+
+		JButton btnDeleteMedicine = new JButton("Delete");
+		btnDeleteMedicine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Add function here...(txtpnAddMedicineName.getText(),
+				// ---------------------------------------------------------------
+				// (txtpnAddMedicineActive.getText());
+				try {
+					jsonAddMedicine = new JSONObject(
+							restController.deleteMedicineById(Controller.name, Controller.token, medId));
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					System.out.println("Error json, delete medicine wywolanie, nizej:");
+					e1.printStackTrace();
+					System.out.println("Error json, delete medicine wywolanie, wyzej");
+				}
+				JOptionPane.showMessageDialog(null, "Medicine has been deleted");
+				for (Component c : mainPanelStorage.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
 					}
-				});
-				//btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
-				pnlSingleMedicine.add(btnDeleteMedicine, "cell 2 4");
-				
+				}
+				pnlMedicine.setVisible(true);
+			}
+		});
+		// btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
+		pnlSingleMedicine.add(btnDeleteMedicine, "cell 2 4");
 
-				// koniec SINGLE MEDICINES
-				// *********************************************
+		// koniec SINGLE MEDICINES
+		// *********************************************
 
-				// *********************************************
-				// PANEL ADD MEDICINES
+		// *********************************************
+		// PANEL ADD MEDICINES
 
-				lblToAddNew = new JLabel("To add new medicine, fill all the fields and press \"Add\" button.");
-				lblToAddNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				// lblToAddNew.setBounds(10, 11, 603, 37);
-				pnlAddMedicine.add(lblToAddNew, "cell 0 0 2 0");
+		lblToAddNew = new JLabel("To add new medicine, fill all the fields and press \"Add\" button.");
+		lblToAddNew.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		// lblToAddNew.setBounds(10, 11, 603, 37);
+		pnlAddMedicine.add(lblToAddNew, "cell 0 0 2 0");
 
-				lblName_1 = new JLabel("Name: ");
-				lblName_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				// lblName_1.setBounds(10, 73, 55, 37);
-				pnlAddMedicine.add(lblName_1, "cell 0 1");
+		lblName_1 = new JLabel("Name: ");
+		lblName_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		// lblName_1.setBounds(10, 73, 55, 37);
+		pnlAddMedicine.add(lblName_1, "cell 0 1");
 
-				txtpnAddMedicineName = new JTextPane();
-				txtpnAddMedicineName.setText("");
-				// txtpnAddMedicineName.setBounds(10, 113, 354, 37);
-				pnlAddMedicine.add(txtpnAddMedicineName, "cell 0 2");
+		txtpnAddMedicineName = new JTextPane();
+		txtpnAddMedicineName.setText("");
+		// txtpnAddMedicineName.setBounds(10, 113, 354, 37);
+		pnlAddMedicine.add(txtpnAddMedicineName, "cell 0 2");
 
-				lblActiveSubstances = new JLabel("Active Substances:");
-				lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				// lblActiveSubstances.setBounds(10, 179, 130, 37);
-				pnlAddMedicine.add(lblActiveSubstances, "cell 1 1");
+		lblActiveSubstances = new JLabel("Active Substances:");
+		lblActiveSubstances.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		// lblActiveSubstances.setBounds(10, 179, 130, 37);
+		pnlAddMedicine.add(lblActiveSubstances, "cell 1 1");
 
-				txtpnAddMedicineActive = new JTextPane();
-				txtpnAddMedicineActive.setText("");
-				// txtpnAddMedicineActive.setBounds(10, 232, 354, 460);
-				pnlAddMedicine.add(txtpnAddMedicineActive, "cell 1 2");
+		txtpnAddMedicineActive = new JTextPane();
+		txtpnAddMedicineActive.setText("");
+		// txtpnAddMedicineActive.setBounds(10, 232, 354, 460);
+		pnlAddMedicine.add(txtpnAddMedicineActive, "cell 1 2");
 
-				lblRelations = new JLabel("Relations");
-				lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
-				// lblRelations.setBounds(572, 73, 157, 37);
-				pnlAddMedicine.add(lblRelations, "cell 2 1");
+		lblRelations = new JLabel("Relations");
+		lblRelations.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		// lblRelations.setBounds(572, 73, 157, 37);
+		pnlAddMedicine.add(lblRelations, "cell 2 1");
 
-				txtpnAddRelationsWith = new JTextPane();
-				txtpnAddRelationsWith.setText("");
-				// txtpnAddRelationsWith.setBounds(572, 113, 430, 579);
-				pnlAddMedicine.add(txtpnAddRelationsWith, "cell 2 2");
+		txtpnAddRelationsWith = new JTextPane();
+		txtpnAddRelationsWith.setText("");
+		// txtpnAddRelationsWith.setBounds(572, 113, 430, 579);
+		pnlAddMedicine.add(txtpnAddRelationsWith, "cell 2 2");
 
-				// Adding new medicine
-				btnSubmitNewMedicine = new JButton("Add");
-				btnSubmitNewMedicine.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						// Add function here...(txtpnAddMedicineName.getText(),
-						// ---------------------------------------------------------------
-						// (txtpnAddMedicineActive.getText());
-						try {
-							jsonAddMedicine = new JSONObject(restController.postMedicine(Controller.name, Controller.token,
-									txtpnAddMedicineName.getText(), txtpnAddMedicineActive.getText()));
-							String[] medicineColumnNames = { "Id:", "Name:" };
-							createTableOfMedicines(setTableOfMedicines(), medicineColumnNames);
-						} catch (JSONException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-							System.out.println("Error json, add medicine wywolanie");
-						}
-						JOptionPane.showMessageDialog(null, "New medicine has been added");
-						for (Component c : mainPanelStorage.getComponents()) {
-							if (c instanceof JPanel) {
-								((JPanel) c).setVisible(false);
-							}
-						}
-						pnlMedicine.setVisible(true);
+		// Adding new medicine
+		btnSubmitNewMedicine = new JButton("Add");
+		btnSubmitNewMedicine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// Add function here...(txtpnAddMedicineName.getText(),
+				// ---------------------------------------------------------------
+				// (txtpnAddMedicineActive.getText());
+				try {
+					jsonAddMedicine = new JSONObject(restController.postMedicine(Controller.name, Controller.token,
+							txtpnAddMedicineName.getText(), txtpnAddMedicineActive.getText()));
+					String[] medicineColumnNames = { "Id:", "Name:" };
+					createTableOfMedicines(setTableOfMedicines(), medicineColumnNames);
+				} catch (JSONException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					System.out.println("Error json, add medicine wywolanie");
+				}
+				JOptionPane.showMessageDialog(null, "New medicine has been added");
+				for (Component c : mainPanelStorage.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
 					}
-				});
-				// btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
-				pnlAddMedicine.add(btnSubmitNewMedicine, "cell 2 3");
+				}
+				pnlMedicine.setVisible(true);
+			}
+		});
+		// btnSubmitNewMedicine.setBounds(861, 732, 141, 44);
+		pnlAddMedicine.add(btnSubmitNewMedicine, "cell 2 3");
 
-				// Go back to Medicine view
-				btnCancelAddMedicine = new JButton("Cancel");
-				btnCancelAddMedicine.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						for (Component c : mainPanelStorage.getComponents()) {
-							if (c instanceof JPanel) {
-								((JPanel) c).setVisible(false);
-							}
-						}
-						pnlMedicine.setVisible(true);
+		// Go back to Medicine view
+		btnCancelAddMedicine = new JButton("Cancel");
+		btnCancelAddMedicine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (Component c : mainPanelStorage.getComponents()) {
+					if (c instanceof JPanel) {
+						((JPanel) c).setVisible(false);
 					}
-				});
-				// btnCancelAddMedicine.setBounds(10, 743, 141, 44);
-				pnlAddMedicine.add(btnCancelAddMedicine, "cell 0 3");
+				}
+				pnlMedicine.setVisible(true);
+			}
+		});
+		// btnCancelAddMedicine.setBounds(10, 743, 141, 44);
+		pnlAddMedicine.add(btnCancelAddMedicine, "cell 0 3");
 
-				// koniec przykladu ADD medicine
-				// ********************* ************************
-
+		// koniec przykladu ADD medicine
+		// ********************* ************************
 
 		// *********************************************
 		// PANEL USER (DODAWANIE PACJENTA I WSZYSTKIE AKCJE, KTORE NIE PASUJA DO
@@ -833,7 +849,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		lblAge = new JLabel("xx");
 		lblAge.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPatient.add(lblAge, "wrap");
-		
+
 		lblAddressStr = new JLabel("Address:");
 		lblAddressStr.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		pnlPatient.add(lblAddressStr);
@@ -1233,11 +1249,11 @@ public class mainGUI extends JFrame implements ActionListener {
 		 * "patientFirstName":"Pacjent","patientLastName":"NumerJeden"}]
 		 */
 		if (dmPrescription.getRowCount() > 0) {
-		    for (int i = dmPrescription.getRowCount() - 1; i > -1; i--) {
-		    	dmPrescription.removeRow(i);
-		    }
+			for (int i = dmPrescription.getRowCount() - 1; i > -1; i--) {
+				dmPrescription.removeRow(i);
+			}
 		}
-		
+
 		prescriptionJson = new JSONArray(
 				restController.getPrescription(Controller.doctorId, Controller.name, Controller.token));
 		for (int i = 0; i < prescriptionJson.length(); i++) {
@@ -1383,7 +1399,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		btnPrescriptionModify = new JButton("Modify");
 		btnPrescriptionModify.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
 				enablePrescriptionDetails();
 				btnPrescriptionAccept.setVisible(true);
 				btnPrescriptionModify.setVisible(false);
@@ -1500,8 +1516,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		txtfdPrescriptionDosage.setDisabledTextColor(Color.BLACK);
 		txtfdPrescriptionDosage.setColumns(10);
 		pnlPrescriptionAdd.add(txtfdPrescriptionDosage, "wrap");
-		
-		
+
 		btnPrescriptionBack = new JButton("Back");
 		btnPrescriptionBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1519,7 +1534,7 @@ public class mainGUI extends JFrame implements ActionListener {
 		btnPrescriptionAddInside.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addPrescription();
-				
+
 				for (Component c : mainPanelStorage.getComponents()) {
 					if (c instanceof JPanel) {
 						((JPanel) c).setVisible(false);
@@ -1565,21 +1580,17 @@ public class mainGUI extends JFrame implements ActionListener {
 		txtfdPrescriptionILicence.setEnabled(false);
 
 	}
-	
 
 	private void addPrescription() {
-		
-		/*"login":"[string]",
-		"token":"[string]",
-		"dosage":"[string]",
-		"expiryDate":"[string]",         (note:format: RRRR-MM-DD)
-		"medicineName":"[string]",
-		"doctorId":[integer],
-		"patientId":[integer]}*/
-		
+
+		/*
+		 * "login":"[string]", "token":"[string]", "dosage":"[string]",
+		 * "expiryDate":"[string]", (note:format: RRRR-MM-DD)
+		 * "medicineName":"[string]", "doctorId":[integer],
+		 * "patientId":[integer]}
+		 */
+
 	}
-	
-	
 
 	public void actionPerformed(ActionEvent e) {
 
@@ -1622,65 +1633,65 @@ public class mainGUI extends JFrame implements ActionListener {
 		}
 
 	}
-        
-    private void printPrescription() {
-        try {
-            com.itextpdf.text.Document document = new com.itextpdf.text.Document(PageSize.A4);
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("printable.pdf"));
-            document.open();
-            PdfContentByte cb = writer.getDirectContent();
 
-            PdfReader reader = new PdfReader("wzor_recepty_rp.pdf");
-            PdfImportedPage page = writer.getImportedPage(reader, 1);
+	private void printPrescription() {
+		try {
+			com.itextpdf.text.Document document = new com.itextpdf.text.Document(PageSize.A4);
+			PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream("printable.pdf"));
+			document.open();
+			PdfContentByte cb = writer.getDirectContent();
 
-            document.newPage();
-            cb.addTemplate(page, 0, 0);
+			PdfReader reader = new PdfReader("wzor_recepty_rp.pdf");
+			PdfImportedPage page = writer.getImportedPage(reader, 1);
 
-            ColumnText ct = new ColumnText(cb);
-            Phrase phrase = new Phrase(txtfdPrescriptionName.getText());
-            ct.setSimpleColumn(phrase, 200, 570, 580, 317, 15, Element.ALIGN_LEFT);
-            ct.go();
+			document.newPage();
+			cb.addTemplate(page, 0, 0);
 
-            phrase = new Phrase(txtfdPrescriptionSurname.getText());
-            ct.setSimpleColumn(phrase, 260, 570, 580, 317, 15, Element.ALIGN_LEFT);
-            ct.go();
+			ColumnText ct = new ColumnText(cb);
+			Phrase phrase = new Phrase(txtfdPrescriptionName.getText());
+			ct.setSimpleColumn(phrase, 200, 570, 580, 317, 15, Element.ALIGN_LEFT);
+			ct.go();
 
-            phrase = new Phrase(txtfdPrescriptionPesel.getText());
-            ct.setSimpleColumn(phrase, 200, 540, 580, 317, 15, Element.ALIGN_LEFT);
-            ct.go();
+			phrase = new Phrase(txtfdPrescriptionSurname.getText());
+			ct.setSimpleColumn(phrase, 260, 570, 580, 317, 15, Element.ALIGN_LEFT);
+			ct.go();
 
-            phrase = new Phrase(txtfdPrescriptionMedicine.getText());
-            ct.setSimpleColumn(phrase, 180, 440, 580, 317, 15, Element.ALIGN_LEFT);
-            ct.go();
+			phrase = new Phrase(txtfdPrescriptionPesel.getText());
+			ct.setSimpleColumn(phrase, 200, 540, 580, 317, 15, Element.ALIGN_LEFT);
+			ct.go();
 
-            phrase = new Phrase(txtfdPrescriptionDosage.getText());
-            ct.setSimpleColumn(phrase, 200, 400, 580, 317, 15, Element.ALIGN_LEFT);
-            ct.go();
+			phrase = new Phrase(txtfdPrescriptionMedicine.getText());
+			ct.setSimpleColumn(phrase, 180, 440, 580, 317, 15, Element.ALIGN_LEFT);
+			ct.go();
 
-            phrase = new Phrase(txtfdPrescriptionIName.getText());
-            ct.setSimpleColumn(phrase, 300, 0, 580, 165, 15, Element.ALIGN_LEFT);
-            ct.go();
+			phrase = new Phrase(txtfdPrescriptionDosage.getText());
+			ct.setSimpleColumn(phrase, 200, 400, 580, 317, 15, Element.ALIGN_LEFT);
+			ct.go();
 
-            phrase = new Phrase(txtfdPrescriptionILicence.getText());
-            ct.setSimpleColumn(phrase, 300, 0, 580, 150, 15, Element.ALIGN_LEFT);
-            ct.go();
+			phrase = new Phrase(txtfdPrescriptionIName.getText());
+			ct.setSimpleColumn(phrase, 300, 0, 580, 165, 15, Element.ALIGN_LEFT);
+			ct.go();
 
-            phrase = new Phrase(txtfdPrescriptionDate.getText());
-            ct.setSimpleColumn(phrase, 200, 0, 580, 160, 15, Element.ALIGN_LEFT);
-            ct.go();
+			phrase = new Phrase(txtfdPrescriptionILicence.getText());
+			ct.setSimpleColumn(phrase, 300, 0, 580, 150, 15, Element.ALIGN_LEFT);
+			ct.go();
 
-            phrase = new Phrase(txtfdPrescriptionExpiry.getText());
-            ct.setSimpleColumn(phrase, 200, 0, 580, 110, 15, Element.ALIGN_LEFT);
-            ct.go();
+			phrase = new Phrase(txtfdPrescriptionDate.getText());
+			ct.setSimpleColumn(phrase, 200, 0, 580, 160, 15, Element.ALIGN_LEFT);
+			ct.go();
 
-            document.close();
+			phrase = new Phrase(txtfdPrescriptionExpiry.getText());
+			ct.setSimpleColumn(phrase, 200, 0, 580, 110, 15, Element.ALIGN_LEFT);
+			ct.go();
 
-            if (Desktop.isDesktopSupported()) {
-                Desktop.getDesktop().browse(new URI("printable.pdf"));
-            }
-        } catch (Exception ex) {
+			document.close();
 
-        }
-    }
+			if (Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().browse(new URI("printable.pdf"));
+			}
+		} catch (Exception ex) {
+
+		}
+	}
 
 }
